@@ -1,0 +1,43 @@
+import Image from 'next/image';
+import Link from 'next/link';
+
+interface LogoProps {
+  ukuran?: 'kecil' | 'sedang' | 'besar';
+  tampilkanTeks?: boolean;
+  className?: string;
+}
+
+const ukuranMap = {
+  kecil: { gambar: 28, teks: 'text-lg' },
+  sedang: { gambar: 36, teks: 'text-xl' },
+  besar: { gambar: 48, teks: 'text-2xl' },
+};
+
+export default function Logo({ ukuran = 'sedang', tampilkanTeks = true, className = '' }: LogoProps) {
+  const config = ukuranMap[ukuran];
+
+  return (
+    <Link href="/" className={`flex items-center gap-2.5 group ${className}`} aria-label="Lentera — Beranda">
+      <div className="relative transition-transform duration-300 group-hover:scale-110">
+        <Image
+          src="/logo.svg"
+          alt="Logo Lentera"
+          width={config.gambar}
+          height={config.gambar}
+          priority
+        />
+      </div>
+      {tampilkanTeks && (
+        <span
+          className={`${config.teks} font-bold tracking-tight`}
+          style={{
+            fontFamily: 'var(--font-display)',
+            color: 'var(--color-forest-700)',
+          }}
+        >
+          Lentera
+        </span>
+      )}
+    </Link>
+  );
+}

@@ -1,69 +1,193 @@
-import Image from "next/image";
+import type { Metadata } from 'next';
+import Link from 'next/link';
+import Hero from '@/components/sections/Hero';
+import ModulCard from '@/components/sections/ModulCard';
+import Stats from '@/components/sections/Stats';
+import { ArrowRight, Sparkles, Shield, Zap } from 'lucide-react';
 
-export default function Home() {
+export const metadata: Metadata = {
+  title: 'Lentera — Terangi Jalan Akademismu',
+  description:
+    'Platform terintegrasi untuk mahasiswa Indonesia: repositori materi belajar berkualitas dan basis data beasiswa dengan kecerdasan buatan.',
+};
+
+const nilaiUnggulan = [
+  {
+    ikon: <Sparkles size={20} />,
+    judul: 'Didukung AI',
+    deskripsi: 'Asisten kecerdasan buatan membantu belajar lebih efektif dan menemukan beasiswa yang tepat',
+  },
+  {
+    ikon: <Shield size={20} />,
+    judul: 'Terpercaya',
+    deskripsi: 'Materi dan beasiswa diverifikasi oleh komunitas mahasiswa dan tim editorial kami',
+  },
+  {
+    ikon: <Zap size={20} />,
+    judul: 'Gratis & Cepat',
+    deskripsi: 'Akses seluruh fitur dasar secara gratis dengan antarmuka yang cepat dan responsif',
+  },
+];
+
+export default function HalamanUtama() {
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert h-5 w-[100px]"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the{" "}
-            <code className="rounded bg-black/[.06] px-1.5 py-0.5 font-mono text-[0.9em] dark:bg-white/[.08]">
-              page.tsx
-            </code>{" "}
-            file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
+    <>
+      {/* Hero Section */}
+      <Hero />
+
+      {/* Seksi Dua Modul */}
+      <section
+        className="py-20"
+        style={{ background: 'var(--color-cream-100)' }}
+        aria-labelledby="modul-judul"
+      >
+        <div className="container-lentera">
+          <div className="text-center mb-14">
+            <p
+              className="text-xs font-bold tracking-widest uppercase mb-3"
+              style={{ color: 'var(--color-forest-600)' }}
             >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
+              Dua Modul Terintegrasi
+            </p>
+            <h2
+              id="modul-judul"
+              className="text-3xl md:text-4xl font-bold mb-4"
+              style={{ fontFamily: 'var(--font-display)', color: 'var(--color-charcoal-900)' }}
             >
-              Learning
-            </a>{" "}
-            center.
+              Satu Platform, Dua Solusi
+            </h2>
+            <p
+              className="text-base max-w-2xl mx-auto"
+              style={{ color: 'var(--color-charcoal-500)' }}
+            >
+              Lentera hadir dengan dua modul yang saling melengkapi untuk mendukung perjalanan akademik dan finansialmu sebagai mahasiswa.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <ModulCard modul="belajar" />
+            <ModulCard modul="beasiswa" />
+          </div>
+        </div>
+      </section>
+
+      {/* Seksi Statistik */}
+      <Stats />
+
+      {/* Seksi Nilai Unggulan */}
+      <section
+        className="py-20"
+        style={{ background: 'var(--color-cream-100)' }}
+        aria-labelledby="nilai-judul"
+      >
+        <div className="container-lentera">
+          <div className="text-center mb-14">
+            <h2
+              id="nilai-judul"
+              className="text-3xl md:text-4xl font-bold mb-4"
+              style={{ fontFamily: 'var(--font-display)', color: 'var(--color-charcoal-900)' }}
+            >
+              Mengapa Lentera?
+            </h2>
+            <p className="text-base max-w-xl mx-auto" style={{ color: 'var(--color-charcoal-500)' }}>
+              Dirancang khusus untuk kebutuhan mahasiswa Indonesia yang menginginkan akses pendidikan berkualitas dan berkelanjutan.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {nilaiUnggulan.map((nilai, index) => (
+              <div
+                key={nilai.judul}
+                className="card-glass p-8 text-center group"
+                style={{ animationDelay: `${index * 150}ms` }}
+              >
+                <div
+                  className="w-14 h-14 rounded-[var(--radius-md)] flex items-center justify-center mx-auto mb-5 transition-all duration-300 group-hover:scale-110 group-hover:rotate-3"
+                  style={{
+                    background: 'var(--color-forest-100)',
+                    color: 'var(--color-forest-700)',
+                  }}
+                  aria-hidden="true"
+                >
+                  {nilai.ikon}
+                </div>
+                <h3
+                  className="text-lg font-bold mb-3"
+                  style={{ fontFamily: 'var(--font-display)', color: 'var(--color-charcoal-900)' }}
+                >
+                  {nilai.judul}
+                </h3>
+                <p className="text-sm leading-relaxed" style={{ color: 'var(--color-charcoal-500)' }}>
+                  {nilai.deskripsi}
+                </p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* CTA Akhir */}
+      <section
+        className="py-24 relative overflow-hidden"
+        aria-labelledby="cta-judul"
+        style={{ background: 'var(--color-forest-800)' }}
+      >
+        {/* Dekorasi background */}
+        <div className="absolute inset-0 overflow-hidden" aria-hidden="true">
+          <div
+            className="absolute -top-20 -right-20 w-64 h-64 rounded-full opacity-10"
+            style={{ background: 'radial-gradient(circle, var(--color-terracotta-400), transparent 70%)' }}
+          />
+          <div
+            className="absolute -bottom-20 -left-20 w-80 h-80 rounded-full opacity-8"
+            style={{ background: 'radial-gradient(circle, var(--color-forest-400), transparent 70%)' }}
+          />
+        </div>
+
+        <div className="container-lentera text-center relative z-10">
+          <p
+            className="text-xs font-bold tracking-widest uppercase mb-4"
+            style={{ color: 'var(--color-terracotta-400)' }}
+          >
+            Mulai Sekarang
           </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+          <h2
+            id="cta-judul"
+            className="text-3xl md:text-5xl font-bold mb-6 text-white"
+            style={{ fontFamily: 'var(--font-display)' }}
           >
-            <Image
-              className="dark:invert h-[14px] w-4"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={14}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+            Siap Meraih Impianmu?
+          </h2>
+          <p
+            className="text-lg mb-10 max-w-xl mx-auto"
+            style={{ color: 'rgba(245, 240, 232, 0.8)' }}
           >
-            Documentation
-          </a>
+            Bergabung sekarang dan mulai perjalanan belajarmu bersama ribuan mahasiswa Indonesia yang telah merasakan manfaat Lentera.
+          </p>
+          <div className="flex flex-wrap items-center justify-center gap-4">
+            <Link
+              href="/register"
+              className="inline-flex items-center gap-2 px-8 py-4 rounded-[var(--radius-sm)] font-semibold text-base shadow-lg transition-all duration-200 hover:shadow-xl hover:-translate-y-0.5"
+              style={{
+                background: 'white',
+                color: 'var(--color-forest-700)',
+              }}
+              id="cta-daftar-sekarang"
+            >
+              <Sparkles size={18} />
+              Daftar Gratis Sekarang
+              <ArrowRight size={16} />
+            </Link>
+            <Link
+              href="/jelajah"
+              className="inline-flex items-center gap-2 px-8 py-4 rounded-[var(--radius-sm)] font-semibold text-base border-2 border-white text-white hover:bg-white/10 transition-all duration-200"
+              id="cta-jelajah-dulu"
+            >
+              Jelajah Dulu
+            </Link>
+          </div>
         </div>
-      </main>
-    </div>
+      </section>
+    </>
   );
 }
