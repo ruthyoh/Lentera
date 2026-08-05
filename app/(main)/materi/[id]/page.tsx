@@ -19,7 +19,6 @@ export async function generateMetadata({ params }: HalamanDetailMateriProps): Pr
 export default async function HalamanDetailMateri({ params }: HalamanDetailMateriProps) {
   const { id } = await params;
 
-  // Data placeholder — akan diganti dengan fetch Supabase
   const materi = {
     id,
     judul: 'Catatan Lengkap Kalkulus 1 — UTS & UAS',
@@ -51,12 +50,12 @@ export default async function HalamanDetailMateri({ params }: HalamanDetailMater
       >
         <div className="container-lentera">
           <nav aria-label="Breadcrumb" className="flex items-center gap-2 text-sm">
-            <Link href="/jelajah" className="flex items-center gap-1.5 transition-colors hover:text-[var(--color-forest-700)]" style={{ color: 'var(--color-charcoal-500)' }}>
+            <Link href="/jelajah" className="flex items-center gap-1.5 transition-colors hover:underline text-[var(--color-gold-600)]">
               <ArrowLeft size={14} />
               Jelajah Materi
             </Link>
-            <span style={{ color: 'var(--color-charcoal-300)' }}>/</span>
-            <span className="font-medium truncate" style={{ color: 'var(--color-charcoal-700)' }}>
+            <span style={{ color: 'var(--text-muted-on-light)' }}>/</span>
+            <span className="font-medium truncate text-[var(--text-on-light)]">
               {materi.judul}
             </span>
           </nav>
@@ -70,20 +69,20 @@ export default async function HalamanDetailMateri({ params }: HalamanDetailMater
             {/* Header Materi */}
             <div className="card-glass p-8">
               <div className="flex flex-wrap gap-2 mb-4">
-                <Badge varian="forest">{materi.kategori}</Badge>
+                <Badge varian="gold">{materi.kategori}</Badge>
                 <Badge varian="cream">{materi.format}</Badge>
                 <Badge varian="cream">{materi.halaman} halaman</Badge>
               </div>
 
               <h1
-                className="text-2xl md:text-3xl font-bold mb-4"
-                style={{ fontFamily: 'var(--font-display)', color: 'var(--color-charcoal-900)' }}
+                className="text-2xl md:text-3xl font-bold mb-4 text-[var(--text-on-light)]"
+                style={{ fontFamily: 'var(--font-display)' }}
               >
                 {materi.judul}
               </h1>
 
               {/* Meta info */}
-              <div className="flex flex-wrap gap-5 text-sm mb-6" style={{ color: 'var(--color-charcoal-500)' }}>
+              <div className="flex flex-wrap gap-5 text-sm mb-6 text-[var(--text-muted-on-light)]">
                 <span className="flex items-center gap-1.5">
                   <User size={14} />
                   {materi.pengunggah}
@@ -103,13 +102,13 @@ export default async function HalamanDetailMateri({ params }: HalamanDetailMater
               </div>
 
               {/* Deskripsi */}
-              <p className="leading-relaxed mb-6" style={{ color: 'var(--color-charcoal-700)' }}>
+              <p className="leading-relaxed mb-6 text-[var(--text-on-light)]">
                 {materi.deskripsi}
               </p>
 
               {/* Topik */}
               <div className="mb-6">
-                <p className="text-sm font-semibold mb-3" style={{ color: 'var(--color-charcoal-700)' }}>
+                <p className="text-sm font-semibold mb-3 text-[var(--text-on-light)]">
                   Topik yang Dibahas:
                 </p>
                 <div className="flex flex-wrap gap-2">
@@ -117,7 +116,7 @@ export default async function HalamanDetailMateri({ params }: HalamanDetailMater
                     <span
                       key={t}
                       className="px-3 py-1.5 rounded-full text-xs font-medium"
-                      style={{ background: 'var(--color-forest-100)', color: 'var(--color-forest-700)' }}
+                      style={{ background: 'var(--color-gold-100)', color: 'var(--color-gold-900)' }}
                     >
                       {t}
                     </span>
@@ -142,8 +141,8 @@ export default async function HalamanDetailMateri({ params }: HalamanDetailMater
             {/* Preview placeholder */}
             <div className="card-glass p-8">
               <h2
-                className="text-lg font-bold mb-4"
-                style={{ fontFamily: 'var(--font-display)', color: 'var(--color-charcoal-900)' }}
+                className="text-lg font-bold mb-4 text-[var(--text-on-light)]"
+                style={{ fontFamily: 'var(--font-display)' }}
               >
                 Pratinjau Materi
               </h2>
@@ -154,8 +153,8 @@ export default async function HalamanDetailMateri({ params }: HalamanDetailMater
                 aria-label="Pratinjau materi belum tersedia"
               >
                 <div className="text-center">
-                  <BookOpen size={40} className="mx-auto mb-3" style={{ color: 'var(--color-charcoal-300)' }} />
-                  <p className="text-sm" style={{ color: 'var(--color-charcoal-400)' }}>
+                  <BookOpen size={40} className="mx-auto mb-3 text-[var(--text-muted-on-light)]" />
+                  <p className="text-sm text-[var(--text-muted-on-light)]">
                     Pratinjau tersedia setelah masuk
                   </p>
                   <Link href="/login">
@@ -173,23 +172,23 @@ export default async function HalamanDetailMateri({ params }: HalamanDetailMater
             {/* Asisten AI */}
             <div
               className="p-6 rounded-[var(--radius-lg)] text-white"
-              style={{ background: 'var(--color-forest-700)' }}
+              style={{ background: 'var(--color-dark-800)' }}
             >
               <div className="flex items-center gap-2 mb-3">
-                <Brain size={20} />
-                <h3 className="font-bold" style={{ fontFamily: 'var(--font-display)' }}>
+                <Brain size={20} style={{ color: 'var(--color-gold-400)' }} />
+                <h3 className="font-bold text-[var(--text-on-dark)]" style={{ fontFamily: 'var(--font-display)' }}>
                   Asisten Belajar AI
                 </h3>
               </div>
-              <p className="text-sm opacity-85 mb-4">
+              <p className="text-sm mb-4 text-[var(--text-muted-on-dark)]">
                 Gunakan AI untuk meringkas materi ini, membuat kuis, atau tanya jawab seputar topiknya.
               </p>
               <div className="space-y-2">
                 {['Ringkas materi ini', 'Buat 5 kuis latihan', 'Jelaskan bab 3'].map((aksi) => (
                   <button
                     key={aksi}
-                    className="w-full text-left text-sm px-3 py-2.5 rounded-lg transition-all"
-                    style={{ background: 'rgba(255,255,255,0.12)', color: 'white' }}
+                    className="w-full text-left text-sm px-3 py-2.5 rounded-lg transition-all text-[var(--text-on-dark)]"
+                    style={{ background: 'rgba(201,151,30,0.15)', border: '1px solid rgba(201,151,30,0.25)' }}
                     id={`aksi-ai-${aksi.toLowerCase().replace(/\s+/g, '-')}`}
                   >
                     &ldquo;{aksi}&rdquo;
@@ -201,8 +200,8 @@ export default async function HalamanDetailMateri({ params }: HalamanDetailMater
             {/* Statistik */}
             <div className="card-glass p-6">
               <h3
-                className="font-bold mb-4"
-                style={{ fontFamily: 'var(--font-display)', color: 'var(--color-charcoal-900)' }}
+                className="font-bold mb-4 text-[var(--text-on-light)]"
+                style={{ fontFamily: 'var(--font-display)' }}
               >
                 Statistik Materi
               </h3>
@@ -218,8 +217,8 @@ export default async function HalamanDetailMateri({ params }: HalamanDetailMater
                     className="flex justify-between text-sm py-2 border-b"
                     style={{ borderColor: 'var(--color-cream-300)' }}
                   >
-                    <span style={{ color: 'var(--color-charcoal-500)' }}>{stat.label}</span>
-                    <span className="font-semibold" style={{ color: 'var(--color-charcoal-900)' }}>
+                    <span className="text-[var(--text-muted-on-light)]">{stat.label}</span>
+                    <span className="font-semibold text-[var(--text-on-light)]">
                       {stat.nilai}
                     </span>
                   </div>

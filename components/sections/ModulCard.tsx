@@ -33,7 +33,7 @@ const dataModul = {
     warna: {
       latar: 'bg-gradient-card-belajar',
       badge: 'bg-white/15 text-white',
-      tombol: 'bg-white text-[var(--color-forest-700)] hover:bg-[var(--color-cream-200)]',
+      tombol: 'bg-white text-[var(--color-dark-900)] hover:bg-[var(--color-cream-200)]',
       latarIcon: 'bg-white/20',
       fiturBg: 'bg-white/10',
     },

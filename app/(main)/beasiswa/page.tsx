@@ -20,7 +20,6 @@ const kategoriBeasiswa = [
   { label: 'Internasional', value: 'internasional' },
 ];
 
-// Data placeholder beasiswa
 const beasiswaPlaceholder = Array.from({ length: 9 }, (_, i) => ({
   id: `beasiswa-${i + 1}`,
   nama: [
@@ -82,16 +81,16 @@ export default function HalamanBeasiswa() {
         <div className="container-lentera relative z-10">
           <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
             <div>
-              <p className="text-xs font-bold tracking-widest uppercase mb-2" style={{ color: 'rgba(245,240,232,0.8)' }}>
+              <p className="text-xs font-bold tracking-widest uppercase mb-2" style={{ color: 'var(--text-muted-on-dark)' }}>
                 Modul Beasiswa
               </p>
               <h1
-                className="text-3xl md:text-4xl font-bold text-white mb-3"
+                className="text-3xl md:text-4xl font-bold mb-3 text-[var(--text-on-dark)]"
                 style={{ fontFamily: 'var(--font-display)' }}
               >
                 Jelajah Beasiswa
               </h1>
-              <p className="text-sm" style={{ color: 'rgba(245,240,232,0.75)' }}>
+              <p className="text-sm text-[var(--text-muted-on-dark)]">
                 300+ beasiswa diperbarui setiap minggu
               </p>
             </div>
@@ -151,7 +150,7 @@ export default function HalamanBeasiswa() {
             <select
               id="filter-ipk-minimum"
               className="px-4 py-3 rounded-[var(--radius-sm)] border text-sm bg-white focus:outline-none focus:ring-2 focus:ring-[var(--color-terracotta-500)]"
-              style={{ borderColor: 'var(--color-cream-400)', color: 'var(--color-charcoal-700)' }}
+              style={{ borderColor: 'var(--color-cream-400)', color: 'var(--text-on-light)' }}
               aria-label="Filter IPK minimum"
             >
               <option value="">IPK Minimum</option>
@@ -177,7 +176,7 @@ export default function HalamanBeasiswa() {
               style={
                 kat.value === 'semua'
                   ? { background: 'var(--color-terracotta-500)', color: 'white' }
-                  : { background: 'white', color: 'var(--color-charcoal-600)' }
+                  : { background: 'white', color: 'var(--text-on-light)' }
               }
               id={`tab-beasiswa-${kat.value}`}
             >
@@ -210,27 +209,27 @@ export default function HalamanBeasiswa() {
 
                 {/* Nama */}
                 <h2
-                  className="font-bold text-base mb-1 line-clamp-2 group-hover:text-[var(--color-terracotta-600)] transition-colors"
-                  style={{ fontFamily: 'var(--font-display)', color: 'var(--color-charcoal-900)' }}
+                  className="font-bold text-base mb-1 line-clamp-2 transition-colors text-[var(--text-on-light)] group-hover:text-[var(--color-terracotta-600)]"
+                  style={{ fontFamily: 'var(--font-display)' }}
                 >
                   {beasiswa.nama}
                 </h2>
-                <p className="text-xs mb-4" style={{ color: 'var(--color-charcoal-400)' }}>
+                <p className="text-xs mb-4 text-[var(--text-muted-on-light)]">
                   oleh {beasiswa.penyelenggara}
                 </p>
 
                 {/* Info */}
                 <div className="space-y-2 mb-4">
-                  <div className="flex items-center gap-2 text-xs" style={{ color: 'var(--color-charcoal-500)' }}>
+                  <div className="flex items-center gap-2 text-xs text-[var(--text-muted-on-light)]">
                     <GraduationCap size={13} />
                     IPK Minimum: <strong>{beasiswa.ipk.toFixed(2)}</strong>
                   </div>
-                  <div className="flex items-center gap-2 text-xs" style={{ color: 'var(--color-charcoal-500)' }}>
+                  <div className="flex items-center gap-2 text-xs text-[var(--text-muted-on-light)]">
                     <Clock size={13} />
                     Tenggat: <strong>{beasiswa.tenggat}</strong>
                   </div>
                   {beasiswa.nominal && (
-                    <div className="flex items-center gap-2 text-xs" style={{ color: 'var(--color-terracotta-600)' }}>
+                    <div className="flex items-center gap-2 text-xs text-[var(--color-terracotta-600)]">
                       <Award size={13} />
                       <strong>Rp {beasiswa.nominal.toLocaleString('id-ID')}/bulan</strong>
                     </div>
@@ -238,8 +237,7 @@ export default function HalamanBeasiswa() {
                 </div>
 
                 <div
-                  className="flex items-center gap-1 text-xs font-semibold opacity-0 group-hover:opacity-100 transition-opacity"
-                  style={{ color: 'var(--color-terracotta-600)' }}
+                  className="flex items-center gap-1 text-xs font-semibold opacity-0 group-hover:opacity-100 transition-opacity text-[var(--color-terracotta-600)]"
                   aria-hidden="true"
                 >
                   Lihat detail
@@ -260,7 +258,7 @@ export default function HalamanBeasiswa() {
                 style={
                   hal === 1
                     ? { background: 'var(--color-terracotta-500)', color: 'white' }
-                    : { background: 'white', color: 'var(--color-charcoal-600)' }
+                    : { background: 'white', color: 'var(--text-on-light)' }
                 }
                 aria-label={hal === '...' ? 'Halaman lainnya' : `Halaman ${hal}`}
                 aria-current={hal === 1 ? 'page' : undefined}

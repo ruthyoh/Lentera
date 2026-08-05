@@ -18,7 +18,6 @@ const kategoriFilter = [
   { label: 'Presentasi', value: 'presentasi', ikon: <Presentation size={14} /> },
 ];
 
-// Data placeholder materi
 const materiPlaceholder = Array.from({ length: 9 }, (_, i) => ({
   id: `materi-${i + 1}`,
   judul: [
@@ -56,31 +55,31 @@ export default function HalamanJelajah() {
       {/* Header halaman */}
       <div
         className="py-14 relative overflow-hidden"
-        style={{ background: 'var(--color-forest-700)' }}
+        style={{ background: 'var(--color-dark-800)' }}
       >
         <div className="absolute inset-0 opacity-5" aria-hidden="true" style={{
-          backgroundImage: `linear-gradient(var(--color-cream-200) 1px, transparent 1px), linear-gradient(90deg, var(--color-cream-200) 1px, transparent 1px)`,
+          backgroundImage: `linear-gradient(rgba(201,151,30,0.3) 1px, transparent 1px), linear-gradient(90deg, rgba(201,151,30,0.3) 1px, transparent 1px)`,
           backgroundSize: '40px 40px'
         }} />
         <div className="container-lentera relative z-10">
           <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
             <div>
-              <p className="text-xs font-bold tracking-widest uppercase mb-2" style={{ color: 'var(--color-forest-200)' }}>
+              <p className="text-xs font-bold tracking-widest uppercase mb-2" style={{ color: 'var(--color-gold-400)' }}>
                 Modul Belajar
               </p>
               <h1
-                className="text-3xl md:text-4xl font-bold text-white mb-3"
+                className="text-3xl md:text-4xl font-bold mb-3 text-[var(--text-on-dark)]"
                 style={{ fontFamily: 'var(--font-display)' }}
               >
                 Jelajah Materi
               </h1>
-              <p className="text-sm" style={{ color: 'rgba(245,240,232,0.75)' }}>
+              <p className="text-sm text-[var(--text-muted-on-dark)]">
                 12.000+ materi dari mahasiswa seluruh Indonesia
               </p>
             </div>
             <div className="flex gap-3">
               <Tombol
-                varian="sekunder"
+                varian="primer"
                 ukuran="sedang"
                 ikonKiri={<Brain size={16} />}
                 id="tombol-asisten-ai"
@@ -92,7 +91,7 @@ export default function HalamanJelajah() {
                   varian="hantu"
                   ukuran="sedang"
                   ikonKiri={<Upload size={16} />}
-                  className="text-white! hover:bg-white/10! border border-white/20!"
+                  className="text-[var(--text-on-dark)]! hover:bg-white/10! border border-white/20!"
                   id="tombol-unggah-materi"
                 >
                   Unggah Materi
@@ -117,8 +116,8 @@ export default function HalamanJelajah() {
           <div className="flex gap-3 flex-wrap">
             <select
               id="filter-jurusan"
-              className="px-4 py-3 rounded-[var(--radius-sm)] border text-sm bg-white focus:outline-none focus:ring-2 focus:ring-[var(--color-forest-500)]"
-              style={{ borderColor: 'var(--color-cream-400)', color: 'var(--color-charcoal-700)' }}
+              className="px-4 py-3 rounded-[var(--radius-sm)] border text-sm bg-white focus:outline-none focus:ring-2 focus:ring-[var(--color-gold-500)]"
+              style={{ borderColor: 'var(--color-cream-400)', color: 'var(--text-on-light)' }}
               aria-label="Filter berdasarkan jurusan"
             >
               <option value="">Semua Jurusan</option>
@@ -139,16 +138,11 @@ export default function HalamanJelajah() {
               key={kat.value}
               role="tab"
               aria-selected={kat.value === 'semua'}
-              className={[
-                'flex items-center gap-1.5 px-4 py-2 rounded-full text-sm font-medium transition-all duration-200',
-                kat.value === 'semua'
-                  ? 'text-[var(--color-cream-100)] shadow-sm'
-                  : 'hover:bg-[var(--color-cream-300)]',
-              ].join(' ')}
+              className="flex items-center gap-1.5 px-4 py-2 rounded-full text-sm font-medium transition-all duration-200"
               style={
                 kat.value === 'semua'
-                  ? { background: 'var(--color-forest-700)', color: 'white' }
-                  : { color: 'var(--color-charcoal-600)', background: 'white' }
+                  ? { background: 'var(--color-gold-500)', color: 'var(--color-dark-900)' }
+                  : { color: 'var(--text-on-light)', background: 'white' }
               }
               id={`tab-${kat.value}`}
             >
@@ -175,27 +169,27 @@ export default function HalamanJelajah() {
               {/* Ikon format */}
               <div
                 className="w-11 h-11 rounded-[var(--radius-sm)] flex items-center justify-center mb-4 transition-transform duration-300 group-hover:scale-110"
-                style={{ background: 'var(--color-forest-100)', color: 'var(--color-forest-700)' }}
+                style={{ background: 'var(--color-gold-100)', color: 'var(--color-gold-700)' }}
                 aria-hidden="true"
               >
                 <FileText size={20} />
               </div>
 
-              <Badge varian="forest" className="mb-3 text-xs">
+              <Badge varian="gold" className="mb-3 text-xs">
                 {labelKategori[materi.kategori] || materi.kategori}
               </Badge>
 
               <h2
-                className="font-bold text-base mb-1 line-clamp-2 group-hover:text-[var(--color-forest-700)] transition-colors"
-                style={{ fontFamily: 'var(--font-display)', color: 'var(--color-charcoal-900)' }}
+                className="font-bold text-base mb-1 line-clamp-2 transition-colors text-[var(--text-on-light)] group-hover:text-[var(--color-gold-600)]"
+                style={{ fontFamily: 'var(--font-display)' }}
               >
                 {materi.judul}
               </h2>
-              <p className="text-xs mb-4" style={{ color: 'var(--color-charcoal-400)' }}>
+              <p className="text-xs mb-4 text-[var(--text-muted-on-light)]">
                 {materi.matkul} · oleh {materi.pengunggah}
               </p>
 
-              <div className="flex items-center justify-between text-xs" style={{ color: 'var(--color-charcoal-400)' }}>
+              <div className="flex items-center justify-between text-xs text-[var(--text-muted-on-light)]">
                 <span>{materi.unduhan.toLocaleString('id-ID')} unduhan</span>
                 <span className="flex items-center gap-1">
                   ❤️ {materi.suka}
@@ -203,8 +197,8 @@ export default function HalamanJelajah() {
               </div>
 
               <div
-                className="mt-4 pt-4 border-t flex items-center gap-1 text-xs font-semibold opacity-0 group-hover:opacity-100 transition-opacity"
-                style={{ borderColor: 'var(--color-cream-300)', color: 'var(--color-forest-700)' }}
+                className="mt-4 pt-4 border-t flex items-center gap-1 text-xs font-semibold opacity-0 group-hover:opacity-100 transition-opacity text-[var(--color-gold-600)]"
+                style={{ borderColor: 'var(--color-cream-300)' }}
                 aria-hidden="true"
               >
                 Lihat detail
@@ -220,16 +214,11 @@ export default function HalamanJelajah() {
             {[1, 2, 3, '...', 24].map((hal, i) => (
               <button
                 key={i}
-                className={[
-                  'w-10 h-10 rounded-[var(--radius-sm)] text-sm font-medium transition-all',
-                  hal === 1
-                    ? 'text-white shadow-sm'
-                    : 'hover:bg-[var(--color-cream-300)]',
-                ].join(' ')}
+                className="w-10 h-10 rounded-[var(--radius-sm)] text-sm font-medium transition-all"
                 style={
                   hal === 1
-                    ? { background: 'var(--color-forest-700)', color: 'white' }
-                    : { background: 'white', color: 'var(--color-charcoal-600)' }
+                    ? { background: 'var(--color-gold-500)', color: 'var(--color-dark-900)' }
+                    : { background: 'white', color: 'var(--text-on-light)' }
                 }
                 aria-label={hal === '...' ? 'Halaman lainnya' : `Halaman ${hal}`}
                 aria-current={hal === 1 ? 'page' : undefined}

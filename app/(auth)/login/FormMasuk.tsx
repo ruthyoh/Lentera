@@ -40,14 +40,14 @@ export default function FormMasuk() {
       {state.sukses && state.pesan && (
         <div
           role="status"
-          className="flex items-start gap-3 p-4 rounded-[var(--radius-sm)] text-sm"
+          className="flex items-start gap-3 p-4 rounded-[var(--radius-sm)] text-sm font-medium"
           style={{
-            background: 'var(--color-forest-50)',
-            border: '1px solid var(--color-forest-200)',
-            color: 'var(--color-forest-700)',
+            background: 'var(--color-gold-50)',
+            border: '1px solid var(--color-gold-200)',
+            color: 'var(--color-gold-900)',
           }}
         >
-          <CheckCircle size={16} className="flex-shrink-0 mt-0.5" />
+          <CheckCircle size={16} className="flex-shrink-0 mt-0.5 text-[var(--color-gold-600)]" />
           <span>{state.pesan}</span>
         </div>
       )}
@@ -82,8 +82,8 @@ export default function FormMasuk() {
         <div className="flex justify-end mt-2">
           <Link
             href="/lupa-kata-sandi"
-            className="text-xs font-medium transition-colors"
-            style={{ color: 'var(--color-forest-600)' }}
+            className="text-xs font-semibold transition-colors hover:underline"
+            style={{ color: 'var(--color-gold-600)' }}
           >
             Lupa kata sandi?
           </Link>

@@ -6,7 +6,7 @@ const statistik = [
     angka: '5.000+',
     label: 'Mahasiswa Aktif',
     deskripsi: 'Bergabung dari 50+ universitas di seluruh Indonesia',
-    warna: 'forest',
+    warna: 'gold',
   },
   {
     ikon: <BookOpen size={24} />,
@@ -20,7 +20,7 @@ const statistik = [
     angka: '300+',
     label: 'Program Beasiswa',
     deskripsi: 'Dari pemerintah, swasta, dan lembaga internasional',
-    warna: 'forest',
+    warna: 'gold',
   },
   {
     ikon: <TrendingUp size={24} />,
@@ -50,11 +50,11 @@ export default function Stats() {
           <h2
             id="stats-judul"
             className="text-3xl md:text-4xl font-bold mb-4"
-            style={{ fontFamily: 'var(--font-display)', color: 'var(--color-charcoal-900)' }}
+            style={{ fontFamily: 'var(--font-display)', color: 'var(--text-on-light)' }}
           >
             Lentera dalam Angka
           </h2>
-          <p className="text-base max-w-xl mx-auto" style={{ color: 'var(--color-charcoal-500)' }}>
+          <p className="text-base max-w-xl mx-auto" style={{ color: 'var(--text-muted-on-light)' }}>
             Bersama-sama kami membangun ekosistem belajar yang inklusif dan berkelanjutan untuk mahasiswa Indonesia.
           </p>
         </div>
@@ -76,12 +76,12 @@ export default function Stats() {
                 className="w-14 h-14 rounded-[var(--radius-md)] flex items-center justify-center mx-auto mb-4 transition-transform duration-300 group-hover:scale-110"
                 style={{
                   background:
-                    stat.warna === 'forest'
-                      ? 'var(--color-forest-100)'
+                    stat.warna === 'gold'
+                      ? 'var(--color-gold-100)'
                       : 'var(--color-terracotta-100)',
                   color:
-                    stat.warna === 'forest'
-                      ? 'var(--color-forest-700)'
+                    stat.warna === 'gold'
+                      ? 'var(--color-gold-700)'
                       : 'var(--color-terracotta-600)',
                 }}
                 aria-hidden="true"
@@ -93,8 +93,8 @@ export default function Stats() {
                 style={{
                   fontFamily: 'var(--font-display)',
                   color:
-                    stat.warna === 'forest'
-                      ? 'var(--color-forest-700)'
+                    stat.warna === 'gold'
+                      ? 'var(--color-gold-700)'
                       : 'var(--color-terracotta-600)',
                 }}
               >
@@ -102,11 +102,11 @@ export default function Stats() {
               </p>
               <p
                 className="font-semibold text-sm mb-2"
-                style={{ color: 'var(--color-charcoal-900)' }}
+                style={{ color: 'var(--text-on-light)' }}
               >
                 {stat.label}
               </p>
-              <p className="text-xs leading-relaxed" style={{ color: 'var(--color-charcoal-400)' }}>
+              <p className="text-xs leading-relaxed" style={{ color: 'var(--text-muted-on-light)' }}>
                 {stat.deskripsi}
               </p>
             </div>

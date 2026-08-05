@@ -45,20 +45,20 @@ export default function HalamanUtama() {
           <div className="text-center mb-14">
             <p
               className="text-xs font-bold tracking-widest uppercase mb-3"
-              style={{ color: 'var(--color-forest-600)' }}
+              style={{ color: 'var(--color-gold-600)' }}
             >
               Dua Modul Terintegrasi
             </p>
             <h2
               id="modul-judul"
               className="text-3xl md:text-4xl font-bold mb-4"
-              style={{ fontFamily: 'var(--font-display)', color: 'var(--color-charcoal-900)' }}
+              style={{ fontFamily: 'var(--font-display)', color: 'var(--text-on-light)' }}
             >
               Satu Platform, Dua Solusi
             </h2>
             <p
               className="text-base max-w-2xl mx-auto"
-              style={{ color: 'var(--color-charcoal-500)' }}
+              style={{ color: 'var(--text-muted-on-light)' }}
             >
               Lentera hadir dengan dua modul yang saling melengkapi untuk mendukung perjalanan akademik dan finansialmu sebagai mahasiswa.
             </p>
@@ -85,11 +85,11 @@ export default function HalamanUtama() {
             <h2
               id="nilai-judul"
               className="text-3xl md:text-4xl font-bold mb-4"
-              style={{ fontFamily: 'var(--font-display)', color: 'var(--color-charcoal-900)' }}
+              style={{ fontFamily: 'var(--font-display)', color: 'var(--text-on-light)' }}
             >
               Mengapa Lentera?
             </h2>
-            <p className="text-base max-w-xl mx-auto" style={{ color: 'var(--color-charcoal-500)' }}>
+            <p className="text-base max-w-xl mx-auto" style={{ color: 'var(--text-muted-on-light)' }}>
               Dirancang khusus untuk kebutuhan mahasiswa Indonesia yang menginginkan akses pendidikan berkualitas dan berkelanjutan.
             </p>
           </div>
@@ -104,8 +104,8 @@ export default function HalamanUtama() {
                 <div
                   className="w-14 h-14 rounded-[var(--radius-md)] flex items-center justify-center mx-auto mb-5 transition-all duration-300 group-hover:scale-110 group-hover:rotate-3"
                   style={{
-                    background: 'var(--color-forest-100)',
-                    color: 'var(--color-forest-700)',
+                    background: 'var(--color-gold-100)',
+                    color: 'var(--color-gold-700)',
                   }}
                   aria-hidden="true"
                 >
@@ -113,11 +113,11 @@ export default function HalamanUtama() {
                 </div>
                 <h3
                   className="text-lg font-bold mb-3"
-                  style={{ fontFamily: 'var(--font-display)', color: 'var(--color-charcoal-900)' }}
+                  style={{ fontFamily: 'var(--font-display)', color: 'var(--text-on-light)' }}
                 >
                   {nilai.judul}
                 </h3>
-                <p className="text-sm leading-relaxed" style={{ color: 'var(--color-charcoal-500)' }}>
+                <p className="text-sm leading-relaxed" style={{ color: 'var(--text-muted-on-light)' }}>
                   {nilai.deskripsi}
                 </p>
               </div>
@@ -130,7 +130,7 @@ export default function HalamanUtama() {
       <section
         className="py-24 relative overflow-hidden"
         aria-labelledby="cta-judul"
-        style={{ background: 'var(--color-forest-800)' }}
+        style={{ background: 'var(--color-dark-800)' }}
       >
         {/* Dekorasi background */}
         <div className="absolute inset-0 overflow-hidden" aria-hidden="true">
@@ -140,7 +140,7 @@ export default function HalamanUtama() {
           />
           <div
             className="absolute -bottom-20 -left-20 w-80 h-80 rounded-full opacity-8"
-            style={{ background: 'radial-gradient(circle, var(--color-forest-400), transparent 70%)' }}
+            style={{ background: 'radial-gradient(circle, var(--color-gold-600), transparent 70%)' }}
           />
         </div>
 
@@ -153,14 +153,14 @@ export default function HalamanUtama() {
           </p>
           <h2
             id="cta-judul"
-            className="text-3xl md:text-5xl font-bold mb-6 text-white"
-            style={{ fontFamily: 'var(--font-display)' }}
+            className="text-3xl md:text-5xl font-bold mb-6"
+            style={{ fontFamily: 'var(--font-display)', color: 'var(--text-on-dark)' }}
           >
             Siap Meraih Impianmu?
           </h2>
           <p
             className="text-lg mb-10 max-w-xl mx-auto"
-            style={{ color: 'rgba(245, 240, 232, 0.8)' }}
+            style={{ color: 'var(--text-muted-on-dark)' }}
           >
             Bergabung sekarang dan mulai perjalanan belajarmu bersama ribuan mahasiswa Indonesia yang telah merasakan manfaat Lentera.
           </p>
@@ -169,8 +169,8 @@ export default function HalamanUtama() {
               href="/register"
               className="inline-flex items-center gap-2 px-8 py-4 rounded-[var(--radius-sm)] font-semibold text-base shadow-lg transition-all duration-200 hover:shadow-xl hover:-translate-y-0.5"
               style={{
-                background: 'white',
-                color: 'var(--color-forest-700)',
+                background: 'var(--text-on-dark)',
+                color: 'var(--text-on-light)',
               }}
               id="cta-daftar-sekarang"
             >
@@ -180,7 +180,8 @@ export default function HalamanUtama() {
             </Link>
             <Link
               href="/jelajah"
-              className="inline-flex items-center gap-2 px-8 py-4 rounded-[var(--radius-sm)] font-semibold text-base border-2 border-white text-white hover:bg-white/10 transition-all duration-200"
+              className="inline-flex items-center gap-2 px-8 py-4 rounded-[var(--radius-sm)] font-semibold text-base border-2 hover:bg-white/10 transition-all duration-200"
+              style={{ borderColor: 'var(--text-on-dark)', color: 'var(--text-on-dark)' }}
               id="cta-jelajah-dulu"
             >
               Jelajah Dulu

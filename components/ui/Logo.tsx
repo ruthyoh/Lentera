@@ -32,7 +32,7 @@ export default function Logo({ ukuran = 'sedang', tampilkanTeks = true, classNam
           className={`${config.teks} font-bold tracking-tight`}
           style={{
             fontFamily: 'var(--font-display)',
-            color: 'var(--color-forest-700)',
+            color: 'var(--text-on-light)',
           }}
         >
           Lentera

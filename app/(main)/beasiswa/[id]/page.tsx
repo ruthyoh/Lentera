@@ -22,7 +22,6 @@ export async function generateMetadata({ params }: HalamanDetailBeasiswaProps): 
 export default async function HalamanDetailBeasiswa({ params }: HalamanDetailBeasiswaProps) {
   const { id } = await params;
 
-  // Placeholder — akan diganti fetch Supabase
   const beasiswa = {
     id,
     nama: 'Beasiswa Unggulan Kemendikbud 2026',
@@ -67,12 +66,12 @@ export default async function HalamanDetailBeasiswa({ params }: HalamanDetailBea
       <div className="border-b py-3" style={{ borderColor: 'var(--color-cream-300)', background: 'white' }}>
         <div className="container-lentera">
           <nav aria-label="Breadcrumb" className="flex items-center gap-2 text-sm">
-            <Link href="/beasiswa" className="flex items-center gap-1.5 hover:text-[var(--color-terracotta-600)] transition-colors" style={{ color: 'var(--color-charcoal-500)' }}>
+            <Link href="/beasiswa" className="flex items-center gap-1.5 hover:text-[var(--color-terracotta-600)] transition-colors text-[var(--text-muted-on-light)]">
               <ArrowLeft size={14} />
               Jelajah Beasiswa
             </Link>
-            <span style={{ color: 'var(--color-charcoal-300)' }}>/</span>
-            <span className="font-medium truncate" style={{ color: 'var(--color-charcoal-700)' }}>
+            <span style={{ color: 'var(--text-muted-on-light)' }}>/</span>
+            <span className="font-medium truncate text-[var(--text-on-light)]">
               {beasiswa.nama}
             </span>
           </nav>
@@ -100,18 +99,18 @@ export default async function HalamanDetailBeasiswa({ params }: HalamanDetailBea
                 </div>
                 <div>
                   <h1
-                    className="text-2xl md:text-3xl font-bold mb-1"
-                    style={{ fontFamily: 'var(--font-display)', color: 'var(--color-charcoal-900)' }}
+                    className="text-2xl md:text-3xl font-bold mb-1 text-[var(--text-on-light)]"
+                    style={{ fontFamily: 'var(--font-display)' }}
                   >
                     {beasiswa.nama}
                   </h1>
-                  <p className="text-sm" style={{ color: 'var(--color-charcoal-500)' }}>
+                  <p className="text-sm text-[var(--text-muted-on-light)]">
                     {beasiswa.penyelenggara}
                   </p>
                 </div>
               </div>
 
-              <p className="leading-relaxed mb-6" style={{ color: 'var(--color-charcoal-700)' }}>
+              <p className="leading-relaxed mb-6 text-[var(--text-on-light)]">
                 {beasiswa.deskripsi}
               </p>
 
@@ -141,16 +140,16 @@ export default async function HalamanDetailBeasiswa({ params }: HalamanDetailBea
             {/* Persyaratan */}
             <div className="card-glass p-8">
               <h2
-                className="text-xl font-bold mb-5 flex items-center gap-2"
-                style={{ fontFamily: 'var(--font-display)', color: 'var(--color-charcoal-900)' }}
+                className="text-xl font-bold mb-5 flex items-center gap-2 text-[var(--text-on-light)]"
+                style={{ fontFamily: 'var(--font-display)' }}
               >
                 <AlertCircle size={20} style={{ color: 'var(--color-terracotta-500)' }} />
                 Persyaratan Pendaftaran
               </h2>
               <ul className="space-y-3">
                 {beasiswa.persyaratan.map((syarat, i) => (
-                  <li key={i} className="flex items-start gap-3 text-sm" style={{ color: 'var(--color-charcoal-700)' }}>
-                    <CheckCircle size={16} className="flex-shrink-0 mt-0.5" style={{ color: 'var(--color-forest-600)' }} />
+                  <li key={i} className="flex items-start gap-3 text-sm text-[var(--text-on-light)]">
+                    <CheckCircle size={16} className="flex-shrink-0 mt-0.5" style={{ color: 'var(--color-gold-600)' }} />
                     {syarat}
                   </li>
                 ))}
@@ -160,8 +159,8 @@ export default async function HalamanDetailBeasiswa({ params }: HalamanDetailBea
             {/* Benefit */}
             <div className="card-glass p-8">
               <h2
-                className="text-xl font-bold mb-5 flex items-center gap-2"
-                style={{ fontFamily: 'var(--font-display)', color: 'var(--color-charcoal-900)' }}
+                className="text-xl font-bold mb-5 flex items-center gap-2 text-[var(--text-on-light)]"
+                style={{ fontFamily: 'var(--font-display)' }}
               >
                 <Award size={20} style={{ color: 'var(--color-terracotta-500)' }} />
                 Manfaat Beasiswa
@@ -185,7 +184,7 @@ export default async function HalamanDetailBeasiswa({ params }: HalamanDetailBea
           <div className="space-y-6">
             {/* Info Ringkas */}
             <div className="card-glass p-6">
-              <h3 className="font-bold mb-4" style={{ fontFamily: 'var(--font-display)', color: 'var(--color-charcoal-900)' }}>
+              <h3 className="font-bold mb-4 text-[var(--text-on-light)]" style={{ fontFamily: 'var(--font-display)' }}>
                 Informasi Singkat
               </h3>
               <div className="space-y-4">
@@ -200,8 +199,8 @@ export default async function HalamanDetailBeasiswa({ params }: HalamanDetailBea
                       {info.ikon}
                     </div>
                     <div>
-                      <p className="text-xs" style={{ color: 'var(--color-charcoal-400)' }}>{info.label}</p>
-                      <p className="text-sm font-semibold" style={{ color: 'var(--color-charcoal-900)' }}>{info.nilai}</p>
+                      <p className="text-xs text-[var(--text-muted-on-light)]">{info.label}</p>
+                      <p className="text-sm font-semibold text-[var(--text-on-light)]">{info.nilai}</p>
                     </div>
                   </div>
                 ))}
@@ -224,7 +223,7 @@ export default async function HalamanDetailBeasiswa({ params }: HalamanDetailBea
               </p>
               <Link href="/login" className="block">
                 <button
-                  className="w-full py-3 rounded-[var(--radius-sm)] text-sm font-semibold transition-all hover:opacity-90"
+                  className="w-full py-3 rounded-[var(--radius-sm)] text-sm font-semibold transition-all hover:opacity-90 cursor-pointer"
                   style={{ background: 'white', color: 'var(--color-terracotta-700)' }}
                   id="tombol-mulai-esai-ai"
                 >

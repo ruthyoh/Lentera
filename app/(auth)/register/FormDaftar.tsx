@@ -71,18 +71,18 @@ export default function FormDaftar() {
         </div>
       )}
 
-      {/* Pesan sukses (perlu konfirmasi email) */}
+      {/* Pesan sukses */}
       {state.sukses && state.pesan && (
         <div
           role="status"
-          className="flex items-start gap-3 p-4 rounded-[var(--radius-sm)] text-sm"
+          className="flex items-start gap-3 p-4 rounded-[var(--radius-sm)] text-sm font-medium"
           style={{
-            background: 'var(--color-forest-50)',
-            border: '1px solid var(--color-forest-200)',
-            color: 'var(--color-forest-700)',
+            background: 'var(--color-gold-50)',
+            border: '1px solid var(--color-gold-200)',
+            color: 'var(--color-gold-900)',
           }}
         >
-          <CheckCircle size={16} className="flex-shrink-0 mt-0.5" />
+          <CheckCircle size={16} className="flex-shrink-0 mt-0.5 text-[var(--color-gold-600)]" />
           <span>{state.pesan}</span>
         </div>
       )}
@@ -147,7 +147,7 @@ export default function FormDaftar() {
       {/* Divider data akademik */}
       <div
         className="divider-teks text-xs py-2"
-        style={{ color: 'var(--color-charcoal-400)' }}
+        style={{ color: 'var(--text-muted-on-light)' }}
       >
         Data Akademik (opsional — untuk pencocokan beasiswa)
       </div>
@@ -157,7 +157,7 @@ export default function FormDaftar() {
         <label
           htmlFor="jurusan"
           className="text-sm font-semibold flex items-center gap-1.5"
-          style={{ color: 'var(--color-charcoal-700)' }}
+          style={{ color: 'var(--text-on-light)' }}
         >
           <GraduationCap size={14} />
           Jurusan / Program Studi
@@ -165,12 +165,12 @@ export default function FormDaftar() {
         <select
           id="jurusan"
           name="jurusan"
-          className="w-full rounded-[var(--radius-sm)] border px-4 py-3 text-sm bg-white transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-[var(--color-forest-500)] focus:border-transparent"
+          className="w-full rounded-[var(--radius-sm)] border px-4 py-3 text-sm bg-white transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-[var(--color-gold-500)] focus:border-transparent"
           style={{
             borderColor: state.fieldErrors?.jurusan
               ? '#f87171'
               : 'var(--color-cream-400)',
-            color: 'var(--color-charcoal-700)',
+            color: 'var(--text-on-light)',
           }}
           defaultValue=""
         >
@@ -191,7 +191,7 @@ export default function FormDaftar() {
           <label
             htmlFor="semester"
             className="text-sm font-semibold flex items-center gap-1.5"
-            style={{ color: 'var(--color-charcoal-700)' }}
+            style={{ color: 'var(--text-on-light)' }}
           >
             <BookMarked size={14} />
             Semester
@@ -199,12 +199,12 @@ export default function FormDaftar() {
           <select
             id="semester"
             name="semester"
-            className="w-full rounded-[var(--radius-sm)] border px-4 py-3 text-sm bg-white transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-[var(--color-forest-500)] focus:border-transparent"
+            className="w-full rounded-[var(--radius-sm)] border px-4 py-3 text-sm bg-white transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-[var(--color-gold-500)] focus:border-transparent"
             style={{
               borderColor: state.fieldErrors?.semester
                 ? '#f87171'
                 : 'var(--color-cream-400)',
-              color: 'var(--color-charcoal-700)',
+              color: 'var(--text-on-light)',
             }}
             defaultValue=""
           >
@@ -240,22 +240,22 @@ export default function FormDaftar() {
         <label
           htmlFor="kategori-khusus"
           className="text-sm font-semibold"
-          style={{ color: 'var(--color-charcoal-700)' }}
+          style={{ color: 'var(--text-on-light)' }}
         >
           Kategori Khusus (opsional)
         </label>
         <select
           id="kategori-khusus"
           name="kategori_khusus"
-          className="w-full rounded-[var(--radius-sm)] border px-4 py-3 text-sm bg-white transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-[var(--color-forest-500)] focus:border-transparent"
-          style={{ borderColor: 'var(--color-cream-400)', color: 'var(--color-charcoal-700)' }}
+          className="w-full rounded-[var(--radius-sm)] border px-4 py-3 text-sm bg-white transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-[var(--color-gold-500)] focus:border-transparent"
+          style={{ borderColor: 'var(--color-cream-400)', color: 'var(--text-on-light)' }}
           defaultValue=""
         >
           {pilihanKategoriKhusus.map((k) => (
             <option key={k.value} value={k.value}>{k.label}</option>
           ))}
         </select>
-        <p className="text-xs" style={{ color: 'var(--color-charcoal-400)' }}>
+        <p className="text-xs" style={{ color: 'var(--text-muted-on-light)' }}>
           Digunakan untuk pencocokan beasiswa yang lebih akurat
         </p>
       </div>
@@ -267,18 +267,17 @@ export default function FormDaftar() {
           id="setuju-syarat"
           name="setuju_syarat"
           required
-          className="mt-0.5 w-4 h-4 rounded border-[var(--color-cream-400)] accent-[var(--color-forest-600)]"
+          className="mt-0.5 w-4 h-4 rounded border-[var(--color-cream-400)] accent-[var(--color-gold-600)]"
         />
         <label
           htmlFor="setuju-syarat"
           className="text-sm leading-relaxed"
-          style={{ color: 'var(--color-charcoal-500)' }}
+          style={{ color: 'var(--text-muted-on-light)' }}
         >
           Saya menyetujui{' '}
           <Link
             href="/syarat-ketentuan"
-            className="font-semibold underline"
-            style={{ color: 'var(--color-forest-700)' }}
+            className="font-semibold underline text-[var(--color-gold-600)]"
             target="_blank"
           >
             Syarat &amp; Ketentuan
@@ -286,8 +285,7 @@ export default function FormDaftar() {
           dan{' '}
           <Link
             href="/kebijakan-privasi"
-            className="font-semibold underline"
-            style={{ color: 'var(--color-forest-700)' }}
+            className="font-semibold underline text-[var(--color-gold-600)]"
             target="_blank"
           >
             Kebijakan Privasi
@@ -308,12 +306,11 @@ export default function FormDaftar() {
         {pending ? 'Membuat Akun...' : 'Buat Akun Gratis'}
       </Tombol>
 
-      <p className="text-center text-sm" style={{ color: 'var(--color-charcoal-500)' }}>
+      <p className="text-center text-sm" style={{ color: 'var(--text-muted-on-light)' }}>
         Sudah punya akun?{' '}
         <Link
           href="/login"
-          className="font-semibold transition-colors"
-          style={{ color: 'var(--color-forest-700)' }}
+          className="font-semibold transition-colors hover:underline text-[var(--color-gold-600)]"
         >
           Masuk sekarang
         </Link>

@@ -17,7 +17,8 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
         {label && (
           <label
             htmlFor={inputId}
-            className="text-sm font-semibold text-[var(--color-charcoal-700)]"
+            className="text-sm font-semibold"
+            style={{ color: 'var(--text-on-light)' }}
           >
             {label}
             {props.required && (
@@ -27,7 +28,10 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
         )}
         <div className="relative">
           {ikonKiri && (
-            <div className="absolute left-3 top-1/2 -translate-y-1/2 text-[var(--color-charcoal-400)]">
+            <div
+              className="absolute left-3 top-1/2 -translate-y-1/2"
+              style={{ color: 'var(--text-muted-on-light)' }}
+            >
               {ikonKiri}
             </div>
           )}
@@ -36,23 +40,27 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
             id={inputId}
             className={[
               'w-full rounded-[var(--radius-sm)] border px-4 py-3 text-sm',
-              'bg-white text-[var(--color-charcoal-900)]',
-              'placeholder:text-[var(--color-charcoal-300)]',
+              'bg-white',
+              'placeholder:text-[var(--color-ink-300)]',
               'transition-all duration-200',
-              'focus:outline-none focus:ring-2 focus:ring-[var(--color-forest-500)] focus:border-transparent',
+              'focus:outline-none focus:ring-2 focus:ring-[var(--color-gold-500)] focus:border-transparent',
               error
                 ? 'border-red-400 focus:ring-red-400'
-                : 'border-[var(--color-cream-400)] hover:border-[var(--color-forest-400)]',
+                : 'border-[var(--color-cream-400)] hover:border-[var(--color-gold-400)]',
               ikonKiri ? 'pl-10' : '',
               ikonKanan ? 'pr-10' : '',
               className,
             ]
               .filter(Boolean)
               .join(' ')}
+            style={{ color: 'var(--text-on-light)' }}
             {...props}
           />
           {ikonKanan && (
-            <div className="absolute right-3 top-1/2 -translate-y-1/2 text-[var(--color-charcoal-400)]">
+            <div
+              className="absolute right-3 top-1/2 -translate-y-1/2"
+              style={{ color: 'var(--text-muted-on-light)' }}
+            >
               {ikonKanan}
             </div>
           )}
@@ -66,7 +74,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
           </p>
         )}
         {petunjuk && !error && (
-          <p className="text-xs text-[var(--color-charcoal-400)]">{petunjuk}</p>
+          <p className="text-xs" style={{ color: 'var(--text-muted-on-light)' }}>{petunjuk}</p>
         )}
       </div>
     );

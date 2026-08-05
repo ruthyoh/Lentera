@@ -1,14 +1,32 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
-import Image from 'next/image';
+import { BookOpen, Award, Brain, Trophy } from 'lucide-react';
 import Logo from '@/components/ui/Logo';
-import Tombol from '@/components/ui/Button';
 import FormMasuk from './FormMasuk';
 
 export const metadata: Metadata = {
   title: 'Masuk ke Lentera',
   description: 'Masuk ke akun Lentera dan akses ribuan materi belajar serta beasiswa.',
 };
+
+const poinUnggulan = [
+  {
+    ikon: BookOpen,
+    teks: 'Ribuan catatan & rangkuman kuliah yang dikurasi komunitas',
+  },
+  {
+    ikon: Award,
+    teks: 'Pencocokan beasiswa otomatis sesuai profil akademikmu',
+  },
+  {
+    ikon: Brain,
+    teks: 'Ringkasan, kuis, dan draf esai beasiswa dihasilkan AI',
+  },
+  {
+    ikon: Trophy,
+    teks: 'Sistem poin & papan peringkat untuk motivasi belajar',
+  },
+];
 
 export default function HalamanMasuk() {
   return (
@@ -17,58 +35,80 @@ export default function HalamanMasuk() {
       style={{ background: 'var(--color-cream-200)' }}
     >
       {/* Panel Kiri — Branding */}
-      <div className="hidden lg:flex lg:w-1/2 bg-gradient-hero flex-col justify-between p-12 relative overflow-hidden">
-        <div className="absolute inset-0" aria-hidden="true">
+      <div className="hidden lg:flex lg:w-1/2 bg-gradient-hero flex-col justify-center p-12 relative overflow-hidden">
+        {/* Dekorasi background */}
+        <div className="absolute inset-0 pointer-events-none" aria-hidden="true">
           <div
-            className="absolute top-20 right-10 w-64 h-64 rounded-full opacity-15"
-            style={{ background: 'radial-gradient(circle, var(--color-terracotta-400), transparent 70%)' }}
+            className="absolute top-20 right-10 w-64 h-64 rounded-full opacity-10"
+            style={{ background: 'radial-gradient(circle, var(--color-gold-500), transparent 70%)' }}
           />
           <div
-            className="absolute bottom-20 left-10 w-80 h-80 rounded-full opacity-10"
-            style={{ background: 'radial-gradient(circle, var(--color-forest-300), transparent 70%)' }}
+            className="absolute bottom-20 left-10 w-80 h-80 rounded-full opacity-8"
+            style={{ background: 'radial-gradient(circle, var(--color-gold-600), transparent 70%)' }}
+          />
+          {/* Grid */}
+          <div
+            className="absolute inset-0 opacity-5"
+            style={{
+              backgroundImage: `linear-gradient(rgba(201,151,30,0.3) 1px, transparent 1px), linear-gradient(90deg, rgba(201,151,30,0.3) 1px, transparent 1px)`,
+              backgroundSize: '40px 40px',
+            }}
           />
         </div>
 
-        <div className="relative z-10">
-          <Logo ukuran="sedang" tampilkanTeks className="[&>a>span]:text-white" />
-        </div>
-
-        <div className="relative z-10 space-y-8">
-          <blockquote className="text-white">
-            <p className="text-2xl font-bold mb-4 leading-tight" style={{ fontFamily: 'var(--font-display)' }}>
+        {/* Konten panel — terpusat secara vertikal, TANPA logo kedua */}
+        <div className="relative z-10 flex flex-col gap-8">
+          {/* Kutipan langsung — tanpa logo tambahan di atasnya */}
+          <blockquote>
+            <p
+              className="text-2xl font-bold leading-snug mb-2"
+              style={{ fontFamily: 'var(--font-display)', color: 'var(--text-on-dark)' }}
+            >
               &ldquo;Ilmu yang dibagikan adalah cahaya yang tidak pernah padam.&rdquo;
             </p>
-            <footer className="text-sm opacity-75">
+            <footer className="text-sm" style={{ color: 'var(--text-muted-on-dark)' }}>
               — Semangat Lentera untuk mahasiswa Indonesia
             </footer>
           </blockquote>
 
-          <div className="space-y-3">
-            {[
-              { emoji: '📚', teks: 'Ribuan materi kuliah berkualitas' },
-              { emoji: '🏆', teks: 'Temukan beasiswa yang sesuai profilmu' },
-              { emoji: '🤖', teks: 'Asisten Belajar & Beasiswa AI 24/7' },
-            ].map((item) => (
-              <div key={item.teks} className="flex items-center gap-3">
-                <span className="text-xl">{item.emoji}</span>
-                <p className="text-white/80 text-sm">{item.teks}</p>
-              </div>
-            ))}
+          {/* Poin keunggulan */}
+          <div className="space-y-4">
+            {poinUnggulan.map((item) => {
+              const Ikon = item.ikon;
+              return (
+                <div key={item.teks} className="flex items-start gap-3.5">
+                  <div
+                    className="w-9 h-9 rounded-[var(--radius-sm)] flex items-center justify-center flex-shrink-0 mt-0.5"
+                    style={{ background: 'rgba(201,151,30,0.18)', border: '1px solid rgba(201,151,30,0.3)' }}
+                  >
+                    <Ikon size={16} style={{ color: 'var(--color-gold-300)' }} />
+                  </div>
+                  <p className="text-sm leading-relaxed font-medium" style={{ color: 'var(--text-on-dark)' }}>
+                    {item.teks}
+                  </p>
+                </div>
+              );
+            })}
           </div>
 
-          {/* Logo TCC */}
-          <Image
-            src="/logo-tcc.svg"
-            alt="TCC Triple-C Vibe Code 2026"
-            width={120}
-            height={36}
-            className="opacity-60"
-          />
+          {/* Badge TCC */}
+          <div>
+            <div
+              className="inline-flex items-center gap-2 px-3.5 py-2 rounded-[var(--radius-sm)] text-xs font-semibold"
+              style={{
+                background: 'rgba(201,151,30,0.15)',
+                border: '1px solid rgba(201,151,30,0.3)',
+                color: 'var(--color-gold-300)',
+              }}
+            >
+              ★ TCC Vibe Code 2026 — Triple-C
+            </div>
+          </div>
         </div>
       </div>
 
       {/* Panel Kanan — Form */}
-      <div className="flex-1 flex items-center justify-center p-6 lg:p-12">
+      <div className="flex-1 flex items-center justify-center p-6 lg:p-12 pt-24 lg:pt-16">
         <div className="w-full max-w-md">
           {/* Logo mobile */}
           <div className="lg:hidden mb-8 flex justify-center">
@@ -78,11 +118,11 @@ export default function HalamanMasuk() {
           <div className="mb-8">
             <h1
               className="text-2xl font-bold mb-2"
-              style={{ fontFamily: 'var(--font-display)', color: 'var(--color-charcoal-900)' }}
+              style={{ fontFamily: 'var(--font-display)', color: 'var(--text-on-light)' }}
             >
               Selamat Datang Kembali 👋
             </h1>
-            <p className="text-sm" style={{ color: 'var(--color-charcoal-500)' }}>
+            <p className="text-sm" style={{ color: 'var(--text-muted-on-light)' }}>
               Masuk untuk mengakses materi belajar dan beasiswamu.
             </p>
           </div>
@@ -102,7 +142,7 @@ export default function HalamanMasuk() {
             className="w-full flex items-center justify-center gap-3 py-3 px-4 rounded-[var(--radius-sm)] border-2 text-sm font-semibold transition-all duration-200 opacity-50 cursor-not-allowed"
             style={{
               borderColor: 'var(--color-cream-400)',
-              color: 'var(--color-charcoal-700)',
+              color: 'var(--text-on-light)',
               background: 'white',
             }}
           >
@@ -116,12 +156,12 @@ export default function HalamanMasuk() {
           </button>
 
           {/* Link ke register */}
-          <p className="text-center text-sm mt-6" style={{ color: 'var(--color-charcoal-500)' }}>
+          <p className="text-center text-sm mt-6" style={{ color: 'var(--text-muted-on-light)' }}>
             Belum punya akun?{' '}
             <Link
               href="/register"
-              className="font-semibold transition-colors"
-              style={{ color: 'var(--color-forest-700)' }}
+              className="font-semibold transition-colors hover:underline"
+              style={{ color: 'var(--color-gold-600)' }}
             >
               Daftar gratis
             </Link>
