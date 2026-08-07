@@ -7,6 +7,7 @@ import Tombol from '@/components/ui/Button';
 import { ambilDetailMateri } from '@/lib/actions/materi';
 import TombolUnduh from '@/components/materi/TombolUnduh';
 import FormPenilaian from '@/components/materi/FormPenilaian';
+import PanelAsistenAI from '@/components/materi/PanelAsistenAI';
 
 interface HalamanDetailMateriProps {
   params: Promise<{ id: string }>;
@@ -159,39 +160,8 @@ export default async function HalamanDetailMateri({ params }: HalamanDetailMater
 
           {/* Sidebar */}
           <div className="space-y-6">
-            {/* Asisten AI Placeholder */}
-            <div
-              className="p-6 rounded-[var(--radius-lg)] text-white shadow-lg relative overflow-hidden"
-              style={{ background: 'var(--color-dark-800)' }}
-            >
-              <div className="flex items-center gap-2 mb-3">
-                <Brain size={22} style={{ color: 'var(--color-gold-400)' }} />
-                <h3 className="font-bold text-base text-[var(--text-on-dark)]" style={{ fontFamily: 'var(--font-display)' }}>
-                  Asisten Belajar AI
-                </h3>
-              </div>
-              <p className="text-xs mb-4 leading-relaxed text-[var(--text-muted-on-dark)]">
-                Fitur kecerdasan buatan untuk meringkas berkas ini, menjadikannya kuis latihan, atau menjawab pertanyaan akademik.
-              </p>
-              <div className="space-y-2">
-                {[
-                  '💡 Ringkas materi ini dalam 5 poin',
-                  '❓ Buat 5 kuis latihan dari materi ini',
-                  '💬 Tanya Jawab seputar materi ini',
-                ].map((aksi, idx) => (
-                  <div
-                    key={idx}
-                    className="w-full text-left text-xs px-3.5 py-3 rounded-lg transition-all text-[var(--text-on-dark)] font-medium flex items-center justify-between"
-                    style={{ background: 'rgba(201,151,30,0.15)', border: '1px solid rgba(201,151,30,0.25)' }}
-                  >
-                    <span>{aksi}</span>
-                    <span className="text-[10px] uppercase font-bold px-2 py-0.5 rounded bg-[var(--color-gold-500)] text-[var(--color-dark-900)]">
-                      Segera
-                    </span>
-                  </div>
-                ))}
-              </div>
-            </div>
+            {/* Asisten Belajar AI Interaktif */}
+            <PanelAsistenAI materiId={materi.id} judulMateri={materi.judul} />
 
             {/* Kartu Informasi Pengunggah */}
             <div className="card-glass p-6 space-y-4">
