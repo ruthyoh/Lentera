@@ -34,7 +34,7 @@ export interface Materi {
   created_at: string;
   updated_at: string;
   // Join fields
-  profiles?: Pick<Profil, 'id' | 'nama_lengkap' | 'avatar_url'> | null;
+  profiles?: Pick<Profil, 'id' | 'nama_lengkap' | 'avatar_url' | 'jurusan' | 'asal_institusi'> | null;
 }
 
 export type KategoriMateri =

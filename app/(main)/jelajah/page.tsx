@@ -1,42 +1,34 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
-import { Search, Filter, BookOpen, FileText, HelpCircle, Presentation, ArrowRight, Brain, Upload } from 'lucide-react';
+import {
+  Search, BookOpen, FileText, HelpCircle, Presentation, ArrowRight, Brain, Upload, Layers, FolderOpen
+} from 'lucide-react';
 import Badge from '@/components/ui/Badge';
 import Tombol from '@/components/ui/Button';
-import Input from '@/components/ui/Input';
+import { ambilDaftarMateri } from '@/lib/actions/materi';
 
 export const metadata: Metadata = {
   title: 'Jelajah Materi Belajar',
   description: 'Temukan ribuan catatan kuliah, rangkuman, dan bank soal dari mahasiswa seluruh Indonesia.',
 };
 
+interface HalamanJelajahProps {
+  searchParams: Promise<{
+    q?: string;
+    kategori?: string;
+    matkul?: string;
+    halaman?: string;
+  }>;
+}
+
 const kategoriFilter = [
   { label: 'Semua', value: 'semua', ikon: <BookOpen size={14} /> },
   { label: 'Catatan', value: 'catatan', ikon: <FileText size={14} /> },
   { label: 'Rangkuman', value: 'rangkuman', ikon: <FileText size={14} /> },
   { label: 'Bank Soal', value: 'bank_soal', ikon: <HelpCircle size={14} /> },
+  { label: 'Modul', value: 'modul', ikon: <Layers size={14} /> },
   { label: 'Presentasi', value: 'presentasi', ikon: <Presentation size={14} /> },
 ];
-
-const materiPlaceholder = Array.from({ length: 9 }, (_, i) => ({
-  id: `materi-${i + 1}`,
-  judul: [
-    'Catatan Lengkap Kalkulus 1 — UTS & UAS',
-    'Rangkuman Algoritma dan Struktur Data',
-    'Bank Soal Fisika Dasar 200 Soal',
-    'Modul Praktikum Pemrograman Web',
-    'Catatan Ekonomi Mikro Semester 3',
-    'Rangkuman Manajemen Keuangan',
-    'Bank Soal Statistika dengan Pembahasan',
-    'Catatan Kimia Organik Lengkap',
-    'Presentasi Sistem Operasi Komputer',
-  ][i],
-  kategori: ['catatan', 'rangkuman', 'bank_soal', 'modul', 'catatan', 'rangkuman', 'bank_soal', 'catatan', 'presentasi'][i] as string,
-  matkul: ['Kalkulus 1', 'Algoritma', 'Fisika Dasar', 'Pemweb', 'Eko Mikro', 'Manajemen', 'Statistika', 'Kimia Organik', 'SO'][i],
-  pengunggah: ['Ahmad R.', 'Siti N.', 'Budi P.', 'Rina M.', 'Doni A.', 'Lestari', 'Fajar K.', 'Dewi S.', 'Rizky F.'][i],
-  unduhan: [1243, 876, 2341, 543, 987, 432, 1876, 765, 654][i],
-  suka: [234, 156, 432, 98, 187, 76, 321, 143, 112][i],
-}));
 
 const labelKategori: Record<string, string> = {
   catatan: 'Catatan',
@@ -44,23 +36,42 @@ const labelKategori: Record<string, string> = {
   bank_soal: 'Bank Soal',
   modul: 'Modul',
   presentasi: 'Presentasi',
+  lainnya: 'Lainnya',
 };
 
-export default function HalamanJelajah() {
+export default async function HalamanJelajah({ searchParams }: HalamanJelajahProps) {
+  const params = await searchParams;
+  const kataKunci = params.q || '';
+  const kategoriDipilih = params.kategori || 'semua';
+  const matkulDipilih = params.matkul || '';
+  const halamanSaatIni = params.halaman ? parseInt(params.halaman, 10) : 1;
+
+  const { materi, total, halaman, totalHalaman } = await ambilDaftarMateri({
+    q: kataKunci,
+    kategori: kategoriDipilih,
+    matkul: matkulDipilih,
+    halaman: halamanSaatIni,
+    perHalaman: 9,
+  });
+
   return (
     <div
       className="min-h-screen pt-16"
       style={{ background: 'var(--color-cream-200)' }}
     >
-      {/* Header halaman */}
+      {/* Header Halaman */}
       <div
         className="py-14 relative overflow-hidden"
         style={{ background: 'var(--color-dark-800)' }}
       >
-        <div className="absolute inset-0 opacity-5" aria-hidden="true" style={{
-          backgroundImage: `linear-gradient(rgba(201,151,30,0.3) 1px, transparent 1px), linear-gradient(90deg, rgba(201,151,30,0.3) 1px, transparent 1px)`,
-          backgroundSize: '40px 40px'
-        }} />
+        <div
+          className="absolute inset-0 opacity-5"
+          aria-hidden="true"
+          style={{
+            backgroundImage: `linear-gradient(rgba(201,151,30,0.3) 1px, transparent 1px), linear-gradient(90deg, rgba(201,151,30,0.3) 1px, transparent 1px)`,
+            backgroundSize: '40px 40px',
+          }}
+        />
         <div className="container-lentera relative z-10">
           <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
             <div>
@@ -74,18 +85,20 @@ export default function HalamanJelajah() {
                 Jelajah Materi
               </h1>
               <p className="text-sm text-[var(--text-muted-on-dark)]">
-                12.000+ materi dari mahasiswa seluruh Indonesia
+                {total.toLocaleString('id-ID')} berkas materi tersedia dari mahasiswa se-Indonesia
               </p>
             </div>
             <div className="flex gap-3">
-              <Tombol
-                varian="primer"
-                ukuran="sedang"
-                ikonKiri={<Brain size={16} />}
-                id="tombol-asisten-ai"
-              >
-                Asisten Belajar AI
-              </Tombol>
+              <Link href="/jelajah?fitur=ai">
+                <Tombol
+                  varian="primer"
+                  ukuran="sedang"
+                  ikonKiri={<Brain size={16} />}
+                  id="tombol-asisten-ai"
+                >
+                  Asisten Belajar AI
+                </Tombol>
+              </Link>
               <Link href="/jelajah/unggah">
                 <Tombol
                   varian="hantu"
@@ -94,7 +107,7 @@ export default function HalamanJelajah() {
                   className="text-[var(--text-on-dark)]! hover:bg-white/10! border border-white/20!"
                   id="tombol-unggah-materi"
                 >
-                  Unggah Materi
+                  Unggah Materi (+10 Poin)
                 </Tombol>
               </Link>
             </div>
@@ -103,131 +116,213 @@ export default function HalamanJelajah() {
       </div>
 
       <div className="container-lentera py-8">
-        {/* Search & Filter Bar */}
-        <div className="card-glass p-5 mb-8 flex flex-col md:flex-row gap-4">
-          <div className="flex-1">
-            <Input
-              id="cari-materi"
-              placeholder="Cari materi, mata kuliah, atau topik..."
-              ikonKiri={<Search size={16} />}
+        {/* Search & Filter Form */}
+        <form action="/jelajah" method="GET" className="card-glass p-5 mb-8 flex flex-col md:flex-row gap-4">
+          {/* Preset Kategori Hidden Query */}
+          {kategoriDipilih !== 'semua' && (
+            <input type="hidden" name="kategori" value={kategoriDipilih} />
+          )}
+
+          <div className="flex-1 relative">
+            <input
+              type="text"
+              name="q"
+              defaultValue={kataKunci}
+              placeholder="Cari judul materi, mata kuliah, atau topik..."
+              className="w-full pl-11 pr-4 py-3 rounded-[var(--radius-sm)] border text-sm bg-white focus:outline-none focus:ring-2 focus:ring-[var(--color-gold-500)]"
+              style={{ borderColor: 'var(--color-cream-400)', color: 'var(--text-on-light)' }}
               aria-label="Cari materi belajar"
+              id="input-cari-materi"
             />
+            <Search size={18} className="absolute left-3.5 top-3.5 text-[var(--text-muted-on-light)]" />
           </div>
+
           <div className="flex gap-3 flex-wrap">
-            <select
-              id="filter-jurusan"
+            <input
+              type="text"
+              name="matkul"
+              defaultValue={matkulDipilih}
+              placeholder="Filter Mata Kuliah..."
               className="px-4 py-3 rounded-[var(--radius-sm)] border text-sm bg-white focus:outline-none focus:ring-2 focus:ring-[var(--color-gold-500)]"
               style={{ borderColor: 'var(--color-cream-400)', color: 'var(--text-on-light)' }}
-              aria-label="Filter berdasarkan jurusan"
-            >
-              <option value="">Semua Jurusan</option>
-              <option value="ti">Teknik Informatika</option>
-              <option value="si">Sistem Informasi</option>
-              <option value="manajemen">Manajemen</option>
-            </select>
-            <Tombol varian="outline" ukuran="sedang" ikonKiri={<Filter size={15} />} id="tombol-filter-lanjutan">
-              Filter
+              aria-label="Filter mata kuliah"
+              id="filter-matkul"
+            />
+            <Tombol type="submit" varian="primer" ukuran="sedang" id="tombol-cari">
+              Cari
             </Tombol>
+            {(kataKunci || matkulDipilih || kategoriDipilih !== 'semua') && (
+              <Link href="/jelajah">
+                <Tombol varian="outline" ukuran="sedang" id="tombol-reset-filter">
+                  Reset
+                </Tombol>
+              </Link>
+            )}
           </div>
-        </div>
+        </form>
 
         {/* Tab Kategori */}
         <div className="flex gap-2 flex-wrap mb-8" role="tablist" aria-label="Filter kategori materi">
-          {kategoriFilter.map((kat) => (
-            <button
-              key={kat.value}
-              role="tab"
-              aria-selected={kat.value === 'semua'}
-              className="flex items-center gap-1.5 px-4 py-2 rounded-full text-sm font-medium transition-all duration-200"
-              style={
-                kat.value === 'semua'
-                  ? { background: 'var(--color-gold-500)', color: 'var(--color-dark-900)' }
-                  : { color: 'var(--text-on-light)', background: 'white' }
-              }
-              id={`tab-${kat.value}`}
-            >
-              {kat.ikon}
-              {kat.label}
-            </button>
-          ))}
+          {kategoriFilter.map((kat) => {
+            const isAktif = kategoriDipilih === kat.value;
+            // Build URL query params preserving search & matkul
+            const searchParamsObj = new URLSearchParams();
+            if (kataKunci) searchParamsObj.set('q', kataKunci);
+            if (matkulDipilih) searchParamsObj.set('matkul', matkulDipilih);
+            if (kat.value !== 'semua') searchParamsObj.set('kategori', kat.value);
+
+            const queryString = searchParamsObj.toString();
+            const href = `/jelajah${queryString ? `?${queryString}` : ''}`;
+
+            return (
+              <Link
+                key={kat.value}
+                href={href}
+                className="flex items-center gap-1.5 px-4 py-2 rounded-full text-sm font-semibold transition-all duration-200"
+                style={
+                  isAktif
+                    ? { background: 'var(--color-gold-500)', color: 'var(--color-dark-900)' }
+                    : { color: 'var(--text-on-light)', background: 'white' }
+                }
+                role="tab"
+                aria-selected={isAktif}
+                id={`tab-kategori-${kat.value}`}
+              >
+                {kat.ikon}
+                {kat.label}
+              </Link>
+            );
+          })}
         </div>
 
         {/* Grid Materi */}
-        <div
-          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-10"
-          role="list"
-          aria-label="Daftar materi belajar"
-        >
-          {materiPlaceholder.map((materi) => (
-            <Link
-              key={materi.id}
-              href={`/materi/${materi.id}`}
-              className="card-glass p-6 block group"
-              role="listitem"
-              aria-label={`Buka materi: ${materi.judul}`}
-            >
-              {/* Ikon format */}
-              <div
-                className="w-11 h-11 rounded-[var(--radius-sm)] flex items-center justify-center mb-4 transition-transform duration-300 group-hover:scale-110"
-                style={{ background: 'var(--color-gold-100)', color: 'var(--color-gold-700)' }}
-                aria-hidden="true"
+        {materi.length > 0 ? (
+          <div
+            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-10"
+            role="list"
+            aria-label="Daftar materi belajar"
+          >
+            {materi.map((item) => (
+              <Link
+                key={item.id}
+                href={`/materi/${item.id}`}
+                className="card-glass p-6 block group"
+                role="listitem"
+                aria-label={`Buka materi: ${item.judul}`}
               >
-                <FileText size={20} />
-              </div>
+                <div
+                  className="w-11 h-11 rounded-[var(--radius-sm)] flex items-center justify-center mb-4 transition-transform duration-300 group-hover:scale-110"
+                  style={{ background: 'var(--color-gold-100)', color: 'var(--color-gold-700)' }}
+                  aria-hidden="true"
+                >
+                  <FileText size={20} />
+                </div>
 
-              <Badge varian="gold" className="mb-3 text-xs">
-                {labelKategori[materi.kategori] || materi.kategori}
-              </Badge>
+                <Badge varian="gold" className="mb-3 text-xs">
+                  {labelKategori[item.kategori] || item.kategori}
+                </Badge>
 
-              <h2
-                className="font-bold text-base mb-1 line-clamp-2 transition-colors text-[var(--text-on-light)] group-hover:text-[var(--color-gold-600)]"
+                <h2
+                  className="font-bold text-base mb-1 line-clamp-2 transition-colors text-[var(--text-on-light)] group-hover:text-[var(--color-gold-600)]"
+                  style={{ fontFamily: 'var(--font-display)' }}
+                >
+                  {item.judul}
+                </h2>
+
+                <p className="text-xs mb-4 text-[var(--text-muted-on-light)]">
+                  {item.mata_kuliah} · oleh {item.profiles?.nama_lengkap || 'Mahasiswa'}
+                </p>
+
+                <div className="flex items-center justify-between text-xs text-[var(--text-muted-on-light)]">
+                  <span>{(item.jumlah_unduhan || 0).toLocaleString('id-ID')} unduhan</span>
+                  <span className="flex items-center gap-1">
+                    ❤️ {item.jumlah_suka || 0}
+                  </span>
+                </div>
+
+                <div
+                  className="mt-4 pt-4 border-t flex items-center gap-1 text-xs font-semibold opacity-0 group-hover:opacity-100 transition-opacity text-[var(--color-gold-600)]"
+                  style={{ borderColor: 'var(--color-cream-300)' }}
+                  aria-hidden="true"
+                >
+                  Lihat detail &amp; unduh
+                  <ArrowRight size={12} />
+                </div>
+              </Link>
+            ))}
+          </div>
+        ) : (
+          /* Empty State */
+          <div className="card-glass p-12 text-center my-10 max-w-lg mx-auto space-y-4">
+            <div
+              className="w-16 h-16 rounded-full mx-auto flex items-center justify-center"
+              style={{ background: 'var(--color-cream-300)', color: 'var(--text-muted-on-light)' }}
+            >
+              <FolderOpen size={32} />
+            </div>
+            <div>
+              <h3
+                className="text-lg font-bold text-[var(--text-on-light)]"
                 style={{ fontFamily: 'var(--font-display)' }}
               >
-                {materi.judul}
-              </h2>
-              <p className="text-xs mb-4 text-[var(--text-muted-on-light)]">
-                {materi.matkul} · oleh {materi.pengunggah}
+                Belum Ada Materi
+              </h3>
+              <p className="text-sm text-[var(--text-muted-on-light)] mt-1">
+                {kataKunci || matkulDipilih || kategoriDipilih !== 'semua'
+                  ? 'Tidak ada materi yang sesuai dengan pencarian atau filter Anda.'
+                  : 'Belum ada materi yang diunggah. Jadilah mahasiswa pertama yang berbagi materi!'}
               </p>
+            </div>
+            <div className="pt-2 flex justify-center gap-3">
+              {(kataKunci || matkulDipilih || kategoriDipilih !== 'semua') && (
+                <Link href="/jelajah">
+                  <Tombol varian="outline" ukuran="sedang">
+                    Lihat Semua Materi
+                  </Tombol>
+                </Link>
+              )}
+              <Link href="/jelajah/unggah">
+                <Tombol varian="primer" ukuran="sedang" ikonKiri={<Upload size={15} />}>
+                  Unggah Materi Sekarang
+                </Tombol>
+              </Link>
+            </div>
+          </div>
+        )}
 
-              <div className="flex items-center justify-between text-xs text-[var(--text-muted-on-light)]">
-                <span>{materi.unduhan.toLocaleString('id-ID')} unduhan</span>
-                <span className="flex items-center gap-1">
-                  ❤️ {materi.suka}
-                </span>
-              </div>
+        {/* Pagination Nav */}
+        {totalHalaman > 1 && (
+          <div className="flex justify-center">
+            <nav aria-label="Navigasi halaman materi" className="flex gap-2">
+              {Array.from({ length: totalHalaman }, (_, i) => i + 1).map((hal) => {
+                const searchParamsObj = new URLSearchParams();
+                if (kataKunci) searchParamsObj.set('q', kataKunci);
+                if (matkulDipilih) searchParamsObj.set('matkul', matkulDipilih);
+                if (kategoriDipilih !== 'semua') searchParamsObj.set('kategori', kategoriDipilih);
+                searchParamsObj.set('halaman', String(hal));
 
-              <div
-                className="mt-4 pt-4 border-t flex items-center gap-1 text-xs font-semibold opacity-0 group-hover:opacity-100 transition-opacity text-[var(--color-gold-600)]"
-                style={{ borderColor: 'var(--color-cream-300)' }}
-                aria-hidden="true"
-              >
-                Lihat detail
-                <ArrowRight size={12} />
-              </div>
-            </Link>
-          ))}
-        </div>
+                const isAktif = hal === halaman;
 
-        {/* Pagination placeholder */}
-        <div className="flex justify-center">
-          <nav aria-label="Navigasi halaman materi" className="flex gap-2">
-            {[1, 2, 3, '...', 24].map((hal, i) => (
-              <button
-                key={i}
-                className="w-10 h-10 rounded-[var(--radius-sm)] text-sm font-medium transition-all"
-                style={
-                  hal === 1
-                    ? { background: 'var(--color-gold-500)', color: 'var(--color-dark-900)' }
-                    : { background: 'white', color: 'var(--text-on-light)' }
-                }
-                aria-label={hal === '...' ? 'Halaman lainnya' : `Halaman ${hal}`}
-                aria-current={hal === 1 ? 'page' : undefined}
-              >
-                {hal}
-              </button>
-            ))}
-          </nav>
-        </div>
+                return (
+                  <Link key={hal} href={`/jelajah?${searchParamsObj.toString()}`}>
+                    <button
+                      className="w-10 h-10 rounded-[var(--radius-sm)] text-sm font-semibold transition-all"
+                      style={
+                        isAktif
+                          ? { background: 'var(--color-gold-500)', color: 'var(--color-dark-900)' }
+                          : { background: 'white', color: 'var(--text-on-light)' }
+                      }
+                      aria-label={`Halaman ${hal}`}
+                      aria-current={isAktif ? 'page' : undefined}
+                    >
+                      {hal}
+                    </button>
+                  </Link>
+                );
+              })}
+            </nav>
+          </div>
+        )}
       </div>
     </div>
   );

@@ -2,8 +2,14 @@ import { createBrowserClient } from '@supabase/ssr';
 
 /**
  * Supabase Client — Browser Side
- * Gunakan file ini di Client Components ('use client')
- * Hanya menggunakan ANON KEY yang aman untuk diekspos ke public
+ *
+ * Gunakan di Client Components ('use client') saja.
+ * Hanya menggunakan NEXT_PUBLIC_SUPABASE_ANON_KEY yang aman diekspos ke publik.
+ *
+ * @example
+ * 'use client'
+ * import { createClient } from '@/lib/supabase/client'
+ * const supabase = createClient()
  */
 export function createClient() {
   return createBrowserClient(

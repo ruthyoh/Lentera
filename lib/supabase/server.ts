@@ -1,15 +1,23 @@
-import { createServerClient } from '@supabase/ssr';
+import { createServerClient, type CookieOptions } from '@supabase/ssr';
 import { cookies } from 'next/headers';
 
 /**
- * Supabase Client — Server Side
- * Gunakan file ini HANYA di:
- * - Server Components
- * - API Routes (Route Handlers)
- * - Server Actions
+ * Supabase Client — Server Side (dengan Cookie Session)
  *
- * ⚠️ JANGAN import file ini di Client Components!
- * SERVICE_ROLE_KEY memberikan akses penuh ke database.
+ * Gunakan di:
+ * - Server Components
+ * - Server Actions
+ * - Route Handlers (GET yang perlu auth)
+ *
+ * Menggunakan ANON_KEY + cookie store untuk membaca sesi pengguna.
+ * RLS tetap berlaku sesuai kebijakan Supabase.
+ *
+ * ⚠️ JANGAN gunakan di Client Components — import '@/lib/supabase/client' sebagai gantinya.
+ *
+ * @example
+ * import { createServerSupabaseClient } from '@/lib/supabase/server'
+ * const supabase = await createServerSupabaseClient()
+ * const { data: { user } } = await supabase.auth.getUser()
  */
 export async function createServerSupabaseClient() {
   const cookieStore = await cookies();
@@ -22,33 +30,16 @@ export async function createServerSupabaseClient() {
         getAll() {
           return cookieStore.getAll();
         },
-        setAll(cookiesToSet: { name: string; value: string; options?: Record<string, unknown> }[]) {
+        setAll(cookiesToSet: { name: string; value: string; options: CookieOptions }[]) {
           try {
             cookiesToSet.forEach(({ name, value, options }) =>
-              cookieStore.set(name, value, options as Parameters<typeof cookieStore.set>[2])
+              cookieStore.set(name, value, options)
             );
           } catch {
             // Dapat diabaikan jika dipanggil dari Server Component
+            // (cookies tidak dapat di-set dari Server Component, hanya dari Middleware/Route Handler)
           }
         },
-      },
-    }
-  );
-}
-
-/**
- * Supabase Admin Client — Hanya untuk operasi privileged di API Routes
- * Menggunakan SERVICE_ROLE_KEY — bypass Row Level Security
- */
-export async function createAdminClient() {
-  const { createClient } = await import('@supabase/supabase-js');
-  return createClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.SUPABASE_SERVICE_ROLE_KEY!,
-    {
-      auth: {
-        autoRefreshToken: false,
-        persistSession: false,
       },
     }
   );

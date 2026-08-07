@@ -1,15 +1,29 @@
 -- =====================================================
--- LENTERA — Migrasi Database Supabase
--- File: 001_schema.sql
--- Jalankan di: Supabase Dashboard → SQL Editor
+-- LENTERA — Platform Belajar & Beasiswa Mahasiswa
+-- File Migration Utama: 001_schema.sql
+-- Siap dijalankan di: Supabase Dashboard → SQL Editor
 -- =====================================================
 
--- Extension UUID
+-- -------------------------------------------------------
+-- 0. EXTENSIONS & HELPER FUNCTIONS
+-- -------------------------------------------------------
 create extension if not exists "uuid-ossp";
+
+-- Function otomatis update timestamp updated_at
+create or replace function public.update_updated_at_column()
+returns trigger
+language plpgsql
+security definer
+as $$
+begin
+  new.updated_at = now();
+  return new;
+end;
+$$;
 
 -- =====================================================
 -- TABEL 1: profiles
--- Extends auth.users — data akademik mahasiswa
+-- Extends auth.users — menyimpan informasi akademik mahasiswa
 -- =====================================================
 create table if not exists public.profiles (
   id                uuid        references auth.users on delete cascade not null primary key,
@@ -19,22 +33,28 @@ create table if not exists public.profiles (
   semester          integer     check (semester >= 1 and semester <= 12),
   ipk               numeric(3,2) check (ipk >= 0.00 and ipk <= 4.00),
   kategori_khusus   text,       -- contoh: "Penerima KIP-K", "Mahasiswa Berprestasi"
-  poin_kontribusi   integer     not null default 0,
+  poin_kontribusi   integer     not null default 0 check (poin_kontribusi >= 0),
   avatar_url        text,
   created_at        timestamptz not null default now(),
   updated_at        timestamptz not null default now()
 );
 
-comment on table public.profiles is 'Data profil akademik pengguna Lentera, extends auth.users';
-comment on column public.profiles.kategori_khusus is 'Kategori penerima khusus, misal: Penerima KIP-K, Atlet, dll.';
-comment on column public.profiles.poin_kontribusi is 'Poin yang dikumpulkan dari aktivitas berkontribusi (unggah, dll.)';
+comment on table public.profiles is 'Profil akademik mahasiswa Lentera yang terhubung dengan auth.users';
+comment on column public.profiles.poin_kontribusi is 'Poin apresiasi berkontribusi materi di platform';
+
+-- Trigger updated_at profil
+drop trigger if exists set_profiles_updated_at on public.profiles;
+create trigger set_profiles_updated_at
+  before update on public.profiles
+  for each row
+  execute function public.update_updated_at_column();
 
 -- =====================================================
 -- TABEL 2: materi
--- Konten akademik yang diunggah pengguna
+-- Repositori berkas & konten akademik mahasiswa
 -- =====================================================
 create table if not exists public.materi (
-  id                uuid        primary key default uuid_generate_v4(),
+  id                uuid        primary key default gen_random_uuid(),
   uploader_id       uuid        references public.profiles(id) on delete cascade not null,
   judul             text        not null,
   mata_kuliah       text        not null,
@@ -44,29 +64,35 @@ create table if not exists public.materi (
                                 ),
   file_url          text,
   thumbnail_url     text,
-  jumlah_unduhan    integer     not null default 0,
-  jumlah_suka       integer     not null default 0,
+  jumlah_unduhan    integer     not null default 0 check (jumlah_unduhan >= 0),
+  jumlah_suka       integer     not null default 0 check (jumlah_suka >= 0),
   created_at        timestamptz not null default now(),
   updated_at        timestamptz not null default now()
 );
 
-comment on table public.materi is 'Repositori materi akademik yang dibagikan oleh mahasiswa';
-comment on column public.materi.kategori is 'Jenis materi: catatan, rangkuman, bank_soal, modul, presentasi, lainnya';
+comment on table public.materi is 'Repositori materi akademik yang dibagikan mahasiswa';
+
+-- Trigger updated_at materi
+drop trigger if exists set_materi_updated_at on public.materi;
+create trigger set_materi_updated_at
+  before update on public.materi
+  for each row
+  execute function public.update_updated_at_column();
 
 -- =====================================================
 -- TABEL 3: beasiswa
--- Data beasiswa/bantuan pendidikan
+-- Informasi & katalog beasiswa pendidikan
 -- =====================================================
 create table if not exists public.beasiswa (
-  id                      uuid        primary key default uuid_generate_v4(),
+  id                      uuid        primary key default gen_random_uuid(),
   nama_beasiswa           text        not null,
   penyelenggara           text        not null,
   jenis                   text        not null check (
                                         jenis in ('prestasi', 'kebutuhan', 'riset', 'pemerintah', 'swasta', 'internasional')
                                       ),
   kriteria_jurusan        text        not null default 'semua',
-  kriteria_ipk_min        numeric(3,2) check (kriteria_ipk_min >= 0 and kriteria_ipk_min <= 4),
-  kriteria_semester_min   integer     check (kriteria_semester_min >= 1),
+  kriteria_ipk_min        numeric(3,2) check (kriteria_ipk_min >= 0.00 and kriteria_ipk_min <= 4.00),
+  kriteria_semester_min   integer     check (kriteria_semester_min >= 1 and kriteria_semester_min <= 12),
   kriteria_khusus         text,
   deadline_pendaftaran    date,
   link_resmi              text,
@@ -74,19 +100,25 @@ create table if not exists public.beasiswa (
   status                  text        not null default 'aktif' check (
                                         status in ('aktif', 'segera_ditutup', 'ditutup')
                                       ),
-  created_at              timestamptz not null default now()
+  created_at              timestamptz not null default now(),
+  updated_at              timestamptz not null default now()
 );
 
-comment on table public.beasiswa is 'Basis data beasiswa dan bantuan pendidikan';
-comment on column public.beasiswa.jenis is 'Kategori beasiswa: prestasi, kebutuhan, riset, pemerintah, swasta, internasional';
-comment on column public.beasiswa.kriteria_jurusan is 'Jurusan yang berhak, atau ''semua'' untuk semua jurusan';
+comment on table public.beasiswa is 'Database beasiswa dan bantuan biaya pendidikan';
+
+-- Trigger updated_at beasiswa
+drop trigger if exists set_beasiswa_updated_at on public.beasiswa;
+create trigger set_beasiswa_updated_at
+  before update on public.beasiswa
+  for each row
+  execute function public.update_updated_at_column();
 
 -- =====================================================
 -- TABEL 4: interaksi_ai
--- Log interaksi pengguna dengan fitur AI
+-- Riwayat & log penggunaan asisten pintar AI
 -- =====================================================
 create table if not exists public.interaksi_ai (
-  id            uuid        primary key default uuid_generate_v4(),
+  id            uuid        primary key default gen_random_uuid(),
   user_id       uuid        references public.profiles(id) on delete cascade not null,
   materi_id     uuid        references public.materi(id) on delete set null,
   beasiswa_id   uuid        references public.beasiswa(id) on delete set null,
@@ -95,44 +127,61 @@ create table if not exists public.interaksi_ai (
                             ),
   prompt        text,
   respons       text,
-  token_used    integer,
-  created_at    timestamptz not null default now()
+  token_used    integer     check (token_used >= 0),
+  created_at    timestamptz not null default now(),
+  updated_at    timestamptz not null default now()
 );
 
-comment on table public.interaksi_ai is 'Log interaksi pengguna dengan fitur Asisten AI (Belajar & Beasiswa)';
-comment on column public.interaksi_ai.jenis is 'Jenis interaksi: ringkasan, kuis, tanya_jawab, pencocokan_beasiswa, draf_esai';
+comment on table public.interaksi_ai is 'Log aktivitas dan percakapan pengguna dengan fitur Asisten AI';
+
+-- Trigger updated_at interaksi_ai
+drop trigger if exists set_interaksi_ai_updated_at on public.interaksi_ai;
+create trigger set_interaksi_ai_updated_at
+  before update on public.interaksi_ai
+  for each row
+  execute function public.update_updated_at_column();
 
 -- =====================================================
 -- TABEL 5: penilaian
--- Rating materi oleh pengguna (1-5), UNIQUE per user
+-- Penilaian & ulasan materi (1-5), unik per (materi_id, user_id)
 -- =====================================================
 create table if not exists public.penilaian (
-  id          uuid        primary key default uuid_generate_v4(),
+  id          uuid        primary key default gen_random_uuid(),
   materi_id   uuid        references public.materi(id) on delete cascade not null,
   user_id     uuid        references public.profiles(id) on delete cascade not null,
   nilai       integer     not null check (nilai >= 1 and nilai <= 5),
   created_at  timestamptz not null default now(),
+  updated_at  timestamptz not null default now(),
 
-  -- Satu pengguna hanya bisa menilai satu materi sekali
-  unique (materi_id, user_id)
+  constraint uq_penilaian_materi_user unique (materi_id, user_id)
 );
 
-comment on table public.penilaian is 'Penilaian (1-5) materi oleh pengguna, unik per pengguna per materi';
+comment on table public.penilaian is 'Rating bintang (1-5) dari mahasiswa untuk materi tertentu';
+
+-- Trigger updated_at penilaian
+drop trigger if exists set_penilaian_updated_at on public.penilaian;
+create trigger set_penilaian_updated_at
+  before update on public.penilaian
+  for each row
+  execute function public.update_updated_at_column();
 
 -- =====================================================
--- INDEKS untuk performa query umum
+-- INDEKS OPTIMASI QUERY
 -- =====================================================
-create index if not exists materi_uploader_idx     on public.materi(uploader_id);
-create index if not exists materi_kategori_idx     on public.materi(kategori);
-create index if not exists materi_created_idx      on public.materi(created_at desc);
-create index if not exists beasiswa_status_idx     on public.beasiswa(status);
-create index if not exists beasiswa_deadline_idx   on public.beasiswa(deadline_pendaftaran);
-create index if not exists interaksi_ai_user_idx   on public.interaksi_ai(user_id);
-create index if not exists penilaian_materi_idx    on public.penilaian(materi_id);
+create index if not exists idx_profiles_jurusan       on public.profiles(jurusan);
+create index if not exists idx_materi_uploader         on public.materi(uploader_id);
+create index if not exists idx_materi_kategori         on public.materi(kategori);
+create index if not exists idx_materi_mata_kuliah      on public.materi(mata_kuliah);
+create index if not exists idx_materi_created_at      on public.materi(created_at desc);
+create index if not exists idx_beasiswa_status        on public.beasiswa(status);
+create index if not exists idx_beasiswa_deadline      on public.beasiswa(deadline_pendaftaran);
+create index if not exists idx_interaksi_ai_user      on public.interaksi_ai(user_id);
+create index if not exists idx_penilaian_materi       on public.penilaian(materi_id);
+create index if not exists idx_penilaian_user         on public.penilaian(user_id);
 
 -- =====================================================
--- TRIGGER: Auto-create profile saat user baru mendaftar
--- Dipicu setelah INSERT ke auth.users
+-- TRIGGER AUTH: Otomatis buat baris di public.profiles
+-- dipicu saat pendaftaran akun baru di auth.users
 -- =====================================================
 create or replace function public.handle_new_user()
 returns trigger
@@ -152,9 +201,9 @@ begin
   )
   values (
     new.id,
-    coalesce(new.raw_user_meta_data->>'nama_lengkap', 'Pengguna Baru'),
-    new.raw_user_meta_data->>'asal_institusi',
-    new.raw_user_meta_data->>'jurusan',
+    coalesce(nullif(trim(new.raw_user_meta_data->>'nama_lengkap'), ''), 'Pengguna Baru'),
+    nullif(trim(new.raw_user_meta_data->>'asal_institusi'), ''),
+    nullif(trim(new.raw_user_meta_data->>'jurusan'), ''),
     case
       when new.raw_user_meta_data->>'semester' is not null
         and new.raw_user_meta_data->>'semester' != ''
@@ -167,29 +216,28 @@ begin
       then (new.raw_user_meta_data->>'ipk')::numeric(3,2)
       else null
     end,
-    new.raw_user_meta_data->>'kategori_khusus'
+    nullif(trim(new.raw_user_meta_data->>'kategori_khusus'), '')
   );
   return new;
 exception
   when others then
-    -- Jangan gagalkan pendaftaran jika insert profil gagal
-    raise warning 'handle_new_user error: %', sqlerrm;
+    raise warning 'Gagal membuat profil otomatis untuk user %: %', new.id, sqlerrm;
     return new;
 end;
 $$;
 
--- Pasang trigger ke auth.users
+-- Pasang trigger pada auth.users
 drop trigger if exists on_auth_user_created on auth.users;
 create trigger on_auth_user_created
   after insert on auth.users
   for each row
-  execute procedure public.handle_new_user();
+  execute function public.handle_new_user();
 
 -- =====================================================
--- ROW LEVEL SECURITY
+-- ROW LEVEL SECURITY (RLS) & POLICIES
 -- =====================================================
 
--- Aktifkan RLS di semua tabel
+-- 1. Aktifkan RLS pada semua tabel
 alter table public.profiles      enable row level security;
 alter table public.materi        enable row level security;
 alter table public.beasiswa      enable row level security;
@@ -197,120 +245,192 @@ alter table public.interaksi_ai  enable row level security;
 alter table public.penilaian     enable row level security;
 
 -- -------------------------------------------------------
--- PROFILES policies
+-- POLICIES: profiles
 -- -------------------------------------------------------
--- Semua user bisa membaca semua profil
+drop policy if exists "profiles_select_all" on public.profiles;
 create policy "profiles_select_all"
   on public.profiles for select
   using (true);
 
--- Hanya pemilik yang bisa update profilnya sendiri
+drop policy if exists "profiles_insert_own" on public.profiles;
+create policy "profiles_insert_own"
+  on public.profiles for insert
+  to authenticated
+  with check (auth.uid() = id);
+
+drop policy if exists "profiles_update_own" on public.profiles;
 create policy "profiles_update_own"
   on public.profiles for update
   to authenticated
   using (auth.uid() = id)
   with check (auth.uid() = id);
 
--- Hanya pemilik yang bisa menghapus akunnya sendiri
+drop policy if exists "profiles_delete_own" on public.profiles;
 create policy "profiles_delete_own"
   on public.profiles for delete
   to authenticated
   using (auth.uid() = id);
 
--- Tidak ada INSERT manual dari client — hanya via trigger
-
 -- -------------------------------------------------------
--- MATERI policies
+-- POLICIES: materi
 -- -------------------------------------------------------
--- Semua orang bisa membaca materi
+drop policy if exists "materi_select_all" on public.materi;
 create policy "materi_select_all"
   on public.materi for select
   using (true);
 
--- Hanya user login yang bisa mengunggah
+drop policy if exists "materi_insert_authenticated" on public.materi;
 create policy "materi_insert_authenticated"
   on public.materi for insert
   to authenticated
   with check (auth.uid() = uploader_id);
 
--- Hanya pengunggah yang bisa mengubah materinya
+drop policy if exists "materi_update_own" on public.materi;
 create policy "materi_update_own"
   on public.materi for update
   to authenticated
   using (auth.uid() = uploader_id)
   with check (auth.uid() = uploader_id);
 
--- Hanya pengunggah yang bisa menghapus materinya
+drop policy if exists "materi_delete_own" on public.materi;
 create policy "materi_delete_own"
   on public.materi for delete
   to authenticated
   using (auth.uid() = uploader_id);
 
 -- -------------------------------------------------------
--- BEASISWA policies
--- Sementara: semua user login bisa CRUD untuk kemudahan seeding
+-- POLICIES: beasiswa
 -- -------------------------------------------------------
+drop policy if exists "beasiswa_select_all" on public.beasiswa;
 create policy "beasiswa_select_all"
   on public.beasiswa for select
   using (true);
 
+drop policy if exists "beasiswa_insert_authenticated" on public.beasiswa;
 create policy "beasiswa_insert_authenticated"
   on public.beasiswa for insert
   to authenticated
   with check (true);
 
+drop policy if exists "beasiswa_update_authenticated" on public.beasiswa;
 create policy "beasiswa_update_authenticated"
   on public.beasiswa for update
   to authenticated
   using (true)
   with check (true);
 
+drop policy if exists "beasiswa_delete_authenticated" on public.beasiswa;
 create policy "beasiswa_delete_authenticated"
   on public.beasiswa for delete
   to authenticated
   using (true);
 
 -- -------------------------------------------------------
--- INTERAKSI_AI policies
+-- POLICIES: interaksi_ai
 -- -------------------------------------------------------
--- User hanya bisa melihat & membuat interaksi miliknya sendiri
+drop policy if exists "interaksi_ai_select_own" on public.interaksi_ai;
 create policy "interaksi_ai_select_own"
   on public.interaksi_ai for select
   to authenticated
   using (auth.uid() = user_id);
 
+drop policy if exists "interaksi_ai_insert_own" on public.interaksi_ai;
 create policy "interaksi_ai_insert_own"
   on public.interaksi_ai for insert
   to authenticated
   with check (auth.uid() = user_id);
 
+drop policy if exists "interaksi_ai_update_own" on public.interaksi_ai;
+create policy "interaksi_ai_update_own"
+  on public.interaksi_ai for update
+  to authenticated
+  using (auth.uid() = user_id)
+  with check (auth.uid() = user_id);
+
+drop policy if exists "interaksi_ai_delete_own" on public.interaksi_ai;
+create policy "interaksi_ai_delete_own"
+  on public.interaksi_ai for delete
+  to authenticated
+  using (auth.uid() = user_id);
+
 -- -------------------------------------------------------
--- PENILAIAN policies
+-- POLICIES: penilaian
 -- -------------------------------------------------------
--- Semua orang bisa melihat penilaian (untuk menghitung rata-rata)
+drop policy if exists "penilaian_select_all" on public.penilaian;
 create policy "penilaian_select_all"
   on public.penilaian for select
   using (true);
 
--- User login bisa memberi penilaian
+drop policy if exists "penilaian_insert_authenticated" on public.penilaian;
 create policy "penilaian_insert_authenticated"
   on public.penilaian for insert
   to authenticated
   with check (auth.uid() = user_id);
 
--- Hanya pemberi nilai yang bisa mengubah penilaiannya
+drop policy if exists "penilaian_update_own" on public.penilaian;
 create policy "penilaian_update_own"
   on public.penilaian for update
   to authenticated
   using (auth.uid() = user_id)
   with check (auth.uid() = user_id);
 
--- Hanya pemberi nilai yang bisa menghapus penilaiannya
+drop policy if exists "penilaian_delete_own" on public.penilaian;
 create policy "penilaian_delete_own"
   on public.penilaian for delete
   to authenticated
   using (auth.uid() = user_id);
 
 -- =====================================================
--- SELESAI — Skema Lentera berhasil dibuat
+-- STORAGE BUCKET & POLICIES: materi-files
+-- Max file size: 10MB (10485760 bytes)
+-- Format diizinkan: PDF, DOCX
+-- =====================================================
+
+-- 1. Inisialisasi bucket storage materi-files jika belum ada
+insert into storage.buckets (id, name, public, file_size_limit, allowed_mime_types)
+values (
+  'materi-files',
+  'materi-files',
+  true,
+  10485760,
+  array[
+    'application/pdf',
+    'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
+  ]
+)
+on conflict (id) do update set
+  public = true,
+  file_size_limit = 10485760,
+  allowed_mime_types = array[
+    'application/pdf',
+    'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
+  ];
+
+-- 2. Storage Policies
+drop policy if exists "Storage Read Materi Files Public" on storage.objects;
+create policy "Storage Read Materi Files Public"
+  on storage.objects for select
+  using (bucket_id = 'materi-files');
+
+drop policy if exists "Storage Insert Materi Files Authenticated" on storage.objects;
+create policy "Storage Insert Materi Files Authenticated"
+  on storage.objects for insert
+  to authenticated
+  with check (bucket_id = 'materi-files');
+
+drop policy if exists "Storage Update Materi Files Owner" on storage.objects;
+create policy "Storage Update Materi Files Owner"
+  on storage.objects for update
+  to authenticated
+  using (bucket_id = 'materi-files' and auth.uid() = owner)
+  with check (bucket_id = 'materi-files' and auth.uid() = owner);
+
+drop policy if exists "Storage Delete Materi Files Owner" on storage.objects;
+create policy "Storage Delete Materi Files Owner"
+  on storage.objects for delete
+  to authenticated
+  using (bucket_id = 'materi-files' and auth.uid() = owner);
+
+-- =====================================================
+-- SELESAI — Fondasi Database Lentera Siap Digunakan
 -- =====================================================

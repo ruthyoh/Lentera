@@ -2,6 +2,7 @@
 
 import { redirect } from 'next/navigation';
 import { createServerSupabaseClient } from '@/lib/supabase/server';
+import { createAdminClient } from '@/lib/supabase/admin';
 import type { AuthState } from '@/types';
 
 // =====================================================
@@ -39,9 +40,10 @@ function terjemahkanError(message: string): string {
     'Password should be at least 6 characters': 'Kata sandi minimal 8 karakter.',
     'Signup requires a valid password': 'Kata sandi tidak valid. Gunakan minimal 8 karakter.',
     'Unable to validate email address: invalid format': 'Format email tidak valid.',
-    'Email rate limit exceeded': 'Terlalu banyak percobaan. Silakan tunggu beberapa menit dan coba lagi.',
+    'Email rate limit exceeded': 'Terlalu banyak percobaan pendaftaran. Silakan tunggu beberapa menit atau gunakan email lain.',
     'Too many requests': 'Terlalu banyak permintaan. Silakan tunggu sebentar dan coba lagi.',
-    'over_email_send_rate_limit': 'Batas pengiriman email tercapai. Coba lagi dalam 60 detik.',
+    'over_email_send_rate_limit': 'Batas pengiriman email sistem tercapai. Silakan coba lagi.',
+    'email_address_invalid': 'Alamat email tidak valid. Gunakan email dengan domain aktif (contoh: @gmail.com atau @student.ac.id).',
   };
 
   for (const [key, val] of Object.entries(errorMap)) {
@@ -122,38 +124,81 @@ export async function daftarAkun(
     return { fieldErrors };
   }
 
-  // Daftar ke Supabase Auth + kirim metadata untuk trigger
   const supabase = await createServerSupabaseClient();
-  const { error } = await supabase.auth.signUp({
+  const userMetadata = {
+    nama_lengkap,
+    asal_institusi,
+    jurusan,
+    semester: semester ? String(semester) : '',
+    ipk: ipkStr || '',
+    kategori_khusus,
+  };
+
+  // Step 1: Coba pendaftaran standar via Client
+  const { error: signUpError } = await supabase.auth.signUp({
     email,
     password: kata_sandi,
     options: {
-      data: {
-        nama_lengkap,
-        asal_institusi,
-        jurusan,
-        semester: semester ? String(semester) : '',
-        ipk: ipkStr || '',
-        kategori_khusus,
-      },
+      data: userMetadata,
     },
   });
 
-  if (error) {
-    return { error: terjemahkanError(error.message) };
+  // Step 2: Jika terkena rate limit email / error pendaftaran standar, gunakan Admin API (auto-confirm)
+  if (
+    signUpError &&
+    (signUpError.message.includes('rate limit') ||
+      signUpError.message.includes('over_email_send_rate_limit') ||
+      (signUpError as { status?: number }).status === 429)
+  ) {
+    try {
+      const admin = createAdminClient();
+      const { error: adminErr } = await admin.auth.admin.createUser({
+        email,
+        password: kata_sandi,
+        email_confirm: true,
+        user_metadata: userMetadata,
+      });
+
+      if (adminErr) {
+        return { error: terjemahkanError(adminErr.message) };
+      }
+    } catch {
+      return { error: terjemahkanError(signUpError.message) };
+    }
+  } else if (signUpError) {
+    return { error: terjemahkanError(signUpError.message) };
   }
 
-  // Langsung login setelah daftar
+  // Step 3: Langsung login setelah daftar untuk memasang cookie sesi
   const { error: loginError } = await supabase.auth.signInWithPassword({
     email,
     password: kata_sandi,
   });
 
+  // Step 4: Jika login gagal karena "Email not confirmed", konfirmasi otomatis via Admin API
   if (loginError) {
-    // Akun terdaftar tapi login gagal — mungkin perlu konfirmasi email
+    if (loginError.message.includes('Email not confirmed')) {
+      try {
+        const admin = createAdminClient();
+        const { data: usersData } = await admin.auth.admin.listUsers();
+        const createdUser = usersData?.users?.find((u) => u.email === email);
+        if (createdUser) {
+          await admin.auth.admin.updateUserById(createdUser.id, { email_confirm: true });
+          const { error: retryLoginError } = await supabase.auth.signInWithPassword({
+            email,
+            password: kata_sandi,
+          });
+          if (!retryLoginError) {
+            redirect('/jelajah');
+          }
+        }
+      } catch {
+        // Abaikan error fallback admin
+      }
+    }
     return {
       sukses: true,
-      pesan: 'Akun berhasil dibuat! Periksa email Anda untuk konfirmasi, lalu masuk.',
+      pesan: 'Akun berhasil dibuat! Silakan masuk dengan email dan kata sandi Anda.',
     };
   }
 

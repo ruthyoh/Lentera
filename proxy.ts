@@ -1,5 +1,5 @@
 import { NextResponse, type NextRequest } from 'next/server';
-import { createServerClient } from '@supabase/ssr';
+import { createServerClient, type CookieOptions } from '@supabase/ssr';
 
 /**
  * Proxy Lentera — Next.js 16 (menggantikan middleware.ts)
@@ -16,6 +16,7 @@ const RUTE_DILINDUNGI = [
   '/beasiswa',
   '/profil',
   '/papan-peringkat',
+  '/unggah',
 ];
 
 /** Rute auth — jika sudah login, redirect ke /jelajah */
@@ -35,7 +36,7 @@ export async function proxy(request: NextRequest) {
         getAll() {
           return request.cookies.getAll();
         },
-        setAll(cookiesToSet: { name: string; value: string; options?: Record<string, unknown> }[]) {
+        setAll(cookiesToSet: { name: string; value: string; options: CookieOptions }[]) {
           // Update cookies di request untuk propagasi ke server
           cookiesToSet.forEach(({ name, value }) =>
             request.cookies.set(name, value)
