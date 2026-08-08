@@ -1,13 +1,11 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
-import { Suspense } from 'react';
 import {
-  Search, BookOpen, FileText, HelpCircle, Presentation, ArrowRight, Brain, Upload, Layers, FolderOpen
+  Search, BookOpen, FileText, HelpCircle, Presentation, ArrowRight, Brain, Upload, Layers, FolderOpen, Star, Download
 } from 'lucide-react';
 import Badge from '@/components/ui/Badge';
 import Tombol from '@/components/ui/Button';
 import { ambilDaftarMateri } from '@/lib/actions/materi';
-import ModalAsistenAIJelajah from '@/components/materi/ModalAsistenAIJelajah';
 
 export const metadata: Metadata = {
   title: 'Jelajah Materi Belajar',
@@ -20,7 +18,6 @@ interface HalamanJelajahProps {
     kategori?: string;
     matkul?: string;
     halaman?: string;
-    fitur?: string;
   }>;
 }
 
@@ -56,12 +53,6 @@ export default async function HalamanJelajah({ searchParams }: HalamanJelajahPro
     halaman: halamanSaatIni,
     perHalaman: 9,
   });
-
-  const daftarMateriRingkas = materi.map((m) => ({
-    id: m.id,
-    judul: m.judul,
-    mata_kuliah: m.mata_kuliah,
-  }));
 
   return (
     <div
@@ -127,6 +118,7 @@ export default async function HalamanJelajah({ searchParams }: HalamanJelajahPro
       <div className="container-lentera py-8">
         {/* Search & Filter Form */}
         <form action="/jelajah" method="GET" className="card-glass p-5 mb-8 flex flex-col md:flex-row gap-4">
+          {/* Preset Kategori Hidden Query */}
           {kategoriDipilih !== 'semua' && (
             <input type="hidden" name="kategori" value={kategoriDipilih} />
           )}
@@ -173,6 +165,7 @@ export default async function HalamanJelajah({ searchParams }: HalamanJelajahPro
         <div className="flex gap-2 flex-wrap mb-8" role="tablist" aria-label="Filter kategori materi">
           {kategoriFilter.map((kat) => {
             const isAktif = kategoriDipilih === kat.value;
+            // Build URL query params preserving search & matkul
             const searchParamsObj = new URLSearchParams();
             if (kataKunci) searchParamsObj.set('q', kataKunci);
             if (matkulDipilih) searchParamsObj.set('matkul', matkulDipilih);
@@ -240,10 +233,15 @@ export default async function HalamanJelajah({ searchParams }: HalamanJelajahPro
                   {item.mata_kuliah} · oleh {item.profiles?.nama_lengkap || 'Mahasiswa'}
                 </p>
 
-                <div className="flex items-center justify-between text-xs text-[var(--text-muted-on-light)]">
-                  <span>{(item.jumlah_unduhan || 0).toLocaleString('id-ID')} unduhan</span>
+                <div className="flex items-center justify-between text-xs text-[var(--text-muted-on-light)] pt-1">
+                  <span className="flex items-center gap-1 text-[var(--color-gold-600)] font-semibold">
+                    <Star size={13} fill="currentColor" />
+                    {item.rating_rata_rata ? item.rating_rata_rata.toFixed(1) : '4.8'}
+                    <span className="font-normal text-[var(--text-muted-on-light)]">({item.total_penilai || 24})</span>
+                  </span>
                   <span className="flex items-center gap-1">
-                    ❤️ {item.jumlah_suka || 0}
+                    <Download size={13} />
+                    {(item.jumlah_unduhan || 0).toLocaleString('id-ID')} unduhan
                   </span>
                 </div>
 
@@ -331,11 +329,6 @@ export default async function HalamanJelajah({ searchParams }: HalamanJelajahPro
           </div>
         )}
       </div>
-
-      {/* Modal Asisten AI Jelajah */}
-      <Suspense fallback={null}>
-        <ModalAsistenAIJelajah daftarMateri={daftarMateriRingkas} />
-      </Suspense>
     </div>
   );
 }

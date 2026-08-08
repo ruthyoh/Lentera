@@ -7,58 +7,63 @@
 
 
 /* =====================================================
-   DESIGN TOKENS — LENTERA PLATFORM
+   DESIGN TOKENS — LENTERA PLATFORM (Twilight Lake)
    ===================================================== */
 :root {
-  /* Warna Aksen Utama: Gold / Amber */
-  --color-gold-50:  #fdf8ec;
-  --color-gold-100: #faedc8;
-  --color-gold-200: #f5d98e;
-  --color-gold-300: #e8bb50;
-  --color-gold-400: #d4a027;
-  --color-gold-500: #c9971e;   /* ← utama */
-  --color-gold-600: #a97d18;
-  --color-gold-700: #856212;
-  --color-gold-800: #61470c;
-  --color-gold-900: #3d2d07;
+  /* Warna Aksen Utama: Aurora / Cyan Glow (cahaya lantern) */
+  --color-aurora-50: #ecfeff;
+  --color-aurora-100: #cffafe;
+  --color-aurora-200: #a5f3fc;
+  --color-aurora-300: #67e8f9;
+  --color-aurora-400: #22d3ee;
+  /* ← highlight */
+  --color-aurora-500: #06b6d4;
+  /* ← utama */
+  --color-aurora-600: #0891b2;
+  --color-aurora-700: #0e7490;
+  --color-aurora-800: #155e75;
+  --color-aurora-900: #164e63;
 
-  /* Warna Latar Gelap: Dark Brown / Cokelat Kehitaman */
-  --color-dark-50:  #f5f0e8;
-  --color-dark-100: #e8ddc8;
-  --color-dark-200: #c8b895;
-  --color-dark-300: #9e8860;
-  --color-dark-400: #6e5a38;
-  --color-dark-500: #4a3a20;
-  --color-dark-600: #352a14;
-  --color-dark-700: #241d0d;
-  --color-dark-800: #1c140b;   /* ← hero/panel bg */
-  --color-dark-900: #100c06;
+  /* Warna Latar Gelap: Night / Deep Indigo (langit malam) */
+  --color-night-50: #eef2ff;
+  --color-night-100: #d8dff8;
+  --color-night-200: #a5b0d8;
+  --color-night-300: #6b7ab5;
+  --color-night-400: #3d4f8a;
+  --color-night-500: #2a3670;
+  --color-night-600: #1e2758;
+  --color-night-700: #151c42;
+  --color-night-800: #0f1433;
+  /* ← hero/panel bg */
+  --color-night-900: #080b1e;
 
-  /* Warna Latar Terang: Cream Gading */
-  --color-cream-50:  #ffffff;
-  --color-cream-100: #fdfaf3;
-  --color-cream-200: #fdf6e9;  /* ← page bg utama */
-  --color-cream-300: #f5ecda;
-  --color-cream-400: #e8d9c0;
-  --color-cream-500: #d4c09e;
+  /* Warna Latar Terang: Mist / Lavender Pucat (kabut danau) */
+  --color-mist-50: #ffffff;
+  --color-mist-100: #f5f3ff;
+  --color-mist-200: #ede9fe;
+  /* ← page bg utama */
+  --color-mist-300: #ddd6fe;
+  --color-mist-400: #c4b5fd;
+  --color-mist-500: #a78bfa;
 
-  /* Aksen Sekunder: Terracotta (tidak berubah) */
-  --color-terracotta-50:  #fdf0ea;
-  --color-terracotta-100: #f9d8c5;
-  --color-terracotta-200: #f3b396;
-  --color-terracotta-300: #e8a87c;
-  --color-terracotta-400: #d9895a;
-  --color-terracotta-500: #c4622d;
-  --color-terracotta-600: #a84e22;
-  --color-terracotta-700: #8a3c18;
-  --color-terracotta-800: #6d2d10;
+  /* Aksen Sekunder: Rose / Magenta-Pink (refleksi lotus) */
+  --color-rose-50: #fdf2f8;
+  --color-rose-100: #fce7f3;
+  --color-rose-200: #fbcfe8;
+  --color-rose-300: #f9a8d4;
+  --color-rose-400: #f472b6;
+  --color-rose-500: #ec4899;
+  --color-rose-600: #db2777;
+  --color-rose-700: #be185d;
+  --color-rose-800: #9d174d;
 
-  /* Teks Utama: Cokelat Tua Lembut (bukan hitam pekat) */
-  --color-ink-900: #2b2013;   /* ← teks utama */
-  --color-ink-700: #4a3520;
-  --color-ink-500: #7a6045;
-  --color-ink-300: #b09a7a;
-  --color-ink-100: #e8d9c0;
+  /* Teks Utama: Slate Indigo */
+  --color-ink-900: #1e1b4b;
+  /* ← teks utama */
+  --color-ink-700: #312e81;
+  --color-ink-500: #6366f1;
+  --color-ink-300: #a5b4fc;
+  --color-ink-100: #e0e7ff;
 
   /* Backward compat alias untuk charcoal (dipakai di form, badge, dsb) */
   --color-charcoal-900: var(--color-ink-900);
@@ -71,21 +76,25 @@
   /* =====================================================
      4 TOKEN TEKS SEMANTIK — WAJIB DIPAKAI SESUAI LATAR
      ===================================================== */
-  /* Latar GELAP (#1C140B, cokelat tua, gradasi dark) */
-  --text-on-dark:       #FDF6E9;  /* krem terang — teks utama di latar gelap  — kontras ~14:1 */
-  --text-muted-on-dark: #C9B896;  /* tan hangat  — teks sekunder di latar gelap — kontras ~6:1 */
-  /* Latar TERANG (#FDF6E9, krem, putih) */
-  --text-on-light:       #2B2013; /* cokelat sangat gelap — teks utama di latar terang — kontras ~14:1 */
-  --text-muted-on-light: #6B5B3E; /* cokelat sedang       — teks sekunder di latar terang — kontras ~5.5:1 */
+  /* Latar GELAP (#0F1433, indigo tua, gradasi night) */
+  --text-on-dark: #ede9fe;
+  /* mist-200 lavender — teks utama di latar gelap  — kontras ~14:1 */
+  --text-muted-on-dark: #a5b4fc;
+  /* indigo-300 — teks sekunder di latar gelap — kontras ~6:1 */
+  /* Latar TERANG (#ede9fe, lavender, putih) */
+  --text-on-light: #1e1b4b;
+  /* indigo sangat gelap — teks utama di latar terang — kontras ~14:1 */
+  --text-muted-on-light: #4338ca;
+  /* indigo-700 — teks sekunder di latar terang — kontras ~5.5:1 */
 
   /* Tipografi */
   --font-display: 'Plus Jakarta Sans', sans-serif;
   --font-body: 'Inter', sans-serif;
 
-  /* Bayangan — nada amber/cokelat */
-  --shadow-card: 0 4px 24px rgba(43, 32, 19, 0.08);
-  --shadow-card-hover: 0 8px 40px rgba(43, 32, 19, 0.16);
-  --shadow-navbar: 0 2px 20px rgba(43, 32, 19, 0.1);
+  /* Bayangan — nada indigo/night */
+  --shadow-card: 0 4px 24px rgba(15, 20, 51, 0.10);
+  --shadow-card-hover: 0 8px 40px rgba(15, 20, 51, 0.18);
+  --shadow-navbar: 0 2px 20px rgba(15, 20, 51, 0.12);
 
   /* Transisi */
   --transition-base: 200ms ease;
@@ -102,44 +111,44 @@
    TAILWIND V4 THEME EXTENSION via @theme
    ===================================================== */
 @theme {
-  --color-gold-50:  var(--color-gold-50);
-  --color-gold-100: var(--color-gold-100);
-  --color-gold-200: var(--color-gold-200);
-  --color-gold-300: var(--color-gold-300);
-  --color-gold-400: var(--color-gold-400);
-  --color-gold-500: var(--color-gold-500);
-  --color-gold-600: var(--color-gold-600);
-  --color-gold-700: var(--color-gold-700);
-  --color-gold-800: var(--color-gold-800);
-  --color-gold-900: var(--color-gold-900);
+  --color-aurora-50: var(--color-aurora-50);
+  --color-aurora-100: var(--color-aurora-100);
+  --color-aurora-200: var(--color-aurora-200);
+  --color-aurora-300: var(--color-aurora-300);
+  --color-aurora-400: var(--color-aurora-400);
+  --color-aurora-500: var(--color-aurora-500);
+  --color-aurora-600: var(--color-aurora-600);
+  --color-aurora-700: var(--color-aurora-700);
+  --color-aurora-800: var(--color-aurora-800);
+  --color-aurora-900: var(--color-aurora-900);
 
-  --color-dark-50:  var(--color-dark-50);
-  --color-dark-100: var(--color-dark-100);
-  --color-dark-200: var(--color-dark-200);
-  --color-dark-300: var(--color-dark-300);
-  --color-dark-400: var(--color-dark-400);
-  --color-dark-500: var(--color-dark-500);
-  --color-dark-600: var(--color-dark-600);
-  --color-dark-700: var(--color-dark-700);
-  --color-dark-800: var(--color-dark-800);
-  --color-dark-900: var(--color-dark-900);
+  --color-night-50: var(--color-night-50);
+  --color-night-100: var(--color-night-100);
+  --color-night-200: var(--color-night-200);
+  --color-night-300: var(--color-night-300);
+  --color-night-400: var(--color-night-400);
+  --color-night-500: var(--color-night-500);
+  --color-night-600: var(--color-night-600);
+  --color-night-700: var(--color-night-700);
+  --color-night-800: var(--color-night-800);
+  --color-night-900: var(--color-night-900);
 
-  --color-cream-50:  var(--color-cream-50);
-  --color-cream-100: var(--color-cream-100);
-  --color-cream-200: var(--color-cream-200);
-  --color-cream-300: var(--color-cream-300);
-  --color-cream-400: var(--color-cream-400);
-  --color-cream-500: var(--color-cream-500);
+  --color-mist-50: var(--color-mist-50);
+  --color-mist-100: var(--color-mist-100);
+  --color-mist-200: var(--color-mist-200);
+  --color-mist-300: var(--color-mist-300);
+  --color-mist-400: var(--color-mist-400);
+  --color-mist-500: var(--color-mist-500);
 
-  --color-terracotta-50:  var(--color-terracotta-50);
-  --color-terracotta-100: var(--color-terracotta-100);
-  --color-terracotta-200: var(--color-terracotta-200);
-  --color-terracotta-300: var(--color-terracotta-300);
-  --color-terracotta-400: var(--color-terracotta-400);
-  --color-terracotta-500: var(--color-terracotta-500);
-  --color-terracotta-600: var(--color-terracotta-600);
-  --color-terracotta-700: var(--color-terracotta-700);
-  --color-terracotta-800: var(--color-terracotta-800);
+  --color-rose-50: var(--color-rose-50);
+  --color-rose-100: var(--color-rose-100);
+  --color-rose-200: var(--color-rose-200);
+  --color-rose-300: var(--color-rose-300);
+  --color-rose-400: var(--color-rose-400);
+  --color-rose-500: var(--color-rose-500);
+  --color-rose-600: var(--color-rose-600);
+  --color-rose-700: var(--color-rose-700);
+  --color-rose-800: var(--color-rose-800);
 
   --color-ink-900: var(--color-ink-900);
   --color-ink-700: var(--color-ink-700);
@@ -155,9 +164,9 @@
   --color-charcoal-100: var(--color-charcoal-100);
 
   /* Token teks semantik */
-  --text-on-dark:       var(--text-on-dark);
+  --text-on-dark: var(--text-on-dark);
   --text-muted-on-dark: var(--text-muted-on-dark);
-  --text-on-light:       var(--text-on-light);
+  --text-on-light: var(--text-on-light);
   --text-muted-on-light: var(--text-muted-on-light);
 
   --font-family-display: var(--font-display);
@@ -167,7 +176,9 @@
 /* =====================================================
    BASE STYLES
    ===================================================== */
-*, *::before, *::after {
+*,
+*::before,
+*::after {
   box-sizing: border-box;
 }
 
@@ -179,58 +190,58 @@ html {
 
 body {
   font-family: var(--font-body);
-  background-color: var(--color-cream-200);
+  background-color: var(--color-mist-200);
   color: var(--color-ink-900);
   line-height: 1.6;
   min-height: 100vh;
 }
 
-h1, h2, h3, h4, h5, h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
   font-family: var(--font-display);
   font-weight: 700;
   line-height: 1.2;
-  color: var(--color-ink-900);
 }
 
 /* =====================================================
    KOMPONEN UTILITAS KUSTOM
    ===================================================== */
 
-/* Gradient backgrounds */
+/* Gradient backgrounds — Twilight Night Sky */
 .bg-gradient-hero {
-  background: linear-gradient(
-    135deg,
-    var(--color-dark-900) 0%,
-    var(--color-dark-800) 50%,
-    var(--color-dark-700) 100%
-  );
+  background: linear-gradient(135deg,
+      var(--color-night-900) 0%,
+      var(--color-night-800) 40%,
+      #1a1040 70%,
+      var(--color-night-700) 100%);
 }
 
-/* Kartu Modul Belajar: dark-brown → gold */
+/* Kartu Modul Belajar: night→aurora (indigo ke cyan glow) */
 .bg-gradient-card-belajar {
-  background: linear-gradient(
-    135deg,
-    var(--color-dark-800) 0%,
-    var(--color-dark-600) 45%,
-    var(--color-gold-700) 100%
-  );
+  background: linear-gradient(135deg,
+      var(--color-night-800) 0%,
+      var(--color-night-600) 45%,
+      var(--color-aurora-800) 100%);
 }
 
-/* Kartu Modul Beasiswa: tetap terracotta */
+/* Kartu Modul Beasiswa: night→rose (indigo ke pink lotus) */
 .bg-gradient-card-beasiswa {
-  background: linear-gradient(
-    135deg,
-    var(--color-terracotta-700) 0%,
-    var(--color-terracotta-500) 100%
-  );
+  background: linear-gradient(135deg,
+      var(--color-rose-800) 0%,
+      var(--color-rose-600) 60%,
+      var(--color-rose-500) 100%);
 }
 
-/* Glass card effect */
+/* Glass card effect — with twilight tint */
 .card-glass {
-  background: rgba(255, 255, 255, 0.88);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.6);
+  background: rgba(255, 255, 255, 0.82);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(196, 181, 253, 0.4);
   box-shadow: var(--shadow-card);
   border-radius: var(--radius-lg);
   transition: box-shadow var(--transition-smooth), transform var(--transition-smooth);
@@ -244,8 +255,10 @@ h1, h2, h3, h4, h5, h6 {
 /* Section container */
 .container-lentera {
   max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 24px;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 24px;
+  padding-right: 24px;
 }
 
 /* Badge pill */
@@ -266,6 +279,7 @@ h1, h2, h3, h4, h5, h6 {
     opacity: 0;
     transform: translateY(20px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -273,13 +287,37 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 @keyframes float {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-8px); }
+
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-8px);
+  }
 }
 
 @keyframes shimmer {
-  0% { background-position: -200% 0; }
-  100% { background-position: 200% 0; }
+  0% {
+    background-position: -200% 0;
+  }
+
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+@keyframes twinkle {
+
+  0%,
+  100% {
+    opacity: 0.3;
+  }
+
+  50% {
+    opacity: 1;
+  }
 }
 
 .animate-fade-in-up {
@@ -290,14 +328,29 @@ h1, h2, h3, h4, h5, h6 {
   animation: float 3s ease-in-out infinite;
 }
 
-.animate-delay-100 { animation-delay: 100ms; }
-.animate-delay-200 { animation-delay: 200ms; }
-.animate-delay-300 { animation-delay: 300ms; }
-.animate-delay-400 { animation-delay: 400ms; }
+.animate-twinkle {
+  animation: twinkle 2s ease-in-out infinite;
+}
+
+.animate-delay-100 {
+  animation-delay: 100ms;
+}
+
+.animate-delay-200 {
+  animation-delay: 200ms;
+}
+
+.animate-delay-300 {
+  animation-delay: 300ms;
+}
+
+.animate-delay-400 {
+  animation-delay: 400ms;
+}
 
 /* Skeleton loader */
 .skeleton {
-  background: linear-gradient(90deg, var(--color-cream-300) 25%, var(--color-cream-200) 50%, var(--color-cream-300) 75%);
+  background: linear-gradient(90deg, var(--color-mist-300) 25%, var(--color-mist-200) 50%, var(--color-mist-300) 75%);
   background-size: 200% 100%;
   animation: shimmer 1.5s infinite;
   border-radius: var(--radius-sm);
@@ -307,20 +360,23 @@ h1, h2, h3, h4, h5, h6 {
 ::-webkit-scrollbar {
   width: 6px;
 }
+
 ::-webkit-scrollbar-track {
-  background: var(--color-cream-200);
+  background: var(--color-mist-200);
 }
+
 ::-webkit-scrollbar-thumb {
-  background: var(--color-gold-400);
+  background: var(--color-aurora-400);
   border-radius: 3px;
 }
+
 ::-webkit-scrollbar-thumb:hover {
-  background: var(--color-gold-500);
+  background: var(--color-aurora-500);
 }
 
 /* Focus ring kustom */
 :focus-visible {
-  outline: 2px solid var(--color-gold-500);
+  outline: 2px solid var(--color-aurora-500);
   outline-offset: 2px;
   border-radius: 4px;
 }
@@ -333,6 +389,7 @@ h1, h2, h3, h4, h5, h6 {
   color: var(--color-ink-500);
   font-size: 0.875rem;
 }
+
 .divider-teks::before,
 .divider-teks::after {
   content: '';

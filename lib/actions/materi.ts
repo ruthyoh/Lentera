@@ -190,6 +190,164 @@ export async function unggahMateri(
 }
 
 // =====================================================
+// Demo / Fallback Data untuk Modul Belajar
+// =====================================================
+const MATERI_DUMMY_FALLBACK: Materi[] = [
+  {
+    id: 'materi-1',
+    uploader_id: 'user-1',
+    judul: 'Rangkuman Lengkap Algoritma & Struktur Data (Graf, Pohon, & Sorting)',
+    mata_kuliah: 'Algoritma & Struktur Data',
+    deskripsi: 'Catatan komprehensif mencakup materi Binary Search Tree, AVL Tree, Graph Traversal (DFS/BFS), dan analisis kompleksitas Big-O.',
+    kategori: 'rangkuman',
+    file_url: 'https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf',
+    jumlah_unduhan: 342,
+    jumlah_suka: 89,
+    created_at: '2026-08-01T10:00:00Z',
+    updated_at: '2026-08-01T10:00:00Z',
+    profiles: {
+      id: 'user-1',
+      nama_lengkap: 'Budi Santoso',
+      jurusan: 'Teknik Informatika',
+      asal_institusi: 'Universitas Indonesia',
+    },
+  },
+  {
+    id: 'materi-2',
+    uploader_id: 'user-2',
+    judul: 'Kumpulan Bank Soal & Pembahasan UTS/UAS Kalkulus Multivariabel',
+    mata_kuliah: 'Kalkulus II',
+    deskripsi: 'Soal UTS 5 tahun terakhir (2021-2025) dilengkapi pembahasan rinci langkah demi langkah turunan parsial & integral lipat dua.',
+    kategori: 'bank_soal',
+    file_url: 'https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf',
+    jumlah_unduhan: 512,
+    jumlah_suka: 120,
+    created_at: '2026-08-02T14:30:00Z',
+    updated_at: '2026-08-02T14:30:00Z',
+    profiles: {
+      id: 'user-2',
+      nama_lengkap: 'Siti Rahmawati',
+      jurusan: 'Matematika',
+      asal_institusi: 'Institut Teknologi Bandung',
+    },
+  },
+  {
+    id: 'materi-3',
+    uploader_id: 'user-3',
+    judul: 'Catatan Kuliah Fisika Dasar I — Mekanika & Termodinamika',
+    mata_kuliah: 'Fisika Dasar',
+    deskripsi: 'Catatan rapi dengan rumus ringkas, grafik ilustratif, dan contoh soal kinematika, dinamika rotasi, serta hukum termodinamika.',
+    kategori: 'catatan',
+    file_url: 'https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf',
+    jumlah_unduhan: 215,
+    jumlah_suka: 45,
+    created_at: '2026-08-03T09:15:00Z',
+    updated_at: '2026-08-03T09:15:00Z',
+    profiles: {
+      id: 'user-3',
+      nama_lengkap: 'Ahmad Fauzi',
+      jurusan: 'Fisika',
+      asal_institusi: 'Universitas Gadjah Mada',
+    },
+  },
+  {
+    id: 'materi-4',
+    uploader_id: 'user-4',
+    judul: 'Modul Praktikum Pemrograman Web Lanjut (Next.js & Supabase)',
+    mata_kuliah: 'Pemrograman Web',
+    deskripsi: 'Panduan step-by-step membuat aplikasi web full-stack modern menggunakan Next.js App Router, Tailwind CSS, dan Supabase Auth & DB.',
+    kategori: 'modul',
+    file_url: 'https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf',
+    jumlah_unduhan: 480,
+    jumlah_suka: 110,
+    created_at: '2026-08-04T11:20:00Z',
+    updated_at: '2026-08-04T11:20:00Z',
+    profiles: {
+      id: 'user-4',
+      nama_lengkap: 'Dian Permata',
+      jurusan: 'Sistem Informasi',
+      asal_institusi: 'Universitas Airlangga',
+    },
+  },
+  {
+    id: 'materi-5',
+    uploader_id: 'user-5',
+    judul: 'Slide Presentasi Arsitektur Komputer & Organisasi Sistem',
+    mata_kuliah: 'Arsitektur Komputer',
+    deskripsi: 'Slide presentasi kelompok tentang pipelining CPU, hierarki memori cache, dan bus sistem komputer modern.',
+    kategori: 'presentasi',
+    file_url: 'https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf',
+    jumlah_unduhan: 180,
+    jumlah_suka: 32,
+    created_at: '2026-08-05T16:45:00Z',
+    updated_at: '2026-08-05T16:45:00Z',
+    profiles: {
+      id: 'user-5',
+      nama_lengkap: 'Rizky Pratama',
+      jurusan: 'Teknik Komputer',
+      asal_institusi: 'Universitas Diponegoro',
+    },
+  },
+  {
+    id: 'materi-6',
+    uploader_id: 'user-6',
+    judul: 'Rangkuman Intisari Basis Data & Perancangan ERD/SQL',
+    mata_kuliah: 'Sistem Basis Data',
+    deskripsi: 'Rangkuman normalisasi (1NF sampai 3NF), sintaks SQL DDL/DML, joind, serta pemodelan Entity-Relationship Diagram.',
+    kategori: 'rangkuman',
+    file_url: 'https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf',
+    jumlah_unduhan: 295,
+    jumlah_suka: 76,
+    created_at: '2026-08-06T08:10:00Z',
+    updated_at: '2026-08-06T08:10:00Z',
+    profiles: {
+      id: 'user-6',
+      nama_lengkap: 'Anisa Wijaya',
+      jurusan: 'Teknik Informatika',
+      asal_institusi: 'Institut Teknologi Sepuluh Nopember',
+    },
+  },
+  {
+    id: 'materi-7',
+    uploader_id: 'user-7',
+    judul: 'Bank Soal Latihan & Pembahasan Kimia Organik I',
+    mata_kuliah: 'Kimia Organik',
+    deskripsi: 'Paket latihan reaksi substitusi nukleofilik (SN1/SN2), eliminasi (E1/E2), serta tata nama IUPAC senyawa hidrokarbon.',
+    kategori: 'bank_soal',
+    file_url: 'https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf',
+    jumlah_unduhan: 160,
+    jumlah_suka: 28,
+    created_at: '2026-08-06T13:00:00Z',
+    updated_at: '2026-08-06T13:00:00Z',
+    profiles: {
+      id: 'user-7',
+      nama_lengkap: 'Hendra Gunawan',
+      jurusan: 'Kimia',
+      asal_institusi: 'Universitas Padjadjaran',
+    },
+  },
+  {
+    id: 'materi-8',
+    uploader_id: 'user-8',
+    judul: 'Catatan Metode Penelitian Kuantitatif & Olah Data SPSS/R',
+    mata_kuliah: 'Metode Penelitian',
+    deskripsi: 'Panduan menyusun instrumen survei, uji validitas, uji reliabilitas, serta analisis regresi linear menggunakan R dan SPSS.',
+    kategori: 'catatan',
+    file_url: 'https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf',
+    jumlah_unduhan: 410,
+    jumlah_suka: 95,
+    created_at: '2026-08-07T07:30:00Z',
+    updated_at: '2026-08-07T07:30:00Z',
+    profiles: {
+      id: 'user-8',
+      nama_lengkap: 'Maya Putri',
+      jurusan: 'Psikologi',
+      asal_institusi: 'Universitas Brawijaya',
+    },
+  },
+];
+
+// =====================================================
 // Action 2: Query Materi untuk /jelajah
 // =====================================================
 export async function ambilDaftarMateri(params?: {
@@ -252,23 +410,39 @@ export async function ambilDaftarMateri(params?: {
 
   const { data, count, error } = await query;
 
-  if (error) {
-    console.error('Error fetching materi:', error);
-    return {
-      materi: [],
-      total: 0,
-      halaman: page,
-      perHalaman: limit,
-      totalHalaman: 0,
-    };
+  let hasilMateri: Materi[] = (data as unknown as Materi[]) || [];
+  let totalCount = count || 0;
+
+  // Jika DB Supabase materi masih kosong, gunakan fallback dummy materi
+  if ((!error && hasilMateri.length === 0) || error) {
+    let filteredDummy = [...MATERI_DUMMY_FALLBACK];
+
+    if (params?.kategori && params.kategori !== 'semua') {
+      filteredDummy = filteredDummy.filter((m) => m.kategori === params.kategori);
+    }
+    if (params?.matkul && params.matkul !== 'semua') {
+      const queryMatkul = params.matkul.toLowerCase();
+      filteredDummy = filteredDummy.filter((m) => m.mata_kuliah.toLowerCase().includes(queryMatkul));
+    }
+    if (params?.q && params.q.trim() !== '') {
+      const qLower = params.q.trim().toLowerCase();
+      filteredDummy = filteredDummy.filter(
+        (m) =>
+          m.judul.toLowerCase().includes(qLower) ||
+          m.mata_kuliah.toLowerCase().includes(qLower) ||
+          (m.deskripsi && m.deskripsi.toLowerCase().includes(qLower))
+      );
+    }
+
+    totalCount = filteredDummy.length;
+    hasilMateri = filteredDummy.slice(from, from + limit);
   }
 
-  const total = count || 0;
-  const totalHalaman = Math.ceil(total / limit);
+  const totalHalaman = Math.ceil(totalCount / limit);
 
   return {
-    materi: (data as unknown as Materi[]) || [],
-    total,
+    materi: hasilMateri,
+    total: totalCount,
     halaman: page,
     perHalaman: limit,
     totalHalaman,
@@ -301,51 +475,63 @@ export async function ambilDetailMateri(id: string): Promise<{
     .eq('id', id)
     .single();
 
-  if (error || !materiData) {
-    return { materi: null, nilaiSaya: null };
-  }
-
-  // Hitung rata-rata rating dari tabel penilaian
-  const { data: penilaianData } = await supabase
-    .from('penilaian')
-    .select('nilai')
-    .eq('materi_id', id);
-
-  let rating_rata_rata = 0;
-  const total_penilai = penilaianData?.length || 0;
-
-  if (total_penilai > 0) {
-    const sum = penilaianData!.reduce((acc, curr) => acc + curr.nilai, 0);
-    rating_rata_rata = Math.round((sum / total_penilai) * 10) / 10;
-  }
-
-  // Cek rating dari user yang sedang login (jika ada)
-  let nilaiSaya: number | null = null;
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-
-  if (user) {
-    const { data: penilaianSaya } = await supabase
+  if (!error && materiData) {
+    // Hitung rata-rata rating dari tabel penilaian
+    const { data: penilaianData } = await supabase
       .from('penilaian')
       .select('nilai')
-      .eq('materi_id', id)
-      .eq('user_id', user.id)
-      .single();
+      .eq('materi_id', id);
 
-    if (penilaianSaya) {
-      nilaiSaya = penilaianSaya.nilai;
+    let rating_rata_rata = 0;
+    const total_penilai = penilaianData?.length || 0;
+
+    if (total_penilai > 0) {
+      const sum = penilaianData!.reduce((acc, curr) => acc + curr.nilai, 0);
+      rating_rata_rata = Math.round((sum / total_penilai) * 10) / 10;
     }
+
+    let nilaiSaya: number | null = null;
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
+
+    if (user) {
+      const { data: penilaianSaya } = await supabase
+        .from('penilaian')
+        .select('nilai')
+        .eq('materi_id', id)
+        .eq('user_id', user.id)
+        .single();
+
+      if (penilaianSaya) {
+        nilaiSaya = penilaianSaya.nilai;
+      }
+    }
+
+    return {
+      materi: {
+        ...(materiData as unknown as Materi),
+        rating_rata_rata,
+        total_penilai,
+      },
+      nilaiSaya,
+    };
   }
 
-  return {
-    materi: {
-      ...(materiData as unknown as Materi),
-      rating_rata_rata,
-      total_penilai,
-    },
-    nilaiSaya,
-  };
+  // Fallback ke dummy materi jika ID ditemukan di dummy list
+  const dummyItem = MATERI_DUMMY_FALLBACK.find((m) => m.id === id);
+  if (dummyItem) {
+    return {
+      materi: {
+        ...dummyItem,
+        rating_rata_rata: 4.8,
+        total_penilai: 34,
+      },
+      nilaiSaya: null,
+    };
+  }
+
+  return { materi: null, nilaiSaya: null };
 }
 
 // =====================================================

@@ -5,6 +5,7 @@ interface LogoProps {
   ukuran?: 'kecil' | 'sedang' | 'besar';
   tampilkanTeks?: boolean;
   className?: string;
+  warnaTeks?: string;
 }
 
 const ukuranMap = {
@@ -13,14 +14,14 @@ const ukuranMap = {
   besar: { gambar: 48, teks: 'text-2xl' },
 };
 
-export default function Logo({ ukuran = 'sedang', tampilkanTeks = true, className = '' }: LogoProps) {
+export default function Logo({ ukuran = 'sedang', tampilkanTeks = true, className = '', warnaTeks }: LogoProps) {
   const config = ukuranMap[ukuran];
 
   return (
     <Link href="/" className={`flex items-center gap-2.5 group ${className}`} aria-label="Lentera — Beranda">
       <div className="relative transition-transform duration-300 group-hover:scale-110">
         <Image
-          src="/logo.svg"
+          src="/iconlentera.png"
           alt="Logo Lentera"
           width={config.gambar}
           height={config.gambar}
@@ -32,7 +33,7 @@ export default function Logo({ ukuran = 'sedang', tampilkanTeks = true, classNam
           className={`${config.teks} font-bold tracking-tight`}
           style={{
             fontFamily: 'var(--font-display)',
-            color: 'var(--text-on-light)',
+            color: warnaTeks || 'var(--text-on-light)',
           }}
         >
           Lentera

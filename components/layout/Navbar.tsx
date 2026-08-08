@@ -85,7 +85,7 @@ export default function Navbar({ profil }: NavbarProps) {
           <nav className="flex items-center justify-between h-16" aria-label="Navigasi utama">
 
             {/* Logo */}
-            <Logo ukuran="sedang" />
+            <Logo ukuran="sedang" warnaTeks={terscroll ? 'var(--text-on-light)' : 'var(--text-on-dark)'} />
 
             {/* Link Navigasi Desktop */}
             <div className="hidden md:flex items-center gap-1" role="menubar">
@@ -104,16 +104,16 @@ export default function Navbar({ profil }: NavbarProps) {
                     style={
                       aktif
                         ? {
-                            background: link.modul === 'beasiswa'
-                              ? 'rgba(196,98,45,0.15)'
-                              : 'rgba(201,151,30,0.18)',
-                            color: terscroll
-                              ? (link.modul === 'beasiswa' ? 'var(--color-terracotta-600)' : 'var(--color-gold-600)')
-                              : 'var(--text-on-dark)',
-                          }
+                          background: link.modul === 'beasiswa'
+                            ? 'rgba(196,98,45,0.15)'
+                            : 'rgba(201,151,30,0.18)',
+                          color: terscroll
+                            ? (link.modul === 'beasiswa' ? 'var(--color-terracotta-600)' : 'var(--color-gold-600)')
+                            : 'var(--text-on-dark)',
+                        }
                         : {
-                            color: terscroll ? 'var(--text-on-light)' : 'var(--text-on-dark)',
-                          }
+                          color: terscroll ? 'var(--text-on-light)' : 'var(--text-on-dark)',
+                        }
                     }
                     aria-current={aktif ? 'page' : undefined}
                   >
@@ -132,7 +132,7 @@ export default function Navbar({ profil }: NavbarProps) {
                 style={{
                   background: terscroll ? 'rgba(201,151,30,0.12)' : 'rgba(201,151,30,0.18)',
                   border: '1px solid rgba(201,151,30,0.35)',
-                  color: terscroll ? 'var(--color-gold-600)' : 'var(--color-gold-300)',
+                  color: terscroll ? 'var(--color-gold-600)' : '#FFFFFF',
                 }}
               >
                 ★ TCC 2026
@@ -140,7 +140,7 @@ export default function Navbar({ profil }: NavbarProps) {
 
               <div
                 className="w-px h-6 transition-colors duration-300"
-                style={{ background: terscroll ? 'var(--color-cream-400)' : 'rgba(255,255,255,0.2)' }}
+                style={{ background: terscroll ? 'var(--color-cream-400)' : 'rgba(242, 239, 239, 0.2)' }}
                 aria-hidden="true"
               />
 
@@ -278,7 +278,7 @@ export default function Navbar({ profil }: NavbarProps) {
                       ukuran="sedang"
                       ikonKanan={<Sparkles size={14} />}
                       className={!terscroll
-                        ? 'bg-[var(--color-gold-500)]! text-[var(--color-dark-900)]! hover:bg-[var(--color-gold-400)]!'
+                        ? 'bg-[var(--color-gold-500)]! text-[#FFFFFF]! hover:bg-[var(--color-gold-400)]!'
                         : ''}
                     >
                       Daftar Gratis
@@ -381,13 +381,13 @@ export default function Navbar({ profil }: NavbarProps) {
                 style={
                   isAktif(link.href)
                     ? {
-                        background: link.modul === 'beasiswa'
-                          ? 'var(--color-terracotta-100)'
-                          : 'var(--color-gold-100)',
-                        color: link.modul === 'beasiswa'
-                          ? 'var(--color-terracotta-700)'
-                          : 'var(--color-gold-700)',
-                      }
+                      background: link.modul === 'beasiswa'
+                        ? 'var(--color-terracotta-100)'
+                        : 'var(--color-gold-100)',
+                      color: link.modul === 'beasiswa'
+                        ? 'var(--color-terracotta-700)'
+                        : 'var(--color-gold-700)',
+                    }
                     : { color: 'var(--text-on-light)' }
                 }
                 aria-current={isAktif(link.href) ? 'page' : undefined}

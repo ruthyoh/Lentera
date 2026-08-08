@@ -2,10 +2,11 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import {
   ArrowLeft, Award, Clock, GraduationCap, Globe, Brain,
-  CheckCircle, AlertCircle, PenTool, BookOpen, ArrowRight
+  CheckCircle, AlertCircle, PenTool, BookOpen, ArrowRight, FolderOpen
 } from 'lucide-react';
 import Badge from '@/components/ui/Badge';
 import Tombol from '@/components/ui/Button';
+import { ambilDetailBeasiswa } from '@/lib/actions/beasiswa';
 
 interface HalamanDetailBeasiswaProps {
   params: Promise<{ id: string }>;
@@ -13,52 +14,84 @@ interface HalamanDetailBeasiswaProps {
 
 export async function generateMetadata({ params }: HalamanDetailBeasiswaProps): Promise<Metadata> {
   const { id } = await params;
+  const beasiswa = await ambilDetailBeasiswa(id);
+
+  if (!beasiswa) {
+    return {
+      title: 'Beasiswa Tidak Ditemukan | Lentera',
+    };
+  }
+
   return {
-    title: `Detail Beasiswa — ${id}`,
-    description: 'Lihat persyaratan lengkap dan daftar beasiswa di Lentera.',
+    title: `${beasiswa.nama_beasiswa} | Lentera`,
+    description: beasiswa.deskripsi_singkat || `Informasi pendaftaran ${beasiswa.nama_beasiswa} oleh ${beasiswa.penyelenggara}.`,
   };
 }
 
+const statusConfig = {
+  aktif: { label: 'Aktif', varian: 'aktif' as const },
+  segera_ditutup: { label: 'Segera Ditutup', varian: 'peringatan' as const },
+  ditutup: { label: 'Ditutup', varian: 'bahaya' as const },
+};
+
+const labelKategori: Record<string, string> = {
+  pemerintah: 'Pemerintah',
+  swasta: 'Swasta',
+  prestasi: 'Prestasi',
+  kebutuhan: 'Kebutuhan',
+  riset: 'Riset',
+  internasional: 'Internasional',
+};
+
 export default async function HalamanDetailBeasiswa({ params }: HalamanDetailBeasiswaProps) {
   const { id } = await params;
+  const beasiswa = await ambilDetailBeasiswa(id);
 
-  const beasiswa = {
-    id,
-    nama: 'Beasiswa Unggulan Kemendikbud 2026',
-    penyelenggara: 'Kementerian Pendidikan, Kebudayaan, Riset, dan Teknologi',
-    kategori: 'Pemerintah',
-    status: 'aktif',
-    deskripsi:
-      'Beasiswa Unggulan merupakan program beasiswa yang diberikan kepada putra-putri terbaik bangsa Indonesia yang berprestasi dan berpotensi mengembangkan diri. Program ini bertujuan mendorong akses pendidikan tinggi berkualitas bagi mahasiswa berprestasi dari seluruh Indonesia.',
-    persyaratan: [
-      'WNI aktif sebagai mahasiswa S1/D4/S2/S3',
-      'IPK minimal 3.00 untuk S1, 3.25 untuk S2/S3',
-      'Tidak sedang menerima beasiswa lain dari pemerintah',
-      'Usia maksimal 35 tahun (S1), 40 tahun (S2), 45 tahun (S3)',
-      'Tidak melebihi semester 4 untuk S1',
-      'Memiliki sertifikat bahasa Inggris (TOEFL/IELTS) untuk jenjang S2/S3',
-    ],
-    benefit: [
-      'Biaya Pendidikan (SPP/Tuition Fee)',
-      'Biaya Hidup Rp 2.500.000/bulan',
-      'Biaya Buku & Penelitian',
-      'Biaya Seminar/Konferensi',
-    ],
-    nominal: 2500000,
-    tenggat: '30 September 2026',
-    tautanResmi: 'https://beasiswaunggulan.kemdikbud.go.id',
-    ipkMinimum: 3.0,
-    jurusanTersedia: 'Semua Jurusan',
-    semesterMaksimum: 4,
-  };
+  if (!beasiswa) {
+    return (
+      <div className="min-h-screen pt-24 pb-12 flex items-center justify-center" style={{ background: 'var(--color-cream-200)' }}>
+        <div className="card-glass p-12 text-center max-w-md mx-auto space-y-4">
+          <div className="w-16 h-16 rounded-full mx-auto flex items-center justify-center bg-[var(--color-cream-300)] text-[var(--text-muted-on-light)]">
+            <FolderOpen size={32} />
+          </div>
+          <h1 className="text-xl font-bold text-[var(--text-on-light)]" style={{ fontFamily: 'var(--font-display)' }}>
+            Beasiswa Tidak Ditemukan
+          </h1>
+          <p className="text-sm text-[var(--text-muted-on-light)]">
+            Informasi beasiswa yang Anda cari tidak ditemukan atau telah dihapus.
+          </p>
+          <Link href="/beasiswa">
+            <Tombol varian="sekunder" ukuran="sedang" className="mt-2">
+              Kembali ke Jelajah Beasiswa
+            </Tombol>
+          </Link>
+        </div>
+      </div>
+    );
+  }
 
-  const statusConfig = {
-    aktif: { label: 'Aktif', varian: 'aktif' as const },
-    segera_ditutup: { label: 'Segera Ditutup', varian: 'peringatan' as const },
-    ditutup: { label: 'Ditutup', varian: 'bahaya' as const },
-  };
+  const statusInfo = statusConfig[beasiswa.status as keyof typeof statusConfig] || statusConfig.aktif;
 
-  const statusInfo = statusConfig[beasiswa.status as keyof typeof statusConfig];
+  // Format Date
+  let deadlineFormatted = 'Belum ditentukan';
+  if (beasiswa.deadline_pendaftaran) {
+    const dateObj = new Date(beasiswa.deadline_pendaftaran);
+    deadlineFormatted = dateObj.toLocaleDateString('id-ID', {
+      day: 'numeric',
+      month: 'long',
+      year: 'numeric',
+    });
+  }
+
+  // Parse requirements list from kriteria_khusus or generate structured defaults
+  const kriteriaKhususList = beasiswa.kriteria_khusus
+    ? beasiswa.kriteria_khusus.split(',').map((s) => s.trim())
+    : [
+        'WNI aktif sebagai mahasiswa S1/D4/S2/S3',
+        `IPK minimal ${beasiswa.kriteria_ipk_min ? beasiswa.kriteria_ipk_min.toFixed(2) : '3.00'}`,
+        'Tidak sedang menerima beasiswa lain dari pihak ketiga',
+        'Memiliki integritas tinggi dan rekam jejak akademik yang baik',
+      ];
 
   return (
     <div className="min-h-screen pt-16" style={{ background: 'var(--color-cream-200)' }}>
@@ -72,7 +105,7 @@ export default async function HalamanDetailBeasiswa({ params }: HalamanDetailBea
             </Link>
             <span style={{ color: 'var(--text-muted-on-light)' }}>/</span>
             <span className="font-medium truncate text-[var(--text-on-light)]">
-              {beasiswa.nama}
+              {beasiswa.nama_beasiswa}
             </span>
           </nav>
         </div>
@@ -82,11 +115,11 @@ export default async function HalamanDetailBeasiswa({ params }: HalamanDetailBea
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Kolom Utama */}
           <div className="lg:col-span-2 space-y-6">
-            {/* Header */}
+            {/* Header Card */}
             <div className="card-glass p-8">
               <div className="flex flex-wrap gap-2 mb-5">
                 <Badge varian={statusInfo.varian}>{statusInfo.label}</Badge>
-                <Badge varian="terracotta">{beasiswa.kategori}</Badge>
+                <Badge varian="terracotta">{labelKategori[beasiswa.jenis] || beasiswa.jenis}</Badge>
               </div>
 
               <div className="flex items-start gap-4 mb-5">
@@ -102,26 +135,37 @@ export default async function HalamanDetailBeasiswa({ params }: HalamanDetailBea
                     className="text-2xl md:text-3xl font-bold mb-1 text-[var(--text-on-light)]"
                     style={{ fontFamily: 'var(--font-display)' }}
                   >
-                    {beasiswa.nama}
+                    {beasiswa.nama_beasiswa}
                   </h1>
                   <p className="text-sm text-[var(--text-muted-on-light)]">
-                    {beasiswa.penyelenggara}
+                    oleh {beasiswa.penyelenggara}
                   </p>
                 </div>
               </div>
 
               <p className="leading-relaxed mb-6 text-[var(--text-on-light)]">
-                {beasiswa.deskripsi}
+                {beasiswa.deskripsi_singkat || 'Informasi beasiswa ini disediakan resmi oleh penyelenggara untuk mendukung pendidikan tinggi mahasiswa Indonesia.'}
               </p>
 
               {/* CTA */}
               <div className="flex flex-wrap gap-3">
-                <a
-                  href={beasiswa.tautanResmi}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  id="tombol-daftar-beasiswa"
-                >
+                {beasiswa.link_resmi ? (
+                  <a
+                    href={beasiswa.link_resmi}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    id="tombol-daftar-beasiswa"
+                  >
+                    <Tombol
+                      varian="sekunder"
+                      ukuran="besar"
+                      ikonKiri={<Globe size={16} />}
+                      ikonKanan={<ArrowRight size={14} />}
+                    >
+                      Daftar di Situs Resmi
+                    </Tombol>
+                  </a>
+                ) : (
                   <Tombol
                     varian="sekunder"
                     ukuran="besar"
@@ -130,7 +174,7 @@ export default async function HalamanDetailBeasiswa({ params }: HalamanDetailBea
                   >
                     Daftar Sekarang
                   </Tombol>
-                </a>
+                )}
                 <Tombol varian="outline" ukuran="sedang" ikonKiri={<PenTool size={15} />} id="tombol-draf-esai">
                   Buat Draf Esai AI
                 </Tombol>
@@ -144,10 +188,10 @@ export default async function HalamanDetailBeasiswa({ params }: HalamanDetailBea
                 style={{ fontFamily: 'var(--font-display)' }}
               >
                 <AlertCircle size={20} style={{ color: 'var(--color-terracotta-500)' }} />
-                Persyaratan Pendaftaran
+                Kriteria &amp; Persyaratan Pendaftaran
               </h2>
               <ul className="space-y-3">
-                {beasiswa.persyaratan.map((syarat, i) => (
+                {kriteriaKhususList.map((syarat, i) => (
                   <li key={i} className="flex items-start gap-3 text-sm text-[var(--text-on-light)]">
                     <CheckCircle size={16} className="flex-shrink-0 mt-0.5" style={{ color: 'var(--color-gold-600)' }} />
                     {syarat}
@@ -163,10 +207,15 @@ export default async function HalamanDetailBeasiswa({ params }: HalamanDetailBea
                 style={{ fontFamily: 'var(--font-display)' }}
               >
                 <Award size={20} style={{ color: 'var(--color-terracotta-500)' }} />
-                Manfaat Beasiswa
+                Manfaat &amp; Fasilitas Beasiswa
               </h2>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                {beasiswa.benefit.map((b, i) => (
+                {[
+                  'Bantuan Bantuan Biaya Pendidikan (UKT/SPP)',
+                  'Uang Saku / Biaya Hidup Bulanan',
+                  'Pelatihan Kepemimpinan & Soft Skills',
+                  'Networking Komunitas Beasiswa Nasional',
+                ].map((b, i) => (
                   <div
                     key={i}
                     className="flex items-center gap-3 p-3 rounded-[var(--radius-sm)]"
@@ -189,10 +238,10 @@ export default async function HalamanDetailBeasiswa({ params }: HalamanDetailBea
               </h3>
               <div className="space-y-4">
                 {[
-                  { ikon: <Clock size={16} />, label: 'Tenggat Waktu', nilai: beasiswa.tenggat },
-                  { ikon: <Award size={16} />, label: 'Nominal', nilai: `Rp ${beasiswa.nominal.toLocaleString('id-ID')}/bulan` },
-                  { ikon: <GraduationCap size={16} />, label: 'IPK Minimum', nilai: beasiswa.ipkMinimum.toFixed(2) },
-                  { ikon: <BookOpen size={16} />, label: 'Jurusan', nilai: beasiswa.jurusanTersedia },
+                  { ikon: <Clock size={16} />, label: 'Tenggat Waktu', nilai: deadlineFormatted },
+                  { ikon: <GraduationCap size={16} />, label: 'IPK Minimum', nilai: beasiswa.kriteria_ipk_min ? beasiswa.kriteria_ipk_min.toFixed(2) : '3.00' },
+                  { ikon: <BookOpen size={16} />, label: 'Kriteria Jurusan', nilai: beasiswa.kriteria_jurusan || 'Semua Jurusan' },
+                  { ikon: <Award size={16} />, label: 'Semester Min.', nilai: `Semester ${beasiswa.kriteria_semester_min || 1}` },
                 ].map((info) => (
                   <div key={info.label} className="flex items-start gap-3">
                     <div className="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0" style={{ background: 'var(--color-terracotta-100)', color: 'var(--color-terracotta-600)' }}>

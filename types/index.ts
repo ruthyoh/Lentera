@@ -31,6 +31,8 @@ export interface Materi {
   thumbnail_url?: string | null;
   jumlah_unduhan: number;
   jumlah_suka: number;
+  rating_rata_rata?: number | null;
+  total_penilai?: number | null;
   created_at: string;
   updated_at: string;
   // Join fields
