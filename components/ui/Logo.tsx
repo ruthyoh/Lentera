@@ -10,8 +10,8 @@ interface LogoProps {
 
 const ukuranMap = {
   kecil: { gambar: 28, teks: 'text-lg' },
-  sedang: { gambar: 36, teks: 'text-xl' },
-  besar: { gambar: 48, teks: 'text-2xl' },
+  sedang: { gambar: 48, teks: 'text-xl' },
+  besar: { gambar: 64, teks: 'text-2xl' },
 };
 
 export default function Logo({ ukuran = 'sedang', tampilkanTeks = true, className = '', warnaTeks }: LogoProps) {
@@ -23,8 +23,9 @@ export default function Logo({ ukuran = 'sedang', tampilkanTeks = true, classNam
         <Image
           src="/iconlentera.png"
           alt="Logo Lentera"
-          width={config.gambar}
-          height={config.gambar}
+          width={64}
+          height={64}
+          className="object-contain translate-y-1.4"
           priority
         />
       </div>

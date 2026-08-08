@@ -1,9 +1,9 @@
 import type { Metadata } from 'next';
 import './globals.css';
-import Navbar from '@/components/layout/Navbar';
-import Footer from '@/components/layout/Footer';
+import ClientLayoutWrapper from '@/components/layout/ClientLayoutWrapper';
 import { createServerSupabaseClient } from '@/lib/supabase/server';
 import type { ProfilRingkas } from '@/types';
+
 
 export const dynamic = 'force-dynamic';
 
@@ -86,15 +86,15 @@ export default async function RootLayout({
     <html lang="id" suppressHydrationWarning>
       <head>
         <link rel="icon" href="/logo.svg" type="image/svg+xml" />
-        <meta name="theme-color" content="#2D5016" />
+        <meta name="theme-color" content="#081B3A" />
       </head>
       <body>
-        <Navbar profil={profil} />
-        <main id="konten-utama" tabIndex={-1}>
+        <ClientLayoutWrapper profil={profil}>
           {children}
-        </main>
-        <Footer />
+        </ClientLayoutWrapper>
       </body>
     </html>
   );
 }
+
+

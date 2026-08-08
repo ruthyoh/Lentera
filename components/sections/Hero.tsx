@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { BookOpen, Award, ArrowRight, Sparkles, Star } from 'lucide-react';
 import Tombol from '@/components/ui/Button';
+import AnimatedValues from '@/components/ui/AnimatedValues';
 
 export default function Hero() {
   return (
@@ -11,33 +12,115 @@ export default function Hero() {
       style={{ minHeight: '100svh', paddingBottom: '80px' }}
       aria-labelledby="hero-judul"
     >
-      {/* Background dekoratif — overflow-hidden hanya pada div ini, bukan section */}
+      {/* Background dekoratif — animasi lentera bernuansa biru cyan / aurora */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none" aria-hidden="true">
-        {/* Orbs tekstur gold */}
+        {/* Glow halo lembut di belakang judul utama */}
         <div
-          className="absolute top-20 right-16 w-80 h-80 rounded-full opacity-8"
-          style={{ background: 'radial-gradient(circle, var(--color-gold-600), transparent 70%)' }}
+          className="absolute top-16 left-1/4 w-96 h-96 rounded-full opacity-25 animate-glow-pulse"
+          style={{ background: 'radial-gradient(circle, var(--color-aurora-400) 0%, rgba(6, 182, 212, 0.1) 50%, transparent 70%)' }}
         />
         <div
-          className="absolute bottom-24 left-10 w-96 h-96 rounded-full opacity-6"
-          style={{ background: 'radial-gradient(circle, var(--color-gold-800), transparent 70%)' }}
+          className="absolute top-32 right-12 w-[480px] h-[480px] rounded-full opacity-20 animate-glow-pulse"
+          style={{ background: 'radial-gradient(circle, var(--color-aurora-600) 0%, rgba(34, 211, 238, 0.05) 60%, transparent 70%)', animationDelay: '2.5s' }}
         />
-        {/* Grid pattern */}
+
+        {/* Grid pattern biru/aurora tipis */}
         <div
-          className="absolute inset-0 opacity-4"
+          className="absolute inset-0 opacity-10"
           style={{
-            backgroundImage: `linear-gradient(rgba(201,151,30,0.2) 1px, transparent 1px), linear-gradient(90deg, rgba(201,151,30,0.2) 1px, transparent 1px)`,
-            backgroundSize: '50px 50px',
+            backgroundImage: `linear-gradient(rgba(34, 211, 238, 0.15) 1px, transparent 1px), linear-gradient(90deg, rgba(34, 211, 238, 0.15) 1px, transparent 1px)`,
+            backgroundSize: '40px 40px',
           }}
         />
-        {/* Floating lantern icon */}
-        <div className="absolute top-1/4 right-1/4 w-24 h-24 opacity-6 animate-float">
-          <svg viewBox="0 0 40 40" fill="var(--color-gold-500)" xmlns="http://www.w3.org/2000/svg">
-            <rect x="14" y="6" width="12" height="2" rx="1" />
-            <rect x="10" y="8" width="20" height="22" rx="4" />
-            <rect x="12" y="30" width="16" height="3" rx="1.5" />
+
+        {/* Lentera Melayang 1 — Atas Kanan */}
+        <div
+          className="absolute top-[18%] right-[18%] opacity-70 animate-float-lentera"
+          style={{ animationDuration: '9s' }}
+        >
+          <svg width="36" height="52" viewBox="0 0 40 56" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="20" cy="28" r="16" fill="var(--color-aurora-400)" opacity="0.3" className="animate-pulse" />
+            <line x1="20" y1="0" x2="20" y2="10" stroke="rgba(165, 243, 252, 0.6)" strokeWidth="1.5" />
+            <path d="M12 10H28L25 14H15L12 10Z" fill="var(--color-aurora-300)" opacity="0.8" />
+            <path d="M10 14C10 14 6 26 10 38C14 50 26 50 30 38C34 26 30 14 30 14H10Z" fill="url(#blueLanternGrad1)" stroke="rgba(165, 243, 252, 0.7)" strokeWidth="1.2" />
+            <circle cx="20" cy="27" r="5" fill="#A5F3FC" opacity="0.9" />
+            <circle cx="20" cy="27" r="2.5" fill="#FFFFFF" />
+            <rect x="14" y="44" width="12" height="3" rx="1" fill="var(--color-aurora-400)" opacity="0.8" />
+            <line x1="20" y1="47" x2="20" y2="55" stroke="rgba(165, 243, 252, 0.5)" strokeWidth="1.5" />
+            <defs>
+              <linearGradient id="blueLanternGrad1" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stopColor="rgba(6, 182, 212, 0.4)" />
+                <stop offset="50%" stopColor="rgba(34, 211, 238, 0.65)" />
+                <stop offset="100%" stopColor="rgba(15, 23, 42, 0.7)" />
+              </linearGradient>
+            </defs>
           </svg>
         </div>
+
+        {/* Lentera Melayang 2 — Kiri Tengah */}
+        <div
+          className="absolute top-[42%] left-[6%] opacity-60 animate-float-lentera"
+          style={{ animationDuration: '11s', animationDelay: '2s' }}
+        >
+          <svg width="28" height="42" viewBox="0 0 40 56" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="20" cy="28" r="14" fill="var(--color-aurora-500)" opacity="0.35" className="animate-pulse" />
+            <line x1="20" y1="0" x2="20" y2="10" stroke="rgba(196, 181, 253, 0.6)" strokeWidth="1.5" />
+            <path d="M12 10H28L25 14H15L12 10Z" fill="var(--color-mist-400)" opacity="0.8" />
+            <path d="M10 14C10 14 6 26 10 38C14 50 26 50 30 38C34 26 30 14 30 14H10Z" fill="url(#blueLanternGrad2)" stroke="rgba(196, 181, 253, 0.7)" strokeWidth="1.2" />
+            <circle cx="20" cy="27" r="4.5" fill="#E0E7FF" opacity="0.9" />
+            <rect x="14" y="44" width="12" height="3" rx="1" fill="var(--color-mist-400)" opacity="0.8" />
+            <line x1="20" y1="47" x2="20" y2="54" stroke="rgba(196, 181, 253, 0.5)" strokeWidth="1.5" />
+            <defs>
+              <linearGradient id="blueLanternGrad2" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stopColor="rgba(99, 102, 241, 0.4)" />
+                <stop offset="50%" stopColor="rgba(165, 180, 252, 0.6)" />
+                <stop offset="100%" stopColor="rgba(15, 23, 42, 0.7)" />
+              </linearGradient>
+            </defs>
+          </svg>
+        </div>
+
+        {/* Lentera Melayang 3 — Kanan Bawah */}
+        <div
+          className="absolute top-[68%] right-[8%] opacity-55 animate-float-lentera"
+          style={{ animationDuration: '8.5s', animationDelay: '4s' }}
+        >
+          <svg width="32" height="46" viewBox="0 0 40 56" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="20" cy="28" r="15" fill="var(--color-aurora-300)" opacity="0.3" className="animate-pulse" />
+            <line x1="20" y1="0" x2="20" y2="10" stroke="rgba(165, 243, 252, 0.5)" strokeWidth="1.5" />
+            <path d="M12 10H28L25 14H15L12 10Z" fill="var(--color-aurora-300)" opacity="0.8" />
+            <path d="M10 14C10 14 6 26 10 38C14 50 26 50 30 38C34 26 30 14 30 14H10Z" fill="url(#blueLanternGrad1)" stroke="rgba(165, 243, 252, 0.6)" strokeWidth="1.2" />
+            <circle cx="20" cy="27" r="5" fill="#CFFAFE" opacity="0.95" />
+            <rect x="14" y="44" width="12" height="3" rx="1" fill="var(--color-aurora-400)" opacity="0.8" />
+            <line x1="20" y1="47" x2="20" y2="55" stroke="rgba(165, 243, 252, 0.5)" strokeWidth="1.5" />
+          </svg>
+        </div>
+
+        {/* Partikel Percikan Cahaya Lentera (Biru Cyan Glow) */}
+        {[
+          { top: '22%', left: '20%', size: '6px', delay: '0.5s' },
+          { top: '35%', left: '42%', size: '8px', delay: '2.1s' },
+          { top: '50%', right: '30%', size: '5px', delay: '1.2s' },
+          { top: '75%', left: '35%', size: '7px', delay: '3.4s' },
+          { top: '28%', right: '10%', size: '9px', delay: '4.0s' },
+        ].map((p, idx) => (
+          <div
+            key={idx}
+            className="absolute rounded-full animate-pulse"
+            style={{
+              top: p.top,
+              left: p.left,
+              right: p.right,
+              width: p.size,
+              height: p.size,
+              background: 'var(--color-aurora-300)',
+              boxShadow: '0 0 12px var(--color-aurora-400), 0 0 20px var(--color-aurora-500)',
+              animationDuration: '3s',
+              animationDelay: p.delay,
+              opacity: 0.75,
+            }}
+          />
+        ))}
       </div>
 
       <div className="container-lentera relative z-10 pt-24 sm:pt-26 md:pt-28 pb-8 w-full">
@@ -103,30 +186,37 @@ export default function Hero() {
               </Link>
             </div>
 
-            {/* Statistik kecil */}
-            <div
-              className="flex flex-wrap gap-8 animate-fade-in-up animate-delay-300"
-              role="list"
-              aria-label="Statistik platform"
-            >
-              {[
-                { angka: '5.000+', label: 'Mahasiswa Aktif' },
-                { angka: '12.000+', label: 'Materi Tersedia' },
-                { angka: '300+', label: 'Beasiswa Terdaftar' },
-              ].map((stat) => (
-                <div key={stat.label} role="listitem">
-                  <p
-                    className="text-2xl font-bold"
-                    style={{ color: '#FFFFFF', fontFamily: 'var(--font-display)' }}
-                  >
-                    {stat.angka}
-                  </p>
-                  {/* Label statistik: muted-on-dark (kontras ~6:1 terhadap #1C140B) */}
-                  <p className="text-sm" style={{ color: 'var(--text-muted-on-dark)' }}>
-                    {stat.label}
-                  </p>
-                </div>
-              ))}
+            {/* Statistik kecil + AnimatedValues Ticker */}
+            <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6 lg:gap-12 animate-fade-in-up animate-delay-300">
+              <div
+                className="flex flex-wrap gap-8 shrink-0"
+                role="list"
+                aria-label="Statistik platform"
+              >
+                {[
+                  { angka: '5.000+', label: 'Mahasiswa Aktif' },
+                  { angka: '12.000+', label: 'Materi Tersedia' },
+                  { angka: '300+', label: 'Beasiswa Terdaftar' },
+                ].map((stat) => (
+                  <div key={stat.label} role="listitem">
+                    <p
+                      className="text-2xl font-bold"
+                      style={{ color: '#FFFFFF', fontFamily: 'var(--font-display)' }}
+                    >
+                      {stat.angka}
+                    </p>
+                    {/* Label statistik: muted-on-dark (kontras ~6:1 terhadap #1C140B) */}
+                    <p className="text-sm" style={{ color: 'var(--text-muted-on-dark)' }}>
+                      {stat.label}
+                    </p>
+                  </div>
+                ))}
+              </div>
+
+              {/* AnimatedValues Ticker — Digeser 10cm ke kanan & diperlebar 10cm */}
+              <div className="w-full lg:w-[520px] xl:w-[650px] shrink-0 lg:ml-12 xl:ml-16">
+                <AnimatedValues />
+              </div>
             </div>
           </div>
 

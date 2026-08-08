@@ -57,89 +57,95 @@ const ikonPeringkat: Record<number, React.ReactNode> = {
 export default function HalamanPapanPeringkat() {
   return (
     <div className="min-h-screen pt-16" style={{ background: 'var(--color-cream-200)' }}>
-      {/* Header */}
+      {/* Header Halaman — Golden Celestial Glow */}
       <div
-        className="py-14 relative overflow-hidden"
-        style={{
-          background: 'linear-gradient(135deg, var(--color-dark-900) 0%, var(--color-dark-800) 50%, var(--color-dark-700) 100%)',
-        }}
+        className="py-16 relative overflow-hidden bg-gradient-to-b from-[#0B1528] via-[#10203D] to-[#142647] border-b border-amber-500/20"
       >
-        <div className="absolute inset-0 opacity-10" aria-hidden="true" style={{
-          backgroundImage: `radial-gradient(circle, rgba(201,151,30,0.4) 1px, transparent 1px)`,
-          backgroundSize: '24px 24px',
-        }} />
+        {/* Glow halo & background effects */}
+        <div
+          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] rounded-full opacity-25 pointer-events-none blur-3xl"
+          style={{ background: 'radial-gradient(circle, #F59E0B 0%, rgba(245, 158, 11, 0.1) 60%, transparent 80%)' }}
+          aria-hidden="true"
+        />
+        <div
+          className="absolute inset-0 opacity-10 pointer-events-none"
+          aria-hidden="true"
+          style={{
+            backgroundImage: `radial-gradient(circle, rgba(251, 191, 36, 0.4) 1px, transparent 1px)`,
+            backgroundSize: '36px 36px',
+          }}
+        />
+
         <div className="container-lentera relative z-10">
-          <div className="text-center">
-            <div className="inline-flex items-center gap-2 mb-4" aria-hidden="true">
-              <Trophy size={32} style={{ color: 'var(--color-gold-400)' }} />
+          <div className="text-center max-w-2xl mx-auto">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-bold tracking-widest uppercase mb-4 bg-amber-500/15 text-amber-300 border border-amber-500/25 backdrop-blur-md">
+              <Trophy size={14} className="text-amber-400" />
+              Papan Peringkat · Kontributor Terbaik
             </div>
             <h1
-              className="text-3xl md:text-4xl font-bold mb-3 text-[var(--text-on-dark)]"
+              className="text-3xl sm:text-4xl md:text-5xl font-extrabold mb-3 text-white tracking-tight"
               style={{ fontFamily: 'var(--font-display)' }}
             >
-              Papan Peringkat
+              Pahlawan <span className="text-[var(--color-gold-400)]">Lentera</span>
             </h1>
-            <p className="text-sm max-w-lg mx-auto text-[var(--text-muted-on-dark)]">
-              Kontributor terbaik yang aktif berbagi ilmu dan membantu sesama mahasiswa di platform Lentera
+            <p className="text-sm md:text-base text-slate-300 leading-relaxed">
+              Penghargaan tertinggi bagi mahasiswa yang aktif berbagi ilmu, rangkuman, dan materi akademis untuk menyinari masa depan sesama.
             </p>
           </div>
         </div>
       </div>
 
       <div className="container-lentera py-10">
-        {/* Cara Mendapat Poin */}
+        {/* Cara Mendapat Poin — Banner Informatif Glassmorphism */}
         <div
-          className="card-glass p-5 mb-8 flex flex-col md:flex-row items-center gap-4"
+          className="bg-white/90 backdrop-blur-md rounded-2xl p-5 mb-8 flex flex-col md:flex-row items-center gap-4 border border-amber-200/80 shadow-xs"
           role="note"
         >
           <div
-            className="w-11 h-11 rounded-[var(--radius-md)] flex items-center justify-center flex-shrink-0"
-            style={{ background: 'var(--color-gold-100)', color: 'var(--color-gold-700)' }}
+            className="w-11 h-11 rounded-xl flex items-center justify-center flex-shrink-0 bg-amber-500 text-slate-900 font-bold shadow-md"
             aria-hidden="true"
           >
-            <Star size={20} />
+            <Star size={22} className="fill-slate-900" />
           </div>
           <div className="flex-1 text-center md:text-left">
-            <p className="font-semibold text-sm text-[var(--text-on-light)]">
-              Cara Mendapatkan Poin
+            <p className="font-bold text-sm text-slate-900" style={{ fontFamily: 'var(--font-display)' }}>
+              Bagaimana Cara Mengumpulkan Poin Kontribusi?
             </p>
-            <p className="text-xs text-[var(--text-muted-on-light)]">
-              Unggah materi (+50), materi diunduh (+5/unduhan), materi disukai (+10/suka), jawab pertanyaan (+20)
+            <p className="text-xs text-slate-600 mt-0.5">
+              Unggah materi baru <strong className="text-amber-700">(+50 poin)</strong> · Setiap unduhan materi <strong className="text-amber-700">(+5 poin)</strong> · Materi disukai sesama <strong className="text-amber-700">(+10 poin)</strong> · Jawab diskusi AI/forum <strong className="text-amber-700">(+20 poin)</strong>
             </p>
           </div>
         </div>
 
         {/* Top 3 Podium */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12 items-end">
           {peringkatPlaceholder.slice(0, 3).map((user, idx) => {
             const urutan = [1, 0, 2][idx];
             const data = peringkatPlaceholder[urutan];
             const isJuara1 = data.peringkat === 1;
+            const isJuara2 = data.peringkat === 2;
+            const isJuara3 = data.peringkat === 3;
 
             return (
               <div
                 key={data.peringkat}
                 className={[
-                  'card-glass text-center relative',
-                  isJuara1 ? 'p-8 md:-mt-4 ring-2' : 'p-6',
-                ].join(' ')}
-                style={
+                  'bg-white/90 backdrop-blur-md rounded-3xl text-center relative border transition-all duration-300',
                   isJuara1
-                    ? { ['--tw-ring-color' as string]: 'var(--color-gold-500)', borderColor: 'var(--color-gold-300)' }
-                    : undefined
-                }
+                    ? 'p-8 md:-mt-6 border-amber-400 ring-4 ring-amber-400/40 shadow-2xl shadow-amber-500/20 z-10 bg-gradient-to-b from-amber-50/90 via-white/95 to-white'
+                    : 'p-6 border-slate-200/80 shadow-lg hover:shadow-xl hover:-translate-y-1',
+                ].join(' ')}
               >
-                {/* Badge peringkat */}
+                {/* Badge peringkat crown/medal */}
                 <div
                   className={[
-                    'w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-4 font-bold text-lg',
-                    isJuara1 ? 'bg-amber-100 text-amber-700' : '',
+                    'w-14 h-14 rounded-2xl flex items-center justify-center mx-auto mb-4 font-bold text-xl shadow-md border',
+                    isJuara1
+                      ? 'bg-gradient-to-tr from-amber-400 to-amber-200 text-slate-900 border-amber-300'
+                      : isJuara2
+                      ? 'bg-gradient-to-tr from-slate-300 to-slate-100 text-slate-800 border-slate-300'
+                      : 'bg-gradient-to-tr from-amber-700 to-amber-500 text-white border-amber-600',
                   ].join(' ')}
-                  style={
-                    !isJuara1
-                      ? { background: 'var(--color-cream-300)', color: 'var(--text-on-light)' }
-                      : undefined
-                  }
                   aria-label={`Peringkat ${data.peringkat}`}
                 >
                   {ikonPeringkat[data.peringkat] || data.peringkat}
@@ -147,46 +153,41 @@ export default function HalamanPapanPeringkat() {
 
                 {/* Avatar placeholder */}
                 <div
-                  className="w-16 h-16 rounded-full mx-auto mb-3 flex items-center justify-center text-lg font-bold"
-                  style={{
-                    background: isJuara1 ? 'var(--color-gold-200)' : 'var(--color-gold-100)',
-                    color: isJuara1 ? 'var(--color-dark-900)' : 'var(--color-gold-800)',
-                  }}
+                  className={[
+                    'w-16 h-16 rounded-full mx-auto mb-3 flex items-center justify-center text-lg font-bold shadow-inner border-2',
+                    isJuara1 ? 'bg-amber-100 border-amber-300 text-amber-900' : 'bg-slate-100 border-slate-200 text-slate-700',
+                  ].join(' ')}
                   aria-hidden="true"
                 >
                   {data.nama.split(' ').slice(0, 2).map((k) => k[0]).join('')}
                 </div>
 
                 <h2
-                  className="font-bold text-base mb-1 text-[var(--text-on-light)]"
+                  className="font-bold text-base mb-1 text-slate-900"
                   style={{ fontFamily: 'var(--font-display)' }}
                 >
                   {data.nama}
                 </h2>
-                <p className="text-xs mb-3 text-[var(--text-muted-on-light)]">
+                <p className="text-xs mb-3 text-slate-500 font-medium">
                   {data.jurusan}
                 </p>
 
-                <p
-                  className="text-2xl font-bold mb-1"
-                  style={{
-                    fontFamily: 'var(--font-display)',
-                    color: isJuara1 ? 'var(--color-terracotta-600)' : 'var(--color-gold-600)',
-                  }}
-                >
-                  {data.poin.toLocaleString('id-ID')}
-                </p>
-                <p className="text-xs text-[var(--text-muted-on-light)]">poin</p>
+                <div className="my-3 py-2 px-4 rounded-xl bg-amber-50/80 inline-block border border-amber-200/50">
+                  <p
+                    className="text-2xl font-extrabold text-amber-600"
+                    style={{ fontFamily: 'var(--font-display)' }}
+                  >
+                    {data.poin.toLocaleString('id-ID')}
+                  </p>
+                  <p className="text-[11px] font-bold tracking-wider uppercase text-amber-700">Poin Utama</p>
+                </div>
 
-                <div
-                  className="flex justify-center gap-4 mt-4 pt-4 border-t text-xs text-[var(--text-muted-on-light)]"
-                  style={{ borderColor: 'var(--color-cream-300)' }}
-                >
-                  <span className="flex items-center gap-1">
-                    <Upload size={11} /> {data.kontribusi} materi
+                <div className="flex justify-center gap-4 mt-3 pt-3 border-t border-slate-100 text-xs text-slate-500">
+                  <span className="flex items-center gap-1 font-medium">
+                    <Upload size={12} className="text-amber-600" /> {data.kontribusi} materi
                   </span>
-                  <span className="flex items-center gap-1">
-                    <TrendingUp size={11} /> {data.unduhan.toLocaleString('id-ID')} unduhan
+                  <span className="flex items-center gap-1 font-medium">
+                    <TrendingUp size={12} className="text-teal-600" /> {data.unduhan.toLocaleString('id-ID')} unduhan
                   </span>
                 </div>
               </div>
@@ -195,50 +196,54 @@ export default function HalamanPapanPeringkat() {
         </div>
 
         {/* Tabel Lengkap */}
-        <div className="card-glass overflow-hidden">
-          <div className="px-6 py-4 border-b flex items-center justify-between" style={{ borderColor: 'var(--color-cream-300)' }}>
-            <h2
-              className="font-bold text-base text-[var(--text-on-light)]"
-              style={{ fontFamily: 'var(--font-display)' }}
-            >
-              Peringkat Lengkap
-            </h2>
-            <Badge varian="cream">Periode Agustus 2026</Badge>
+        <div className="bg-white/90 backdrop-blur-md rounded-3xl overflow-hidden border border-slate-200/80 shadow-xl">
+          <div className="px-6 py-4 border-b border-slate-100 flex items-center justify-between bg-gradient-to-r from-amber-50/50 via-white to-white">
+            <div className="flex items-center gap-2">
+              <div className="w-2 h-2 rounded-full bg-amber-500" />
+              <h2
+                className="font-bold text-base text-slate-900"
+                style={{ fontFamily: 'var(--font-display)' }}
+              >
+                Peringkat Lengkap Kontributor
+              </h2>
+            </div>
+            <Badge varian="gold" className="text-xs font-semibold px-3 py-1">
+              Periode Agustus 2026
+            </Badge>
           </div>
 
           <div className="overflow-x-auto">
             <table className="w-full" aria-label="Tabel papan peringkat kontributor Lentera">
               <thead>
-                <tr style={{ background: 'var(--color-cream-100)' }}>
-                  <th className="text-left px-6 py-3 text-xs font-semibold uppercase tracking-wide text-[var(--text-muted-on-light)]">#</th>
-                  <th className="text-left px-6 py-3 text-xs font-semibold uppercase tracking-wide text-[var(--text-muted-on-light)]">Nama</th>
-                  <th className="text-left px-6 py-3 text-xs font-semibold uppercase tracking-wide hidden md:table-cell text-[var(--text-muted-on-light)]">Jurusan</th>
-                  <th className="text-right px-6 py-3 text-xs font-semibold uppercase tracking-wide text-[var(--text-muted-on-light)]">
-                    <span className="flex items-center justify-end gap-1"><Star size={11} /> Poin</span>
+                <tr className="bg-slate-50/80 border-b border-slate-100">
+                  <th className="text-left px-6 py-3.5 text-xs font-bold uppercase tracking-wider text-slate-500">#</th>
+                  <th className="text-left px-6 py-3.5 text-xs font-bold uppercase tracking-wider text-slate-500">Mahasiswa</th>
+                  <th className="text-left px-6 py-3.5 text-xs font-bold uppercase tracking-wider hidden md:table-cell text-slate-500">Jurusan</th>
+                  <th className="text-right px-6 py-3.5 text-xs font-bold uppercase tracking-wider text-slate-500">
+                    <span className="flex items-center justify-end gap-1.5"><Star size={12} className="text-amber-500 fill-amber-500" /> Total Poin</span>
                   </th>
-                  <th className="text-right px-6 py-3 text-xs font-semibold uppercase tracking-wide hidden sm:table-cell text-[var(--text-muted-on-light)]">
-                    <span className="flex items-center justify-end gap-1"><BookOpen size={11} /> Kontribusi</span>
+                  <th className="text-right px-6 py-3.5 text-xs font-bold uppercase tracking-wider hidden sm:table-cell text-slate-500">
+                    <span className="flex items-center justify-end gap-1.5"><BookOpen size={12} className="text-amber-600" /> Kontribusi</span>
                   </th>
                 </tr>
               </thead>
-              <tbody>
+              <tbody className="divide-y divide-slate-100">
                 {peringkatPlaceholder.map((user) => (
                   <tr
                     key={user.peringkat}
-                    className="border-b transition-colors hover:bg-[var(--color-cream-100)]"
-                    style={{ borderColor: 'var(--color-cream-300)' }}
+                    className="transition-colors hover:bg-amber-50/40"
                   >
                     <td className="px-6 py-4">
                       <span
-                        className="inline-flex items-center justify-center w-8 h-8 rounded-full text-xs font-bold"
+                        className="inline-flex items-center justify-center w-8 h-8 rounded-xl text-xs font-extrabold shadow-2xs"
                         style={
                           user.peringkat === 1
-                            ? { background: 'linear-gradient(135deg, #fde68a, #fbbf24)', color: '#92400e' }
+                            ? { background: 'linear-gradient(135deg, #fde68a, #fbbf24)', color: '#78350f' }
                             : user.peringkat === 2
-                              ? { background: 'linear-gradient(135deg, #e5e7eb, #d1d5db)', color: '#374151' }
+                              ? { background: 'linear-gradient(135deg, #f1f5f9, #cbd5e1)', color: '#334155' }
                               : user.peringkat === 3
-                                ? { background: 'linear-gradient(135deg, #fde68a, #d97706)', color: '#78350f' }
-                                : { background: 'var(--color-cream-300)', color: 'var(--text-on-light)' }
+                                ? { background: 'linear-gradient(135deg, #fed7aa, #d97706)', color: '#7c2d12' }
+                                : { background: '#f8fafc', color: '#64748b' }
                         }
                       >
                         {user.peringkat}
@@ -247,26 +252,25 @@ export default function HalamanPapanPeringkat() {
                     <td className="px-6 py-4">
                       <div className="flex items-center gap-3">
                         <div
-                          className="w-9 h-9 rounded-full flex items-center justify-center text-xs font-bold flex-shrink-0"
-                          style={{ background: 'var(--color-gold-100)', color: 'var(--color-dark-900)' }}
+                          className="w-9 h-9 rounded-full flex items-center justify-center text-xs font-bold shrink-0 bg-amber-100 text-amber-900 border border-amber-200/60"
                         >
                           {user.nama.split(' ').slice(0, 2).map((k) => k[0]).join('')}
                         </div>
-                        <span className="font-semibold text-sm text-[var(--text-on-light)]">
+                        <span className="font-semibold text-sm text-slate-900">
                           {user.nama}
                         </span>
                       </div>
                     </td>
-                    <td className="px-6 py-4 text-sm hidden md:table-cell text-[var(--text-muted-on-light)]">
+                    <td className="px-6 py-4 text-sm hidden md:table-cell text-slate-500 font-medium">
                       {user.jurusan}
                     </td>
                     <td className="px-6 py-4 text-right">
-                      <span className="font-bold text-sm text-[var(--color-gold-600)]">
+                      <span className="font-extrabold text-sm text-amber-600 bg-amber-50 px-2.5 py-1 rounded-lg border border-amber-200/50">
                         {user.poin.toLocaleString('id-ID')}
                       </span>
                     </td>
-                    <td className="px-6 py-4 text-right text-sm hidden sm:table-cell text-[var(--text-muted-on-light)]">
-                      {user.kontribusi} materi
+                    <td className="px-6 py-4 text-right text-sm hidden sm:table-cell text-slate-500 font-medium">
+                      {user.kontribusi} berkas
                     </td>
                   </tr>
                 ))}

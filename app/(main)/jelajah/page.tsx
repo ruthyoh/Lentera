@@ -59,41 +59,54 @@ export default async function HalamanJelajah({ searchParams }: HalamanJelajahPro
       className="min-h-screen pt-16"
       style={{ background: 'var(--color-cream-200)' }}
     >
-      {/* Header Halaman */}
+      {/* Header Halaman — Twilight Celestial Glow */}
       <div
-        className="py-14 relative overflow-hidden"
-        style={{ background: 'var(--color-dark-800)' }}
+        className="py-16 relative overflow-hidden bg-gradient-to-b from-[#081B3A] via-[#0b244d] to-[#0d2a58] border-b border-white/10"
       >
+        {/* Glow halo & grid dekoratif */}
         <div
-          className="absolute inset-0 opacity-5"
+          className="absolute top-1/2 left-1/4 -translate-y-1/2 w-96 h-96 rounded-full opacity-30 pointer-events-none blur-3xl"
+          style={{ background: 'radial-gradient(circle, var(--color-aurora-400) 0%, rgba(6, 182, 212, 0.1) 60%, transparent 80%)' }}
+          aria-hidden="true"
+        />
+        <div
+          className="absolute top-1/3 right-10 w-80 h-80 rounded-full opacity-20 pointer-events-none blur-3xl"
+          style={{ background: 'radial-gradient(circle, #F59E0B 0%, rgba(245, 158, 11, 0.05) 60%, transparent 80%)' }}
+          aria-hidden="true"
+        />
+        <div
+          className="absolute inset-0 opacity-10 pointer-events-none"
           aria-hidden="true"
           style={{
-            backgroundImage: `linear-gradient(rgba(201,151,30,0.3) 1px, transparent 1px), linear-gradient(90deg, rgba(201,151,30,0.3) 1px, transparent 1px)`,
-            backgroundSize: '40px 40px',
+            backgroundImage: `linear-gradient(rgba(255, 255, 255, 0.15) 1px, transparent 1px), linear-gradient(90deg, rgba(255, 255, 255, 0.15) 1px, transparent 1px)`,
+            backgroundSize: '48px 48px',
           }}
         />
+
         <div className="container-lentera relative z-10">
-          <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
+          <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
             <div>
-              <p className="text-xs font-bold tracking-widest uppercase mb-2" style={{ color: 'var(--color-gold-400)' }}>
-                Modul Belajar
-              </p>
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-bold tracking-widest uppercase mb-3 bg-white/10 text-[var(--color-gold-400)] border border-white/15 backdrop-blur-md">
+                <BookOpen size={13} className="text-[var(--color-gold-400)]" />
+                Modul Belajar · Repositori Akademik
+              </div>
               <h1
-                className="text-3xl md:text-4xl font-bold mb-3 text-[var(--text-on-dark)]"
+                className="text-3xl sm:text-4xl md:text-5xl font-extrabold mb-3 text-white tracking-tight"
                 style={{ fontFamily: 'var(--font-display)' }}
               >
-                Jelajah Materi
+                Jelajah <span className="text-[var(--color-gold-400)]">Materi</span>
               </h1>
-              <p className="text-sm text-[var(--text-muted-on-dark)]">
-                {total.toLocaleString('id-ID')} berkas materi tersedia dari mahasiswa se-Indonesia
+              <p className="text-sm md:text-base text-slate-300 max-w-xl leading-relaxed">
+                Temukan <strong className="text-white font-semibold">{total.toLocaleString('id-ID')} berkas materi</strong> berkualitas yang dibagikan oleh mahasiswa dari berbagai perguruan tinggi se-Indonesia.
               </p>
             </div>
-            <div className="flex gap-3">
+            <div className="flex flex-wrap gap-3 shrink-0">
               <Link href="/jelajah?fitur=ai">
                 <Tombol
                   varian="primer"
                   ukuran="sedang"
                   ikonKiri={<Brain size={16} />}
+                  className="shadow-lg hover:shadow-cyan-500/20"
                   id="tombol-asisten-ai"
                 >
                   Asisten Belajar AI
@@ -104,7 +117,7 @@ export default async function HalamanJelajah({ searchParams }: HalamanJelajahPro
                   varian="hantu"
                   ukuran="sedang"
                   ikonKiri={<Upload size={16} />}
-                  className="text-[var(--text-on-dark)]! hover:bg-white/10! border border-white/20!"
+                  className="text-white! bg-white/10! hover:bg-white/20! border border-white/25! backdrop-blur-md"
                   id="tombol-unggah-materi"
                 >
                   Unggah Materi (+10 Poin)
@@ -206,52 +219,55 @@ export default async function HalamanJelajah({ searchParams }: HalamanJelajahPro
               <Link
                 key={item.id}
                 href={`/materi/${item.id}`}
-                className="card-glass p-6 block group"
+                className="bg-white/80 hover:bg-white backdrop-blur-md rounded-2xl p-6 block group border border-amber-200/60 hover:border-amber-400/80 shadow-xs hover:shadow-xl hover:-translate-y-1.5 transition-all duration-300 relative overflow-hidden"
                 role="listitem"
                 aria-label={`Buka materi: ${item.judul}`}
               >
-                <div
-                  className="w-11 h-11 rounded-[var(--radius-sm)] flex items-center justify-center mb-4 transition-transform duration-300 group-hover:scale-110"
-                  style={{ background: 'var(--color-gold-100)', color: 'var(--color-gold-700)' }}
-                  aria-hidden="true"
-                >
-                  <FileText size={20} />
+                {/* Accent top gradient highlight on hover */}
+                <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-amber-400 via-teal-400 to-blue-500 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+
+                <div className="flex items-center justify-between mb-3">
+                  <div
+                    className="w-10 h-10 rounded-xl flex items-center justify-center transition-all duration-300 group-hover:scale-110 group-hover:rotate-3 bg-amber-50 text-amber-700 border border-amber-200/60 group-hover:bg-amber-500 group-hover:text-white group-hover:shadow-md"
+                    aria-hidden="true"
+                  >
+                    <FileText size={19} />
+                  </div>
+
+                  <Badge varian="gold" className="text-[11px] font-bold uppercase tracking-wider px-2.5 py-0.5">
+                    {labelKategori[item.kategori] || item.kategori}
+                  </Badge>
                 </div>
 
-                <Badge varian="gold" className="mb-3 text-xs">
-                  {labelKategori[item.kategori] || item.kategori}
-                </Badge>
-
                 <h2
-                  className="font-bold text-base mb-1 line-clamp-2 transition-colors text-[var(--text-on-light)] group-hover:text-[var(--color-gold-600)]"
+                  className="font-bold text-base mb-1.5 line-clamp-2 transition-colors text-[var(--text-on-light)] group-hover:text-[var(--color-gold-600)]"
                   style={{ fontFamily: 'var(--font-display)' }}
                 >
                   {item.judul}
                 </h2>
 
-                <p className="text-xs mb-4 text-[var(--text-muted-on-light)]">
-                  {item.mata_kuliah} · oleh {item.profiles?.nama_lengkap || 'Mahasiswa'}
+                <p className="text-xs mb-4 text-[var(--text-muted-on-light)] line-clamp-1">
+                  {item.mata_kuliah} · oleh <span className="font-semibold text-slate-700">{item.profiles?.nama_lengkap || 'Mahasiswa'}</span>
                 </p>
 
-                <div className="flex items-center justify-between text-xs text-[var(--text-muted-on-light)] pt-1">
-                  <span className="flex items-center gap-1 text-[var(--color-gold-600)] font-semibold">
-                    <Star size={13} fill="currentColor" />
+                <div className="flex items-center justify-between text-xs text-[var(--text-muted-on-light)] pt-2 border-t border-slate-100">
+                  <span className="flex items-center gap-1.5 text-amber-600 font-bold bg-amber-50 px-2 py-0.5 rounded-md border border-amber-200/50">
+                    <Star size={13} className="fill-amber-400 text-amber-400" />
                     {item.rating_rata_rata ? item.rating_rata_rata.toFixed(1) : '4.8'}
-                    <span className="font-normal text-[var(--text-muted-on-light)]">({item.total_penilai || 24})</span>
+                    <span className="font-normal text-slate-400">({item.total_penilai || 24})</span>
                   </span>
-                  <span className="flex items-center gap-1">
-                    <Download size={13} />
+                  <span className="flex items-center gap-1 font-medium text-slate-500">
+                    <Download size={13} className="text-slate-400" />
                     {(item.jumlah_unduhan || 0).toLocaleString('id-ID')} unduhan
                   </span>
                 </div>
 
                 <div
-                  className="mt-4 pt-4 border-t flex items-center gap-1 text-xs font-semibold opacity-0 group-hover:opacity-100 transition-opacity text-[var(--color-gold-600)]"
-                  style={{ borderColor: 'var(--color-cream-300)' }}
+                  className="mt-3 flex items-center justify-end gap-1 text-xs font-bold opacity-0 group-hover:opacity-100 transition-all duration-200 transform translate-x-2 group-hover:translate-x-0 text-[var(--color-gold-600)]"
                   aria-hidden="true"
                 >
                   Lihat detail &amp; unduh
-                  <ArrowRight size={12} />
+                  <ArrowRight size={13} />
                 </div>
               </Link>
             ))}

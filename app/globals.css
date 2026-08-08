@@ -65,13 +65,46 @@
   --color-ink-300: #a5b4fc;
   --color-ink-100: #e0e7ff;
 
-  /* Backward compat alias untuk charcoal (dipakai di form, badge, dsb) */
+  /* Backward compat alias untuk charcoal */
   --color-charcoal-900: var(--color-ink-900);
   --color-charcoal-700: var(--color-ink-700);
   --color-charcoal-500: var(--color-ink-500);
   --color-charcoal-400: var(--color-ink-300);
   --color-charcoal-300: var(--color-ink-300);
   --color-charcoal-100: var(--color-ink-100);
+
+  /* Backward compat alias untuk legacy palette -> Twilight mapping */
+  --color-gold-50: var(--color-aurora-50);
+  --color-gold-100: var(--color-aurora-100);
+  --color-gold-200: var(--color-aurora-200);
+  --color-gold-300: var(--color-aurora-300);
+  --color-gold-400: var(--color-aurora-400);
+  --color-gold-500: var(--color-aurora-500);
+  --color-gold-600: var(--color-aurora-600);
+  --color-gold-700: var(--color-aurora-700);
+  --color-gold-800: var(--color-aurora-800);
+  --color-gold-900: var(--color-aurora-900);
+
+  --color-terracotta-50: var(--color-rose-50);
+  --color-terracotta-100: var(--color-rose-100);
+  --color-terracotta-200: var(--color-rose-200);
+  --color-terracotta-300: var(--color-rose-300);
+  --color-terracotta-400: var(--color-rose-400);
+  --color-terracotta-50: var(--color-rose-500);
+  --color-terracotta-600: var(--color-rose-600);
+  --color-terracotta-700: var(--color-rose-700);
+  --color-terracotta-800: var(--color-rose-800);
+  --color-terracotta-900: #831843;
+
+  --color-cream-50: var(--color-mist-50);
+  --color-cream-100: var(--color-mist-100);
+  --color-cream-200: var(--color-mist-200);
+  --color-cream-300: var(--color-mist-300);
+  --color-cream-400: var(--color-mist-400);
+  --color-cream-500: var(--color-mist-500);
+
+  --color-dark-800: var(--color-night-800);
+  --color-dark-900: var(--color-night-900);
 
   /* =====================================================
      4 TOKEN TEKS SEMANTIK — WAJIB DIPAKAI SESUAI LATAR
@@ -162,6 +195,38 @@
   --color-charcoal-400: var(--color-charcoal-400);
   --color-charcoal-300: var(--color-charcoal-300);
   --color-charcoal-100: var(--color-charcoal-100);
+
+  --color-gold-50: var(--color-gold-50);
+  --color-gold-100: var(--color-gold-100);
+  --color-gold-200: var(--color-gold-200);
+  --color-gold-300: var(--color-gold-300);
+  --color-gold-400: var(--color-gold-400);
+  --color-gold-500: var(--color-gold-500);
+  --color-gold-600: var(--color-gold-600);
+  --color-gold-700: var(--color-gold-700);
+  --color-gold-800: var(--color-gold-800);
+  --color-gold-900: var(--color-gold-900);
+
+  --color-terracotta-50: var(--color-terracotta-50);
+  --color-terracotta-100: var(--color-terracotta-100);
+  --color-terracotta-200: var(--color-terracotta-200);
+  --color-terracotta-300: var(--color-terracotta-300);
+  --color-terracotta-400: var(--color-terracotta-400);
+  --color-terracotta-50: var(--color-terracotta-500);
+  --color-terracotta-600: var(--color-terracotta-600);
+  --color-terracotta-700: var(--color-terracotta-700);
+  --color-terracotta-800: var(--color-terracotta-800);
+  --color-terracotta-900: var(--color-terracotta-900);
+
+  --color-cream-50: var(--color-cream-50);
+  --color-cream-100: var(--color-cream-100);
+  --color-cream-200: var(--color-cream-200);
+  --color-cream-300: var(--color-cream-300);
+  --color-cream-400: var(--color-cream-400);
+  --color-cream-500: var(--color-cream-500);
+
+  --color-dark-800: var(--color-dark-800);
+  --color-dark-900: var(--color-dark-900);
 
   /* Token teks semantik */
   --text-on-dark: var(--text-on-dark);
@@ -318,6 +383,41 @@ h6 {
   50% {
     opacity: 1;
   }
+}
+
+/* Animasi Lentera Melayang */
+@keyframes floatLentera {
+  0% {
+    transform: translateY(0px) rotate(0deg);
+    opacity: 0.35;
+  }
+  50% {
+    transform: translateY(-20px) rotate(4deg);
+    opacity: 0.85;
+  }
+  100% {
+    transform: translateY(-40px) rotate(-3deg);
+    opacity: 0.25;
+  }
+}
+
+@keyframes glowPulseLentera {
+  0%, 100% {
+    opacity: 0.25;
+    transform: scale(0.95);
+  }
+  50% {
+    opacity: 0.6;
+    transform: scale(1.1);
+  }
+}
+
+.animate-float-lentera {
+  animation: floatLentera 8s ease-in-out infinite alternate;
+}
+
+.animate-glow-pulse {
+  animation: glowPulseLentera 5s ease-in-out infinite;
 }
 
 .animate-fade-in-up {
