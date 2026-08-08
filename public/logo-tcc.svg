@@ -1,0 +1,11 @@
+<svg width="120" height="40" viewBox="0 0 120 40" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Logo TCC Triple-C">
+  <!-- Badge background -->
+  <rect width="120" height="40" rx="8" fill="#2D5016"/>
+  <!-- Three C shapes representing Triple-C -->
+  <text x="8" y="26" font-family="Arial, sans-serif" font-size="13" font-weight="700" fill="#F5F0E8" letter-spacing="0">TCC</text>
+  <!-- Divider -->
+  <rect x="46" y="8" width="1.5" height="24" rx="0.75" fill="#F5F0E8" opacity="0.3"/>
+  <!-- Triple-C text -->
+  <text x="52" y="22" font-family="Arial, sans-serif" font-size="8" font-weight="600" fill="#C4622D">TRIPLE-C</text>
+  <text x="52" y="32" font-family="Arial, sans-serif" font-size="6.5" font-weight="400" fill="#F5F0E8" opacity="0.8">VIBE CODE 2026</text>
+</svg>
