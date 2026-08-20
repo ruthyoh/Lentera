@@ -7,7 +7,7 @@ import Tombol from '@/components/ui/Button';
 import { ambilDetailMateri } from '@/lib/actions/materi';
 import TombolUnduh from '@/components/materi/TombolUnduh';
 import FormPenilaian from '@/components/materi/FormPenilaian';
-import PanelRingkasanAI from '@/components/materi/PanelRingkasanAI';
+import PanelAsistenAI from '@/components/materi/PanelAsistenAI';
 
 interface HalamanDetailMateriProps {
   params: Promise<{ id: string }>;
@@ -160,10 +160,10 @@ export default async function HalamanDetailMateri({ params }: HalamanDetailMater
 
           {/* Sidebar */}
           <div className="space-y-6">
-            {/* Panel Asisten AI — terkoneksi ke /api/ai/ringkasan */}
-            <PanelRingkasanAI
+            {/* Panel Asisten AI — terkoneksi ke /api/ai/ringkasan, /api/ai/kuis, /api/ai/tanya-jawab */}
+            <PanelAsistenAI
               materiId={materi.id}
-              materiJudul={materi.judul}
+              judulMateri={materi.judul}
             />
 
             {/* Kartu Informasi Pengunggah */}

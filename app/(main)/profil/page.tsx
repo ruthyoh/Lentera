@@ -1,45 +1,95 @@
 import type { Metadata } from 'next';
+import { redirect } from 'next/navigation';
 import Link from 'next/link';
 import {
   User, Mail, GraduationCap, BookMarked, Calculator, Star,
   BookOpen, Award, Upload, Download, Heart, Settings, LogOut,
-  Edit3, Calendar, TrendingUp,
+  Edit3, Calendar, TrendingUp, Brain, MessageSquare, HelpCircle, FileText,
 } from 'lucide-react';
 import Badge from '@/components/ui/Badge';
 import Tombol from '@/components/ui/Button';
+import { createServerSupabaseClient } from '@/lib/supabase/server';
+import { createAdminClient } from '@/lib/supabase/admin';
+import { keluarAkun } from '@/lib/actions/auth';
 
 export const metadata: Metadata = {
   title: 'Profil Saya',
   description: 'Lihat dan kelola profil akun Lentera Anda.',
 };
 
-export default function HalamanProfil() {
-  const profil = {
-    nama: 'Ahmad Rizky Pratama',
-    email: 'ahmad.rizky@email.com',
-    jurusan: 'Teknik Informatika',
-    semester: 5,
-    ipk: 3.72,
-    poin: 12450,
-    peringkat: 1,
-    bergabungSejak: 'Januari 2026',
-    statistik: {
-      materiDiunggah: 87,
-      materiDisukai: 234,
-      totalUnduhan: 15420,
-      beasiswaDilamar: 12,
-    },
-  };
+const ikonJenisAI: Record<string, React.ReactNode> = {
+  ringkasan: <FileText size={14} className="text-[var(--color-gold-600)]" />,
+  kuis: <HelpCircle size={14} className="text-[var(--color-terracotta-500)]" />,
+  tanya_jawab: <MessageSquare size={14} className="text-[var(--color-gold-600)]" />,
+  pencocokan_beasiswa: <Award size={14} className="text-[var(--color-terracotta-500)]" />,
+  draf_esai: <Edit3 size={14} className="text-[var(--color-gold-600)]" />,
+};
 
-  const aktivitasTerbaru = [
-    { aksi: 'Mengunggah materi', judul: 'Catatan Kalkulus 1 — Bab 12', waktu: '2 jam lalu', tipe: 'unggah' },
-    { aksi: 'Mendapat suka', judul: 'Bank Soal Fisika Dasar', waktu: '5 jam lalu', tipe: 'suka' },
-    { aksi: 'Mengunduh materi', judul: 'Rangkuman Algoritma', waktu: '1 hari lalu', tipe: 'unduh' },
-    { aksi: 'Melamar beasiswa', judul: 'Beasiswa Unggulan 2026', waktu: '3 hari lalu', tipe: 'beasiswa' },
-    { aksi: 'Mengunggah materi', judul: 'Modul Pemrograman Web', waktu: '1 minggu lalu', tipe: 'unggah' },
-  ];
+const labelJenisAI: Record<string, string> = {
+  ringkasan: 'Meringkas materi',
+  kuis: 'Membuat kuis latihan',
+  tanya_jawab: 'Tanya jawab materi',
+  pencocokan_beasiswa: 'Pencocokan beasiswa AI',
+  draf_esai: 'Membuat draf esai',
+};
 
-  const ikonAktivitas: Record<string, React.ReactNode> = {
+export default async function HalamanProfil() {
+  const supabase = await createServerSupabaseClient();
+  const { data: { user }, error: userError } = await supabase.auth.getUser();
+
+  if (userError || !user) {
+    redirect('/login?dari=/profil');
+  }
+
+  const admin = createAdminClient();
+
+  // Ambil profil lengkap user
+  const { data: profil } = await admin
+    .from('profiles')
+    .select('*')
+    .eq('id', user.id)
+    .single();
+
+  // Hitung jumlah materi yang diunggah
+  const { count: jumlahMateri } = await admin
+    .from('materi')
+    .select('*', { count: 'exact', head: true })
+    .eq('uploader_id', user.id);
+
+  // Hitung total unduhan dari materi milik user
+  const { data: materiUser } = await admin
+    .from('materi')
+    .select('jumlah_unduhan, jumlah_suka')
+    .eq('uploader_id', user.id);
+
+  const totalUnduhan = materiUser?.reduce((acc, m) => acc + (m.jumlah_unduhan || 0), 0) || 0;
+  const totalSuka = materiUser?.reduce((acc, m) => acc + (m.jumlah_suka || 0), 0) || 0;
+
+  // Ambil riwayat interaksi AI terbaru (12 item)
+  const { data: riwayatAI } = await admin
+    .from('interaksi_ai')
+    .select('id, jenis, created_at, materi_id')
+    .eq('user_id', user.id)
+    .order('created_at', { ascending: false })
+    .limit(12);
+
+  // Hitung per-jenis interaksi AI
+  const hitungPerJenis: Record<string, number> = {};
+  riwayatAI?.forEach((item) => {
+    hitungPerJenis[item.jenis] = (hitungPerJenis[item.jenis] || 0) + 1;
+  });
+
+  // Hitung peringkat user (berdasarkan poin_kontribusi)
+  const { count: peringkat } = await admin
+    .from('profiles')
+    .select('*', { count: 'exact', head: true })
+    .gt('poin_kontribusi', profil?.poin_kontribusi || 0);
+
+  const namaLengkap = profil?.nama_lengkap || user.user_metadata?.nama_lengkap || user.email?.split('@')[0] || 'Pengguna';
+  const inisial = namaLengkap.split(' ').slice(0, 2).map((k: string) => k[0]).join('').toUpperCase();
+  const bergabungSejak = new Date(user.created_at).toLocaleDateString('id-ID', { month: 'long', year: 'numeric' });
+
+  const ikonAktivitasAI: Record<string, React.ReactNode> = {
     unggah: <Upload size={14} style={{ color: 'var(--color-gold-600)' }} />,
     suka: <Heart size={14} style={{ color: 'var(--color-terracotta-500)' }} />,
     unduh: <Download size={14} style={{ color: 'var(--color-gold-600)' }} />,
@@ -65,7 +115,7 @@ export default function HalamanProfil() {
               style={{ background: 'var(--color-gold-100)', color: 'var(--color-dark-900)' }}
               aria-hidden="true"
             >
-              AR
+              {inisial}
             </div>
 
             <div className="text-center md:text-left flex-1">
@@ -74,21 +124,25 @@ export default function HalamanProfil() {
                   className="text-2xl md:text-3xl font-bold"
                   style={{ fontFamily: 'var(--font-display)', color: 'var(--text-on-dark)' }}
                 >
-                  {profil.nama}
+                  {namaLengkap}
                 </h1>
-                <Badge varian="aktif" className="text-xs">Peringkat #{profil.peringkat}</Badge>
+                {(peringkat !== null && peringkat !== undefined) && (
+                  <Badge varian="aktif" className="text-xs">Peringkat #{(peringkat || 0) + 1}</Badge>
+                )}
               </div>
               <p className="text-sm mb-3" style={{ color: 'var(--text-muted-on-dark)' }}>
-                {profil.jurusan} · Semester {profil.semester} · IPK {profil.ipk.toFixed(2)}
+                {profil?.jurusan || 'Belum diisi'}
+                {profil?.semester ? ` · Semester ${profil.semester}` : ''}
+                {profil?.ipk ? ` · IPK ${Number(profil.ipk).toFixed(2)}` : ''}
               </p>
               <div className="flex items-center gap-4 justify-center md:justify-start text-xs" style={{ color: 'var(--text-muted-on-dark)' }}>
                 <span className="flex items-center gap-1">
                   <Calendar size={12} />
-                  Bergabung sejak {profil.bergabungSejak}
+                  Bergabung sejak {bergabungSejak}
                 </span>
                 <span className="flex items-center gap-1">
                   <Star size={12} className="text-[var(--color-gold-400)]" fill="currentColor" />
-                  {profil.poin.toLocaleString('id-ID')} poin
+                  {(profil?.poin_kontribusi || 0).toLocaleString('id-ID')} poin
                 </span>
               </div>
             </div>
@@ -104,15 +158,18 @@ export default function HalamanProfil() {
               >
                 Edit Profil
               </Tombol>
-              <Tombol
-                varian="hantu"
-                ukuran="sedang"
-                ikonKiri={<Settings size={14} />}
-                className="text-[var(--text-on-dark)]! border border-white/20! hover:bg-white/10!"
-                id="tombol-pengaturan"
-              >
-                Pengaturan
-              </Tombol>
+              <form action={keluarAkun}>
+                <Tombol
+                  type="submit"
+                  varian="hantu"
+                  ukuran="sedang"
+                  ikonKiri={<LogOut size={14} />}
+                  className="text-[var(--text-on-dark)]! border border-white/20! hover:bg-white/10!"
+                  id="tombol-keluar-header"
+                >
+                  Keluar
+                </Tombol>
+              </form>
             </div>
           </div>
         </div>
@@ -132,10 +189,10 @@ export default function HalamanProfil() {
               </h2>
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                 {[
-                  { label: 'Materi Diunggah', angka: profil.statistik.materiDiunggah, ikon: <Upload size={18} />, warna: 'gold' },
-                  { label: 'Disukai', angka: profil.statistik.materiDisukai, ikon: <Heart size={18} />, warna: 'terracotta' },
-                  { label: 'Total Unduhan', angka: profil.statistik.totalUnduhan, ikon: <Download size={18} />, warna: 'gold' },
-                  { label: 'Beasiswa Dilamar', angka: profil.statistik.beasiswaDilamar, ikon: <Award size={18} />, warna: 'terracotta' },
+                  { label: 'Materi Diunggah', angka: jumlahMateri || 0, ikon: <Upload size={18} />, warna: 'gold' },
+                  { label: 'Total Suka', angka: totalSuka, ikon: <Heart size={18} />, warna: 'terracotta' },
+                  { label: 'Total Unduhan', angka: totalUnduhan, ikon: <Download size={18} />, warna: 'gold' },
+                  { label: 'Sesi AI', angka: riwayatAI?.length || 0, ikon: <Brain size={18} />, warna: 'terracotta' },
                 ].map((stat) => (
                   <div
                     key={stat.label}
@@ -169,50 +226,78 @@ export default function HalamanProfil() {
               </div>
             </div>
 
-            {/* Aktivitas Terbaru */}
+            {/* Riwayat Interaksi AI */}
             <div className="card-glass p-6">
               <div className="flex items-center justify-between mb-5">
                 <h2
                   className="font-bold text-base"
                   style={{ fontFamily: 'var(--font-display)', color: 'var(--text-on-light)' }}
                 >
-                  Aktivitas Terbaru
+                  Riwayat Interaksi AI
                 </h2>
-                <Link
-                  href="/profil/aktivitas"
-                  className="text-xs font-semibold flex items-center gap-1 transition-colors hover:underline text-[var(--color-gold-600)]"
-                >
-                  Lihat semua
-                  <TrendingUp size={12} />
-                </Link>
-              </div>
-              <div className="space-y-0">
-                {aktivitasTerbaru.map((aktivitas, i) => (
-                  <div
-                    key={i}
-                    className="flex items-start gap-3 py-3.5 border-b last:border-b-0"
-                    style={{ borderColor: 'var(--color-cream-300)' }}
-                  >
-                    <div
-                      className="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5"
-                      style={{ background: aktivitas.tipe === 'beasiswa' || aktivitas.tipe === 'suka' ? 'var(--color-terracotta-50)' : 'var(--color-gold-50)' }}
-                      aria-hidden="true"
+                <div className="flex gap-2 flex-wrap">
+                  {Object.entries(hitungPerJenis).map(([jenis, count]) => (
+                    <span
+                      key={jenis}
+                      className="text-xs px-2.5 py-1 rounded-full font-semibold"
+                      style={{ background: 'var(--color-gold-100)', color: 'var(--color-gold-800)' }}
                     >
-                      {ikonAktivitas[aktivitas.tipe]}
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <p className="text-sm" style={{ color: 'var(--text-on-light)' }}>
-                        <span className="font-semibold">{aktivitas.aksi}</span>
-                        {' — '}
-                        <span className="truncate">{aktivitas.judul}</span>
-                      </p>
-                      <p className="text-xs mt-0.5" style={{ color: 'var(--text-muted-on-light)' }}>
-                        {aktivitas.waktu}
-                      </p>
-                    </div>
-                  </div>
-                ))}
+                      {labelJenisAI[jenis] || jenis}: {count}×
+                    </span>
+                  ))}
+                </div>
               </div>
+
+              {riwayatAI && riwayatAI.length > 0 ? (
+                <div className="space-y-0">
+                  {riwayatAI.slice(0, 8).map((item) => {
+                    const waktuFormatted = new Date(item.created_at).toLocaleDateString('id-ID', {
+                      day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit',
+                    });
+                    return (
+                      <div
+                        key={item.id}
+                        className="flex items-start gap-3 py-3.5 border-b last:border-b-0"
+                        style={{ borderColor: 'var(--color-cream-300)' }}
+                      >
+                        <div
+                          className="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5"
+                          style={{ background: 'var(--color-gold-50)' }}
+                          aria-hidden="true"
+                        >
+                          {ikonJenisAI[item.jenis] || <Brain size={14} />}
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <p className="text-sm" style={{ color: 'var(--text-on-light)' }}>
+                            <span className="font-semibold">{labelJenisAI[item.jenis] || item.jenis}</span>
+                            {item.materi_id && (
+                              <Link
+                                href={`/materi/${item.materi_id}`}
+                                className="text-[var(--color-gold-600)] hover:underline ml-1 text-xs"
+                              >
+                                → lihat materi
+                              </Link>
+                            )}
+                          </p>
+                          <p className="text-xs mt-0.5" style={{ color: 'var(--text-muted-on-light)' }}>
+                            {waktuFormatted}
+                          </p>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              ) : (
+                <div className="py-8 text-center">
+                  <Brain size={32} className="mx-auto mb-3 text-[var(--text-muted-on-light)]" />
+                  <p className="text-sm text-[var(--text-muted-on-light)]">
+                    Belum ada riwayat interaksi AI.
+                  </p>
+                  <Link href="/jelajah" className="text-xs text-[var(--color-gold-600)] hover:underline mt-1 block">
+                    Coba Asisten Belajar AI →
+                  </Link>
+                </div>
+              )}
             </div>
           </div>
 
@@ -228,10 +313,11 @@ export default function HalamanProfil() {
               </h3>
               <div className="space-y-4">
                 {[
-                  { ikon: <Mail size={15} />, label: 'Email', nilai: profil.email },
-                  { ikon: <GraduationCap size={15} />, label: 'Jurusan', nilai: profil.jurusan },
-                  { ikon: <BookMarked size={15} />, label: 'Semester', nilai: `Semester ${profil.semester}` },
-                  { ikon: <Calculator size={15} />, label: 'IPK', nilai: profil.ipk.toFixed(2) },
+                  { ikon: <Mail size={15} />, label: 'Email', nilai: user.email || '-' },
+                  { ikon: <GraduationCap size={15} />, label: 'Jurusan', nilai: profil?.jurusan || 'Belum diisi' },
+                  { ikon: <BookMarked size={15} />, label: 'Semester', nilai: profil?.semester ? `Semester ${profil.semester}` : 'Belum diisi' },
+                  { ikon: <Calculator size={15} />, label: 'IPK', nilai: profil?.ipk ? Number(profil.ipk).toFixed(2) : 'Belum diisi' },
+                  { ikon: <Settings size={15} />, label: 'Institusi', nilai: profil?.asal_institusi || 'Belum diisi' },
                 ].map((info) => (
                   <div key={info.label} className="flex items-start gap-3">
                     <div
@@ -263,10 +349,10 @@ export default function HalamanProfil() {
               </h3>
               <div className="space-y-2">
                 {[
-                  { label: 'Materi Saya', href: '/profil/materi', ikon: <BookOpen size={15} /> },
-                  { label: 'Beasiswa Tersimpan', href: '/profil/beasiswa', ikon: <Award size={15} /> },
-                  { label: 'Riwayat Unduhan', href: '/profil/unduhan', ikon: <Download size={15} /> },
-                  { label: 'Pengaturan Akun', href: '/profil/pengaturan', ikon: <Settings size={15} /> },
+                  { label: 'Jelajah Materi', href: '/jelajah', ikon: <BookOpen size={15} /> },
+                  { label: 'Jelajah Beasiswa', href: '/beasiswa', ikon: <Award size={15} /> },
+                  { label: 'Unggah Materi Baru', href: '/jelajah/unggah', ikon: <Upload size={15} /> },
+                  { label: 'Papan Peringkat', href: '/papan-peringkat', ikon: <TrendingUp size={15} /> },
                 ].map((link) => (
                   <Link
                     key={link.href}
@@ -282,16 +368,19 @@ export default function HalamanProfil() {
             </div>
 
             {/* Tombol Keluar */}
-            <Tombol
-              varian="bahaya"
-              ukuran="sedang"
-              lebarPenuh
-              ikonKiri={<LogOut size={15} />}
-              className="opacity-80 hover:opacity-100"
-              id="tombol-keluar"
-            >
-              Keluar dari Akun
-            </Tombol>
+            <form action={keluarAkun}>
+              <Tombol
+                type="submit"
+                varian="bahaya"
+                ukuran="sedang"
+                lebarPenuh
+                ikonKiri={<LogOut size={15} />}
+                className="opacity-80 hover:opacity-100"
+                id="tombol-keluar"
+              >
+                Keluar dari Akun
+              </Tombol>
+            </form>
           </div>
         </div>
       </div>

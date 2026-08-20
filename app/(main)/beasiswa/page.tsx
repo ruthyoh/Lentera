@@ -195,6 +195,7 @@ export default async function HalamanBeasiswa({ searchParams }: HalamanBeasiswaP
                 Temukan <strong className="text-white font-semibold">{total > 0 ? `${total} peluang beasiswa` : 'berbagai program beasiswa'}</strong> dari pemerintah, swasta, dan donor internasional dengan bantuan rekomendasi AI.
               </p>
             </div>
+
             <Tombol
               varian="sekunder"
               ukuran="sedang"
