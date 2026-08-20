@@ -2,10 +2,11 @@ import { NextResponse, type NextRequest } from 'next/server';
 import { createServerClient, type CookieOptions } from '@supabase/ssr';
 
 /**
- * Proxy Lentera — Next.js 16 (menggantikan middleware.ts)
+ * Middleware Proteksi Rute Lentera
+ *
  * Bertanggung jawab untuk:
  * 1. Refresh sesi Supabase (agar cookies auth selalu segar)
- * 2. Proteksi rute yang membutuhkan autentikasi
+ * 2. Proteksi rute yang membutuhkan autentikasi (/profil, /materi, /jelajah, dll.)
  * 3. Redirect user yang sudah login agar tidak mengakses /login & /register
  */
 
@@ -37,27 +38,26 @@ export async function proxy(request: NextRequest) {
           return request.cookies.getAll();
         },
         setAll(cookiesToSet: { name: string; value: string; options: CookieOptions }[]) {
-          // Update cookies di request untuk propagasi ke server
           cookiesToSet.forEach(({ name, value }) =>
             request.cookies.set(name, value)
           );
-          // Buat ulang response dengan cookies yang diperbarui
           supabaseResponse = NextResponse.next({ request });
           cookiesToSet.forEach(({ name, value, options }) =>
-            supabaseResponse.cookies.set(name, value, options as Parameters<typeof supabaseResponse.cookies.set>[2])
+            supabaseResponse.cookies.set(
+              name,
+              value,
+              options as Parameters<typeof supabaseResponse.cookies.set>[2]
+            )
           );
         },
       },
     }
   );
 
-  // PENTING: Selalu gunakan getUser() bukan getSession() untuk keamanan
-  // getUser() memvalidasi token ke server Supabase
+  // Validasi token user ke server Supabase
   const {
     data: { user },
   } = await supabase.auth.getUser();
-
-  // --- Logika Proteksi Rute ---
 
   const adalahRuteDilindungi = RUTE_DILINDUNGI.some((rute) =>
     pathname.startsWith(rute)
@@ -71,7 +71,6 @@ export async function proxy(request: NextRequest) {
   if (adalahRuteDilindungi && !user) {
     const urlLogin = request.nextUrl.clone();
     urlLogin.pathname = '/login';
-    // Simpan tujuan asal agar bisa redirect setelah login
     urlLogin.searchParams.set('dari', pathname);
     return NextResponse.redirect(urlLogin);
   }
@@ -84,7 +83,6 @@ export async function proxy(request: NextRequest) {
     return NextResponse.redirect(urlJelajah);
   }
 
-  // Kembalikan response dengan cookies yang sudah diperbarui
   return supabaseResponse;
 }
 

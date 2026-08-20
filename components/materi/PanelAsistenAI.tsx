@@ -46,12 +46,12 @@ export default function PanelAsistenAI({ materiId, judulMateri }: PanelAsistenAI
   const [riwayatQNA, setRiwayatQNA] = useState<RiwayatQNA[]>([]);
 
   // ─── Handler 1: Meringkas Materi ──────────────────────────────────────
-  async function handleMulaiRingkasan() {
+  async function handleMulaiRingkasan(pakaiCache = true) {
     setMode('ringkasan');
     setErrorPesan(null);
     setPerluLogin(false);
 
-    if (ringkasanTeks) return; // Gunakan cache yang sudah dimuat
+    if (pakaiCache && ringkasanTeks) return; // Gunakan cache yang sudah dimuat
 
     setSedangMemuat(true);
 
@@ -79,8 +79,15 @@ export default function PanelAsistenAI({ materiId, judulMateri }: PanelAsistenAI
     }
   }
 
+  // ─── Handler 1b: Ringkas Ulang (clear cache lalu re-fetch) ──────────────
+  function handleRingkasUlang() {
+    setRingkasanTeks(null);
+    // Setelah state ter-clear, panggil dengan pakaiCache=false
+    setTimeout(() => handleMulaiRingkasan(false), 0);
+  }
+
   // ─── Handler 2: Membuat Kuis ──────────────────────────────────────────
-  async function handleMulaiKuis() {
+  async function handleMulaiKuis(pakaiCache = true) {
     setMode('kuis');
     setErrorPesan(null);
     setPerluLogin(false);
@@ -88,7 +95,7 @@ export default function PanelAsistenAI({ materiId, judulMateri }: PanelAsistenAI
     setJawabanUser({});
     setKuisSelesai(false);
 
-    if (daftarKuis.length > 0) return; // Gunakan kuis yang sudah dibuat jika ada
+    if (pakaiCache && daftarKuis.length > 0) return; // Gunakan kuis yang sudah dibuat jika ada
 
     setSedangMemuat(true);
 
@@ -223,7 +230,7 @@ export default function PanelAsistenAI({ materiId, judulMateri }: PanelAsistenAI
           </p>
 
           <button
-            onClick={handleMulaiRingkasan}
+            onClick={() => handleMulaiRingkasan()}
             className="w-full text-left text-xs px-4 py-3.5 rounded-lg transition-all text-white font-medium flex items-center justify-between group hover:bg-[rgba(201,151,30,0.25)]"
             style={{ background: 'rgba(201,151,30,0.15)', border: '1px solid rgba(201,151,30,0.3)' }}
           >
@@ -235,7 +242,7 @@ export default function PanelAsistenAI({ materiId, judulMateri }: PanelAsistenAI
           </button>
 
           <button
-            onClick={handleMulaiKuis}
+            onClick={() => handleMulaiKuis()}
             className="w-full text-left text-xs px-4 py-3.5 rounded-lg transition-all text-white font-medium flex items-center justify-between group hover:bg-[rgba(201,151,30,0.25)]"
             style={{ background: 'rgba(201,151,30,0.15)', border: '1px solid rgba(201,151,30,0.3)' }}
           >
@@ -285,7 +292,7 @@ export default function PanelAsistenAI({ materiId, judulMateri }: PanelAsistenAI
                 {ringkasanTeks}
               </div>
               <button
-                onClick={handleMulaiRingkasan}
+                onClick={handleRingkasUlang}
                 className="text-[11px] flex items-center gap-1 text-[var(--color-gold-400)] hover:underline pt-1"
               >
                 <RefreshCw size={11} />
@@ -413,7 +420,10 @@ export default function PanelAsistenAI({ materiId, judulMateri }: PanelAsistenAI
                 </div>
                 <div className="pt-2 flex justify-center gap-3">
                   <button
-                    onClick={handleMulaiKuis}
+                    onClick={() => {
+                      setDaftarKuis([]);
+                      handleMulaiKuis(false);
+                    }}
                     className="text-xs px-4 py-2 rounded-lg bg-[var(--color-gold-500)] text-[var(--color-dark-900)] font-bold flex items-center gap-1.5 hover:bg-[var(--color-gold-400)] transition-colors"
                   >
                     <RotateCcw size={13} />

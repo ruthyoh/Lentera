@@ -119,16 +119,6 @@ export default async function HalamanBeasiswa({ searchParams }: HalamanBeasiswaP
                 Temukan <strong className="text-white font-semibold">{total > 0 ? `${total} peluang beasiswa` : 'berbagai program beasiswa'}</strong> dari pemerintah, swasta, dan donor internasional dengan bantuan rekomendasi AI.
               </p>
             </div>
-            <Tombol
-              varian="sekunder"
-              ukuran="sedang"
-              ikonKiri={<Brain size={16} />}
-              className="bg-gradient-to-r from-amber-400 to-amber-500 text-slate-900 font-bold hover:from-amber-300 hover:to-amber-400 border-none shadow-lg shadow-amber-500/20 shrink-0"
-              id="tombol-pencocokan-ai"
-            >
-              <Sparkles size={14} />
-              Pencocokan AI
-            </Tombol>
           </div>
         </div>
       </div>
