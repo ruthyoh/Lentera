@@ -145,29 +145,29 @@ export default function PanelPencocokanAI({ userId }: PanelPencocokanAIProps) {
         <div
           className="rounded-[var(--radius-lg)] p-5 flex flex-col md:flex-row items-center gap-4"
           style={{
-            background: 'var(--color-terracotta-50)',
-            border: '1px solid var(--color-terracotta-200)',
+            background: 'rgba(168,85,247,0.12)',
+            border: '1px solid rgba(168,85,247,0.3)',
           }}
         >
           <div
             className="w-12 h-12 rounded-[var(--radius-md)] flex items-center justify-center flex-shrink-0"
-            style={{ background: 'var(--color-terracotta-500)' }}
+            style={{ background: 'linear-gradient(135deg, #a855f7, #6366f1)' }}
             aria-hidden="true"
           >
             <Brain size={22} className="text-white" />
           </div>
           <div className="flex-1 text-center md:text-left">
-            <p className="font-semibold text-sm mb-0.5" style={{ color: 'var(--color-terracotta-800)' }}>
+            <p className="font-semibold text-sm mb-0.5" style={{ color: '#e9d5ff' }}>
               Asisten Pencocokan AI Tersedia
             </p>
-            <p className="text-xs" style={{ color: 'var(--color-terracotta-600)' }}>
+            <p className="text-xs" style={{ color: '#c4b5fd' }}>
               Masukkan profil akademikmu dan biarkan AI menemukan beasiswa yang paling cocok untukmu secara otomatis.
             </p>
           </div>
           <button
             onClick={jalankanPencocokan}
             className="flex items-center gap-2 px-5 py-2.5 rounded-[var(--radius-sm)] text-sm font-semibold transition-all hover:opacity-90 cursor-pointer flex-shrink-0"
-            style={{ background: 'var(--color-terracotta-500)', color: 'white' }}
+            style={{ background: 'linear-gradient(135deg, #a855f7, #6366f1)', color: 'white' }}
             id="tombol-pencocokan-ai-coba"
             aria-label="Coba pencocokan beasiswa dengan AI"
           >
@@ -183,17 +183,17 @@ export default function PanelPencocokanAI({ userId }: PanelPencocokanAIProps) {
         <div aria-live="polite" aria-busy="true">
           <div
             className="rounded-[var(--radius-lg)] p-5 mb-4 flex items-center gap-3"
-            style={{ background: 'var(--color-terracotta-50)', border: '1px solid var(--color-terracotta-200)' }}
+            style={{ background: 'rgba(168,85,247,0.12)', border: '1px solid rgba(168,85,247,0.3)' }}
           >
             <div
-              className="w-6 h-6 rounded-full border-3 border-t-transparent animate-spin flex-shrink-0"
-              style={{ borderColor: 'var(--color-terracotta-500)', borderTopColor: 'transparent', borderWidth: 3 }}
+              className="w-6 h-6 rounded-full border-t-transparent animate-spin flex-shrink-0"
+              style={{ borderColor: '#a855f7', borderTopColor: 'transparent', borderWidth: 3, borderStyle: 'solid' }}
             />
             <div>
-              <p className="text-sm font-semibold" style={{ color: 'var(--color-terracotta-800)' }}>
+              <p className="text-sm font-semibold" style={{ color: '#e9d5ff' }}>
                 AI sedang menganalisis profil kamu…
               </p>
-              <p className="text-xs" style={{ color: 'var(--color-terracotta-600)' }}>
+              <p className="text-xs" style={{ color: '#c4b5fd' }}>
                 Mencocokkan dengan {'>'}0 beasiswa aktif — harap tunggu
               </p>
             </div>
@@ -253,15 +253,15 @@ export default function PanelPencocokanAI({ userId }: PanelPencocokanAIProps) {
       {status === 'unauthenticated' && (
         <div
           className="rounded-[var(--radius-lg)] p-6 text-center space-y-4"
-          style={{ background: 'var(--color-terracotta-50)', border: '1px solid var(--color-terracotta-200)' }}
+          style={{ background: 'rgba(168,85,247,0.12)', border: '1px solid rgba(168,85,247,0.3)' }}
           aria-live="polite"
         >
-          <Lock size={28} className="mx-auto" style={{ color: 'var(--color-terracotta-500)' }} />
+          <Lock size={28} className="mx-auto" style={{ color: '#c084fc' }} />
           <div>
-            <p className="font-semibold text-sm mb-1" style={{ color: 'var(--color-terracotta-800)' }}>
+            <p className="font-semibold text-sm mb-1" style={{ color: '#e9d5ff' }}>
               Masuk untuk Pencocokan AI
             </p>
-            <p className="text-xs leading-relaxed" style={{ color: 'var(--color-terracotta-600)' }}>
+            <p className="text-xs leading-relaxed" style={{ color: '#c4b5fd' }}>
               Buat akun Lentera gratis dan dapatkan rekomendasi beasiswa yang dipersonalisasi sesuai jurusan, IPK, dan semester kamu.
             </p>
           </div>
@@ -269,14 +269,14 @@ export default function PanelPencocokanAI({ userId }: PanelPencocokanAIProps) {
             <a
               href="/login"
               className="inline-flex items-center gap-2 px-5 py-2.5 rounded-[var(--radius-sm)] text-sm font-semibold transition-all hover:opacity-90"
-              style={{ background: 'var(--color-terracotta-500)', color: 'white' }}
+              style={{ background: 'linear-gradient(135deg, #a855f7, #6366f1)', color: 'white' }}
             >
               Masuk ke Akun
             </a>
             <a
               href="/register"
               className="inline-flex items-center gap-2 px-5 py-2.5 rounded-[var(--radius-sm)] text-sm font-semibold border transition-all hover:opacity-80"
-              style={{ borderColor: 'var(--color-terracotta-400)', color: 'var(--color-terracotta-700)' }}
+              style={{ borderColor: 'rgba(168,85,247,0.4)', color: '#c084fc' }}
             >
               <Sparkles size={14} />
               Daftar Gratis
@@ -291,20 +291,20 @@ export default function PanelPencocokanAI({ userId }: PanelPencocokanAIProps) {
           {/* Header hasil */}
           <div
             className="rounded-[var(--radius-lg)] p-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3"
-            style={{ background: 'var(--color-terracotta-50)', border: '1px solid var(--color-terracotta-200)' }}
+            style={{ background: 'rgba(168,85,247,0.12)', border: '1px solid rgba(168,85,247,0.3)' }}
           >
             <div>
-              <p className="font-semibold text-sm" style={{ color: 'var(--color-terracotta-800)' }}>
+              <p className="font-semibold text-sm" style={{ color: '#e9d5ff' }}>
                 ✨ {kartu.length} Beasiswa Terbaik untuk Kamu
               </p>
-              <p className="text-xs mt-0.5" style={{ color: 'var(--color-terracotta-600)' }}>
+              <p className="text-xs mt-0.5" style={{ color: '#c4b5fd' }}>
                 AI menganalisis {jumlahDiperiksa} beasiswa aktif berdasarkan profilmu
               </p>
             </div>
             <button
               onClick={jalankanPencocokan}
               className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all hover:opacity-80 cursor-pointer flex-shrink-0"
-              style={{ background: 'rgba(196,98,45,0.12)', color: 'var(--color-terracotta-700)', border: '1px solid rgba(196,98,45,0.25)' }}
+              style={{ background: 'rgba(168,85,247,0.2)', color: '#c084fc', border: '1px solid rgba(168,85,247,0.3)' }}
             >
               <RefreshCw size={12} />
               Perbarui

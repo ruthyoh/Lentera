@@ -85,7 +85,7 @@ export default function Navbar({ profil }: NavbarProps) {
           <nav className="flex items-center justify-between h-16" aria-label="Navigasi utama">
 
             {/* Logo */}
-            <Logo ukuran="sedang" warnaTeks={terscroll ? 'var(--text-on-light)' : 'var(--text-on-dark)'} />
+            <Logo ukuran="sedang" warnaTeks={terscroll ? 'var(--text-on-light)' : '#FFFFFF'} />
 
             {/* Link Navigasi Desktop */}
             <div className="hidden md:flex items-center gap-1" role="menubar">

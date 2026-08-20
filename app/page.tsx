@@ -3,7 +3,7 @@ import Link from 'next/link';
 import Hero from '@/components/sections/Hero';
 import ModulCard from '@/components/sections/ModulCard';
 import Stats from '@/components/sections/Stats';
-import { ArrowRight, Sparkles, Shield, Zap } from 'lucide-react';
+import { ArrowRight, Sparkles, Shield, Zap, BookOpen, Award } from 'lucide-react';
 
 export const metadata: Metadata = {
   title: 'Lentera — Terangi Jalan Akademismu',
@@ -239,7 +239,7 @@ export default function HalamanUtama() {
         </div>
       </section>
 
-      {/* CTA Akhir */}
+      {/* CTA Akhir — Mulai Perjalanan Belajarmu */}
       <section
         className="py-24 relative overflow-hidden"
         aria-labelledby="cta-judul"
@@ -248,34 +248,47 @@ export default function HalamanUtama() {
         {/* Dekorasi background */}
         <div className="absolute inset-0 overflow-hidden" aria-hidden="true">
           <div
-            className="absolute -top-20 -right-20 w-64 h-64 rounded-full opacity-10"
-            style={{ background: 'radial-gradient(circle, var(--color-terracotta-400), transparent 70%)' }}
+            className="absolute -top-20 -right-20 w-80 h-80 rounded-full opacity-15 blur-3xl"
+            style={{ background: 'radial-gradient(circle, var(--color-aurora-400), transparent 70%)' }}
           />
           <div
-            className="absolute -bottom-20 -left-20 w-80 h-80 rounded-full opacity-8"
-            style={{ background: 'radial-gradient(circle, var(--color-gold-600), transparent 70%)' }}
+            className="absolute -bottom-20 -left-20 w-96 h-96 rounded-full opacity-10 blur-3xl"
+            style={{ background: 'radial-gradient(circle, var(--color-gold-400), transparent 70%)' }}
+          />
+          <div
+            className="absolute inset-0 opacity-8"
+            style={{
+              backgroundImage: `linear-gradient(rgba(34, 211, 238, 0.12) 1px, transparent 1px), linear-gradient(90deg, rgba(34, 211, 238, 0.12) 1px, transparent 1px)`,
+              backgroundSize: '48px 48px',
+            }}
           />
         </div>
 
         <div className="container-lentera text-center relative z-10">
           <p
-            className="text-xs font-bold tracking-widest uppercase mb-4"
-            style={{ color: 'var(--color-terracotta-400)' }}
+            className="text-sm font-bold tracking-widest uppercase mb-4"
+            style={{ color: 'var(--text-muted-on-dark)' }}
           >
             Mulai Sekarang
           </p>
           <h2
             id="cta-judul"
-            className="text-3xl md:text-5xl font-bold mb-6"
+            className="text-3xl md:text-5xl font-bold mb-4"
             style={{ fontFamily: 'var(--font-display)', color: 'var(--text-on-dark)' }}
           >
-            Siap Meraih Impianmu?
+            Mulai Perjalanan Belajarmu
           </h2>
+          <h3
+            className="text-xl md:text-2xl font-semibold mb-6"
+            style={{ color: 'var(--color-gold-300)' }}
+          >
+            Akses Ribuan Materi &amp; Beasiswa
+          </h3>
           <p
             className="text-lg mb-10 max-w-xl mx-auto"
             style={{ color: 'var(--text-muted-on-dark)' }}
           >
-            Bergabung sekarang dan mulai perjalanan belajarmu bersama ribuan mahasiswa Indonesia yang telah merasakan manfaat Lentera.
+            Bergabung bersama ribuan mahasiswa yang sudah memanfaatkan Lentera untuk meraih prestasi akademik dan finansial terbaik.
           </p>
           <div className="flex flex-wrap items-center justify-center gap-4">
             <Link
@@ -285,23 +298,25 @@ export default function HalamanUtama() {
                 background: 'var(--text-on-dark)',
                 color: 'var(--text-on-light)',
               }}
-              id="cta-daftar-sekarang"
+              id="cta-mulai-belajar"
             >
-              <Sparkles size={18} />
-              Daftar Gratis Sekarang
+              <BookOpen size={18} />
+              Mulai Belajar Gratis
               <ArrowRight size={16} />
             </Link>
             <Link
-              href="/jelajah"
+              href="/beasiswa"
               className="inline-flex items-center gap-2 px-8 py-4 rounded-[var(--radius-sm)] font-semibold text-base border-2 hover:bg-white/10 transition-all duration-200"
               style={{ borderColor: 'var(--text-on-dark)', color: 'var(--text-on-dark)' }}
-              id="cta-jelajah-dulu"
+              id="cta-cari-beasiswa"
             >
-              Jelajah Dulu
+              <Award size={18} />
+              Cari Beasiswa
             </Link>
           </div>
         </div>
       </section>
+
     </>
   );
 }
