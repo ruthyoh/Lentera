@@ -1,11 +1,13 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
+import { Suspense } from 'react';
 import {
   Search, BookOpen, FileText, HelpCircle, Presentation, ArrowRight, Brain, Upload, Layers, FolderOpen, Star, Download
 } from 'lucide-react';
 import Badge from '@/components/ui/Badge';
 import Tombol from '@/components/ui/Button';
 import { ambilDaftarMateri } from '@/lib/actions/materi';
+import ModalAsistenAIJelajah from '@/components/materi/ModalAsistenAIJelajah';
 
 export const metadata: Metadata = {
   title: 'Jelajah Materi Belajar',
@@ -345,6 +347,13 @@ export default async function HalamanJelajah({ searchParams }: HalamanJelajahPro
           </div>
         )}
       </div>
+
+      {/* Modal Asisten AI — memerlukan Suspense karena menggunakan useSearchParams() */}
+      <Suspense fallback={null}>
+        <ModalAsistenAIJelajah
+          daftarMateri={materi.map((m) => ({ id: m.id, judul: m.judul, mata_kuliah: m.mata_kuliah }))}
+        />
+      </Suspense>
     </div>
   );
 }

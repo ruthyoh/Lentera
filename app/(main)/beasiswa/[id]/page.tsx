@@ -1,12 +1,14 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import {
-  ArrowLeft, Award, Clock, GraduationCap, Globe, Brain,
-  CheckCircle, AlertCircle, PenTool, BookOpen, ArrowRight, FolderOpen
+  ArrowLeft, Award, Clock, GraduationCap, Globe,
+  CheckCircle, AlertCircle, BookOpen, ArrowRight, FolderOpen
 } from 'lucide-react';
 import Badge from '@/components/ui/Badge';
 import Tombol from '@/components/ui/Button';
 import { ambilDetailBeasiswa } from '@/lib/actions/beasiswa';
+import { createServerSupabaseClient } from '@/lib/supabase/server';
+import PanelDrafEsaiAI from '@/components/beasiswa/PanelDrafEsaiAI';
 
 interface HalamanDetailBeasiswaProps {
   params: Promise<{ id: string }>;
@@ -45,7 +47,20 @@ const labelKategori: Record<string, string> = {
 
 export default async function HalamanDetailBeasiswa({ params }: HalamanDetailBeasiswaProps) {
   const { id } = await params;
-  const beasiswa = await ambilDetailBeasiswa(id);
+
+  const [beasiswa, supabase] = await Promise.all([
+    ambilDetailBeasiswa(id),
+    createServerSupabaseClient(),
+  ]);
+
+  // Ambil userId untuk PanelDrafEsaiAI (null jika belum login)
+  let userId: string | null = null;
+  try {
+    const { data: { user } } = await supabase.auth.getUser();
+    userId = user?.id ?? null;
+  } catch {
+    userId = null;
+  }
 
   if (!beasiswa) {
     return (
@@ -175,9 +190,11 @@ export default async function HalamanDetailBeasiswa({ params }: HalamanDetailBea
                     Daftar Sekarang
                   </Tombol>
                 )}
-                <Tombol varian="outline" ukuran="sedang" ikonKiri={<PenTool size={15} />} id="tombol-draf-esai">
-                  Buat Draf Esai AI
-                </Tombol>
+                <a href="#panel-draf-esai" id="tombol-draf-esai">
+                  <Tombol varian="outline" ukuran="sedang" ikonKiri={<BookOpen size={15} />}>
+                    Buat Draf Esai AI
+                  </Tombol>
+                </a>
               </div>
             </div>
 
@@ -256,29 +273,13 @@ export default async function HalamanDetailBeasiswa({ params }: HalamanDetailBea
               </div>
             </div>
 
-            {/* AI Draf Esai */}
-            <div
-              className="p-6 rounded-[var(--radius-lg)] text-white"
-              style={{ background: 'var(--color-terracotta-600)' }}
-            >
-              <div className="flex items-center gap-2 mb-3">
-                <Brain size={20} />
-                <h3 className="font-bold" style={{ fontFamily: 'var(--font-display)' }}>
-                  Draf Esai AI
-                </h3>
-              </div>
-              <p className="text-sm opacity-85 mb-4">
-                Biarkan AI membantu menyusun esai motivasi yang kuat dan sesuai persyaratan beasiswa ini.
-              </p>
-              <Link href="/login" className="block">
-                <button
-                  className="w-full py-3 rounded-[var(--radius-sm)] text-sm font-semibold transition-all hover:opacity-90 cursor-pointer"
-                  style={{ background: 'white', color: 'var(--color-terracotta-700)' }}
-                  id="tombol-mulai-esai-ai"
-                >
-                  Mulai Draf Esai
-                </button>
-              </Link>
+            {/* AI Draf Esai — Panel Fungsional */}
+            <div id="panel-draf-esai">
+              <PanelDrafEsaiAI
+                beasiswaId={id}
+                namaBeasiswa={beasiswa.nama_beasiswa}
+                userId={userId}
+              />
             </div>
           </div>
         </div>
