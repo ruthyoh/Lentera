@@ -2,22 +2,18 @@ import { NextResponse, type NextRequest } from 'next/server';
 import { createServerClient, type CookieOptions } from '@supabase/ssr';
 
 /**
- * Middleware Proteksi Rute Lentera
+ * Proxy Proteksi Rute Lentera (Next.js 16 — file convention: proxy.ts)
  *
  * Bertanggung jawab untuk:
  * 1. Refresh sesi Supabase (agar cookies auth selalu segar)
- * 2. Proteksi rute yang membutuhkan autentikasi (/profil, /materi, /jelajah, dll.)
+ * 2. Proteksi rute yang membutuhkan autentikasi
  * 3. Redirect user yang sudah login agar tidak mengakses /login & /register
  */
 
 /** Rute yang HARUS login untuk mengaksesnya */
 const RUTE_DILINDUNGI = [
-  '/jelajah',
-  '/materi',
-  '/beasiswa',
   '/profil',
   '/papan-peringkat',
-  '/unggah',
 ];
 
 /** Rute auth — jika sudah login, redirect ke /jelajah */
@@ -54,7 +50,7 @@ export async function proxy(request: NextRequest) {
     }
   );
 
-  // Validasi token user ke server Supabase
+  // Refresh sesi user (wajib agar cookies tidak kedaluwarsa)
   const {
     data: { user },
   } = await supabase.auth.getUser();
@@ -90,7 +86,7 @@ export const config = {
   matcher: [
     /*
      * Cocokkan semua path kecuali:
-     * - _next/static (file statis Turbopack/Webpack)
+     * - _next/static (file statis)
      * - _next/image (optimasi gambar)
      * - File publik (SVG, PNG, ICO, dll.)
      */

@@ -137,8 +137,13 @@ const SEED_DATA_BEASISWA = [
 
 // =====================================================
 // Helper: Seed Database jika Tabel Beasiswa Kosong
+// Flag in-memory agar hanya di-check sekali per process (tidak double-query setiap request)
 // =====================================================
+let sudahDiSeed = false;
+
 export async function seedBeasiswaIfEmpty(): Promise<void> {
+  if (sudahDiSeed) return; // Skip jika sudah pernah dijalankan di proses ini
+
   try {
     const admin = createAdminClient();
     const { count, error } = await admin.from('beasiswa').select('*', { count: 'exact', head: true });
@@ -150,7 +155,11 @@ export async function seedBeasiswaIfEmpty(): Promise<void> {
         console.error('Gagal melakukan seed beasiswa:', seedError.message);
       } else {
         console.log('Berhasil menambahkan 9 data beasiswa ke database!');
+        sudahDiSeed = true;
       }
+    } else if (!error) {
+      // Data sudah ada, tidak perlu seed lagi
+      sudahDiSeed = true;
     }
   } catch (err) {
     console.error('Error saat memeriksa/membuat seed beasiswa:', err);

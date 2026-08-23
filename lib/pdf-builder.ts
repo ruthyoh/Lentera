@@ -2,6 +2,9 @@
  * buatPDFDenganTeks — Membuat PDF minimal dengan teks nyata yang bisa diekstrak oleh pdf-parse.
  * Format: PDF 1.4 dengan Content Stream BT/ET yang mengandung teks ASCII.
  *
+ * FIX: Sebelumnya startxref di-hardcode ke nilai 1 yang tidak valid.
+ * Sekarang offset xref dihitung secara akurat dari ukuran aktual setiap bagian.
+ *
  * @param teksKonten - Teks konten yang akan ditanamkan dalam PDF (ASCII, setiap baris dipisah \n)
  * @returns Buffer PDF yang valid
  */
@@ -23,48 +26,43 @@ export function buatPDFDenganTeks(teksKonten: string): Buffer {
 
   streamIsi += 'ET';
 
-  const streamBytes = Buffer.from(streamIsi, 'latin1');
-  const streamLen = streamBytes.length;
+  const streamLen = Buffer.byteLength(streamIsi, 'latin1');
 
-  // Susun struktur objek PDF
-  const headerStr =
-    `%PDF-1.4\n` +
-    `1 0 obj\n<</Type /Catalog /Pages 2 0 R>>\nendobj\n` +
-    `2 0 obj\n<</Type /Pages /Kids [3 0 R] /Count 1>>\nendobj\n` +
-    `3 0 obj\n<</Type /Page /Parent 2 0 R /MediaBox [0 0 612 792]\n  /Contents 4 0 R /Resources <</Font <</F1 5 0 R>>>>>>\nendobj\n` +
-    `4 0 obj\n<</Length ${streamLen}>>\nstream\n`;
+  // ─── Susun struktur objek PDF ──────────────────────────────────────────
+  // Object offsets untuk xref table yang akurat
+  const obj1 = `1 0 obj\n<</Type /Catalog /Pages 2 0 R>>\nendobj\n`;
+  const obj2 = `2 0 obj\n<</Type /Pages /Kids [3 0 R] /Count 1>>\nendobj\n`;
+  const obj3 = `3 0 obj\n<</Type /Page /Parent 2 0 R /MediaBox [0 0 612 792]\n  /Contents 4 0 R /Resources <</Font <</F1 5 0 R>>>>>>\nendobj\n`;
+  const obj4 = `4 0 obj\n<</Length ${streamLen}>>\nstream\n${streamIsi}\nendstream\nendobj\n`;
+  const obj5 = `5 0 obj\n<</Type /Font /Subtype /Type1 /BaseFont /Helvetica>>\nendobj\n`;
 
-  const trailerStr =
-    `\nendstream\nendobj\n` +
-    `5 0 obj\n<</Type /Font /Subtype /Type1 /BaseFont /Helvetica>>\nendobj\n` +
-    `xref\n0 6\n0000000000 65535 f \n`;
+  const header = `%PDF-1.4\n`;
 
-  // Hitung offset sederhana
-  const headerBuf = Buffer.from(headerStr, 'latin1');
-  const trailerBuf = Buffer.from(trailerStr, 'latin1');
+  // Hitung offset tiap objek secara akurat
+  const off1 = Buffer.byteLength(header, 'latin1');
+  const off2 = off1 + Buffer.byteLength(obj1, 'latin1');
+  const off3 = off2 + Buffer.byteLength(obj2, 'latin1');
+  const off4 = off3 + Buffer.byteLength(obj3, 'latin1');
+  const off5 = off4 + Buffer.byteLength(obj4, 'latin1');
+  const startXref = off5 + Buffer.byteLength(obj5, 'latin1');
 
-  const startXref = headerBuf.length + streamBytes.length + Buffer.from('\nendstream\nendobj\n5 0 obj\n<</Type /Font /Subtype /Type1 /BaseFont /Helvetica>>\nendobj\n', 'latin1').length;
-  const trailerFull =
-    trailerStr +
-    `0000000009 00000 n \n0000000058 00000 n \n0000000115 00000 n \n0000000266 00000 n \n` +
-    `trailer\n<</Size 6 /Root 1 0 R>>\nstartxref\n${startXref}\n%%EOF\n`;
+  // Format offset xref (10 digit, padded with zeros)
+  function fmt(n: number): string {
+    return n.toString().padStart(10, '0');
+  }
 
-  const parts = [
-    Buffer.from(headerStr, 'latin1'),
-    streamBytes,
-    Buffer.from(trailerFull.replace(trailerStr, ''), 'latin1'),
-  ];
+  const xref =
+    `xref\n0 6\n` +
+    `0000000000 65535 f \n` +
+    `${fmt(off1)} 00000 n \n` +
+    `${fmt(off2)} 00000 n \n` +
+    `${fmt(off3)} 00000 n \n` +
+    `${fmt(off4)} 00000 n \n` +
+    `${fmt(off5)} 00000 n \n`;
 
-  // Gabung semua bagian
-  const fullStr = `%PDF-1.4\n` +
-    `1 0 obj\n<</Type /Catalog /Pages 2 0 R>>\nendobj\n` +
-    `2 0 obj\n<</Type /Pages /Kids [3 0 R] /Count 1>>\nendobj\n` +
-    `3 0 obj\n<</Type /Page /Parent 2 0 R /MediaBox [0 0 612 792]\n  /Contents 4 0 R /Resources <</Font <</F1 5 0 R>>>>>>\nendobj\n` +
-    `4 0 obj\n<</Length ${streamLen}>>\nstream\n` +
-    streamIsi +
-    `\nendstream\nendobj\n` +
-    `5 0 obj\n<</Type /Font /Subtype /Type1 /BaseFont /Helvetica>>\nendobj\n` +
-    `trailer\n<</Size 6 /Root 1 0 R>>\nstartxref\n1\n%%EOF\n`;
+  const trailer = `trailer\n<</Size 6 /Root 1 0 R>>\nstartxref\n${startXref}\n%%EOF\n`;
 
-  return Buffer.from(fullStr, 'latin1');
+  const fullPdf = header + obj1 + obj2 + obj3 + obj4 + obj5 + xref + trailer;
+
+  return Buffer.from(fullPdf, 'latin1');
 }
