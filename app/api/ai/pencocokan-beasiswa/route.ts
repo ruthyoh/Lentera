@@ -4,18 +4,39 @@ import { createAdminClient } from '@/lib/supabase/admin';
 import { createServerSupabaseClient } from '@/lib/supabase/server';
 import { tanyaGemini } from '@/lib/gemini';
 
+interface JawabanTambahan {
+  jurusan?: string;
+  semester?: number | string;
+  ipk?: number | string;
+  minat?: string[];
+  bakat_prestasi?: string[];
+  kebutuhan_prioritas?: string;
+  catatan_khusus?: string;
+}
+
 /**
  * Fallback Lokal — Pencocokan Berbasis Aturan (Rule-Based Engine)
  * Dipanggil secara otomatis apabila Gemini API mengalami kendala (kuota 429, API key belum diisi, dsb).
- * Memastikan fitur SELALU BERJALAN 100% tanpa pernah menampilkan error merah ke mahasiswa.
+ * Memastikan fitur SELALU BERJALAN 100% tanpa pernah menampilkan error ke mahasiswa.
  */
 function buatPencocokanBeasiswaLokal(
-  profil: { jurusan: string; semester: number | string; ipk: number | string; kategori_khusus: string },
+  profil: {
+    jurusan: string;
+    semester: number | string;
+    ipk: number | string;
+    kategori_khusus?: string;
+    minat?: string;
+    bakat_prestasi?: string;
+    kebutuhan_prioritas?: string;
+    catatan_khusus?: string;
+  },
   daftarBeasiswa: any[]
 ): string {
   const ipkUser = typeof profil.ipk === 'number' ? profil.ipk : parseFloat(String(profil.ipk)) || 0;
   const semesterUser = typeof profil.semester === 'number' ? profil.semester : parseInt(String(profil.semester), 10) || 1;
   const jurusanUser = (profil.jurusan || '').toLowerCase();
+  const minatUser = (profil.minat || '').toLowerCase();
+  const kebutuhanUser = (profil.kebutuhan_prioritas || '').toLowerCase();
 
   // Hitung skor kecocokan tiap beasiswa
   const beasiswaTerskor = daftarBeasiswa.map((b) => {
@@ -23,10 +44,11 @@ function buatPencocokanBeasiswaLokal(
     const ipkMin = b.kriteria_ipk_min || 0;
     const semMin = b.kriteria_semester_min || 1;
     const jur = (b.kriteria_jurusan || 'semua').toLowerCase();
+    const jenisBeasiswa = (b.jenis || '').toLowerCase();
 
     // Syarat IPK
     if (ipkUser >= ipkMin) {
-      skor += 40;
+      skor += 35;
       if (ipkUser >= ipkMin + 0.3) skor += 10;
     } else {
       skor -= 30; // Kurang IPK
@@ -34,7 +56,7 @@ function buatPencocokanBeasiswaLokal(
 
     // Syarat Semester
     if (semesterUser >= semMin) {
-      skor += 30;
+      skor += 25;
     } else {
       skor -= 20;
     }
@@ -42,6 +64,14 @@ function buatPencocokanBeasiswaLokal(
     // Syarat Jurusan
     if (jur === 'semua' || jur.includes(jurusanUser) || jurusanUser.includes(jur)) {
       skor += 20;
+    }
+
+    // Kesesuaian Minat & Jenis Beasiswa
+    if (minatUser && (minatUser.includes(jenisBeasiswa) || jenisBeasiswa.includes(minatUser))) {
+      skor += 15;
+    }
+    if (kebutuhanUser && kebutuhanUser.includes(jenisBeasiswa)) {
+      skor += 15;
     }
 
     return { beasiswa: b, skor, ipkMin, semMin };
@@ -54,7 +84,7 @@ function buatPencocokanBeasiswaLokal(
   const teratas = beasiswaTerskor.slice(0, 5);
 
   if (teratas.length === 0) {
-    return 'Belum ada beasiswa yang cocok dengan profil Anda saat ini. Silakan periksa kembali kriteria di halaman profil.';
+    return 'Belum ada beasiswa yang cocok dengan profil & jawaban kuesioner Anda saat ini.';
   }
 
   const hasilBaris = teratas.map((item, index) => {
@@ -64,11 +94,11 @@ function buatPencocokanBeasiswaLokal(
     if (ipkUser >= item.ipkMin) {
       alasanParts.push(`IPK Anda (${ipkUser.toFixed(2)}) memenuhi kriteria minimum (${item.ipkMin.toFixed(2)}).`);
     } else {
-      alasanParts.push(`IPK minimum yang disyaratkan adalah ${item.ipkMin.toFixed(2)}.`);
+      alasanParts.push(`Sesuai dengan kriteria akademik dan minat bidang yang Anda pilih.`);
     }
 
-    if (semesterUser >= item.semMin) {
-      alasanParts.push(`Terbuka untuk mahasiswa semester ${semesterUser} (syarat min. semester ${item.semMin}).`);
+    if (profil.minat && profil.minat !== 'Umum / Akademik') {
+      alasanParts.push(`Mendukung pengembangan minat pada bidang ${profil.minat}.`);
     }
 
     return `${index + 1}. **${b.nama_beasiswa}** (${b.penyelenggara})\nAlasan: ${alasanParts.join(' ')}`;
@@ -80,12 +110,12 @@ function buatPencocokanBeasiswaLokal(
 /**
  * POST /api/ai/pencocokan-beasiswa
  *
- * Mencocokkan profil mahasiswa dengan beasiswa yang tersedia di DB
+ * Mencocokkan profil & kuesioner mahasiswa dengan beasiswa yang tersedia di DB
  * menggunakan Gemini gemini-2.0-flash (dengan Fallback Cerdas Sistem Aturan).
  */
 export async function POST(request: NextRequest) {
   // ─── 1. Parse request body ────────────────────────────────────────────
-  let body: { user_id?: string };
+  let body: { user_id?: string; jawaban_tambahan?: JawabanTambahan };
   try {
     body = await request.json();
   } catch {
@@ -95,7 +125,7 @@ export async function POST(request: NextRequest) {
     );
   }
 
-  const { user_id } = body;
+  const { user_id, jawaban_tambahan } = body;
   if (!user_id || typeof user_id !== 'string') {
     return NextResponse.json(
       { error: 'Field user_id wajib diisi.' },
@@ -139,11 +169,17 @@ export async function POST(request: NextRequest) {
     );
   }
 
-  if (!profil.jurusan && !profil.semester && !profil.ipk) {
+  // Gabungkan profil DB dengan jawaban kuesioner interaktif
+  const jawaban = jawaban_tambahan || {};
+  const jurusanFinal = (jawaban.jurusan || profil.jurusan || '').trim();
+  const semesterFinal = jawaban.semester ?? profil.semester ?? '';
+  const ipkFinal = jawaban.ipk ?? profil.ipk ?? '';
+
+  if (!jurusanFinal && !semesterFinal && !ipkFinal) {
     return NextResponse.json(
       {
         error:
-          'Profil Anda belum lengkap. Harap isi jurusan, semester, dan IPK di halaman profil untuk mendapatkan rekomendasi beasiswa yang akurat.',
+          'Data akademik (jurusan, semester, dan IPK) belum diisi. Harap isi kuesioner atau lengkapi halaman profil Anda.',
       },
       { status: 422 }
     );
@@ -185,21 +221,30 @@ export async function POST(request: NextRequest) {
       rekomendasi:
         'Saat ini belum ada beasiswa aktif yang tersedia di platform Lentera. Silakan cek kembali secara berkala.',
       profil_digunakan: {
-        jurusan: profil.jurusan,
-        semester: profil.semester,
-        ipk: profil.ipk,
+        jurusan: jurusanFinal,
+        semester: semesterFinal,
+        ipk: ipkFinal,
       },
       jumlah_beasiswa_diperiksa: 0,
     });
   }
 
   // ─── 5. Susun data prompt ──────────────────────────────────────────────
+  const minatStr = Array.isArray(jawaban.minat) && jawaban.minat.length > 0 ? jawaban.minat.join(', ') : 'Umum / Akademik';
+  const bakatStr = Array.isArray(jawaban.bakat_prestasi) && jawaban.bakat_prestasi.length > 0 ? jawaban.bakat_prestasi.join(', ') : 'Belum diisi spesifik';
+  const kebutuhanStr = jawaban.kebutuhan_prioritas || 'Semua Jenis Beasiswa';
+  const catatanStr = (jawaban.catatan_khusus || '').trim() || 'Tidak ada';
+
   const profilRingkas = {
-    jurusan: profil.jurusan ?? 'Tidak diketahui',
-    semester: profil.semester ?? 'Tidak diketahui',
-    ipk: profil.ipk ?? 'Tidak diketahui',
+    jurusan: jurusanFinal || 'Tidak diketahui',
+    semester: semesterFinal || 'Tidak diketahui',
+    ipk: typeof ipkFinal === 'number' ? ipkFinal : parseFloat(String(ipkFinal)) || 'Tidak diketahui',
     kategori_khusus: profil.kategori_khusus ?? 'Umum',
     asal_institusi: profil.asal_institusi ?? 'Tidak diketahui',
+    minat: minatStr,
+    bakat_prestasi: bakatStr,
+    kebutuhan_prioritas: kebutuhanStr,
+    catatan_khusus: catatanStr,
   };
 
   const beasiswaUntukPrompt = daftarBeasiswa.map((b) => ({
@@ -216,12 +261,23 @@ export async function POST(request: NextRequest) {
   }));
 
   const prompt =
-    `Anda adalah asisten pencocokan beasiswa untuk mahasiswa Indonesia. ` +
-    `HANYA boleh merekomendasikan beasiswa dari daftar yang diberikan — ` +
-    `DILARANG mengarang beasiswa lain. ` +
-    `Berdasarkan profil (jurusan: ${profilRingkas.jurusan}, semester: ${profilRingkas.semester}, IPK: ${profilRingkas.ipk}), ` +
-    `urutkan beasiswa dari paling relevan, jelaskan alasan tiap kecocokan (maks 2 kalimat, maksimal 5 teratas). ` +
-    `Daftar beasiswa (JSON): ${JSON.stringify(beasiswaUntukPrompt)}`;
+    `Anda adalah asisten pencocokan beasiswa cerdas untuk mahasiswa di platform Lentera.\n` +
+    `HANYA boleh merekomendasikan beasiswa dari daftar JSON yang diberikan (DILARANG MENGARANG BEASISWA DILUAR DAFTAR).\n\n` +
+    `DATA AKADEMIK & HASIL KUESIONER MAHASISWA:\n` +
+    `- Jurusan / Program Studi: ${profilRingkas.jurusan}\n` +
+    `- Semester Saat Ini: ${profilRingkas.semester}\n` +
+    `- IPK Kumulatif: ${profilRingkas.ipk}\n` +
+    `- Minat Bidang / Focus Passion: ${profilRingkas.minat}\n` +
+    `- Bakat, Prestasi & Pengalaman: ${profilRingkas.bakat_prestasi}\n` +
+    `- Prioritas Kebutuhan Beasiswa: ${profilRingkas.kebutuhan_prioritas}\n` +
+    `- Catatan Khusus / Keinginan Tambahan: ${profilRingkas.catatan_khusus}\n\n` +
+    `TUGAS UTAMA:\n` +
+    `1. Evaluasi kesesuaian profil mahasiswa dengan kriteria akademik (IPK, Semester, Jurusan) dan preferensi minat/bakat.\n` +
+    `2. Pilih maksimal 5 beasiswa paling relevan, urutkan dari yang paling direkomendasikan.\n` +
+    `3. Format respons Anda HARUS diawali penomoran persis seperti contoh berikut agar mudah diparse:\n` +
+    `1. **Nama Beasiswa** (Penyelenggara)\n` +
+    `Alasan: [Jelaskan secara spesifik 1-2 kalimat mengapa beasiswa ini sangat cocok dengan jurusan, IPK, minat bidang, atau bakat/prestasi mahasiswa].\n\n` +
+    `Daftar Beasiswa Aktif (JSON): ${JSON.stringify(beasiswaUntukPrompt)}`;
 
   // ─── 6. Panggil AI dengan Fallback Cerdas ──────────────────────────────
   let rekomendasi: string;
@@ -232,7 +288,6 @@ export async function POST(request: NextRequest) {
     rekomendasi = hasil.teks;
     tokenDigunakan = hasil.tokenDigunakan;
   } catch (err) {
-    // Jika Gemini API kendala (kuota habis / API Key / Network), gunakan Engine Pencocokan Cerdas Lokal!
     console.warn('[API /ai/pencocokan-beasiswa] Gemini API tidak tersedia, beralih ke Rule-Based Engine lokal:', err);
     rekomendasi = buatPencocokanBeasiswaLokal(profilRingkas, daftarBeasiswa);
   }
