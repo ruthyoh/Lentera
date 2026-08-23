@@ -436,11 +436,18 @@ export default async function HalamanJelajah({ searchParams }: HalamanJelajahPro
                     </p>
 
                     <div className="flex items-center justify-between text-xs pt-2 border-t border-white/10">
-                      <span className="flex items-center gap-1.5 font-bold px-2 py-0.5 rounded-md" style={{ color: '#facc15', background: 'rgba(250,204,21,0.12)', border: '1px solid rgba(250,204,21,0.2)' }}>
-                        <Star size={13} className="fill-yellow-400 text-yellow-400" />
-                        {item.rating_rata_rata ? item.rating_rata_rata.toFixed(1) : '4.8'}
-                        <span className="font-normal text-slate-500">({item.total_penilai || 24})</span>
-                      </span>
+                      {(item.rating_rata_rata || 0) > 0 ? (
+                        <span className="flex items-center gap-1.5 font-bold px-2 py-0.5 rounded-md" style={{ color: '#facc15', background: 'rgba(250,204,21,0.12)', border: '1px solid rgba(250,204,21,0.2)' }}>
+                          <Star size={13} className="fill-yellow-400 text-yellow-400" />
+                          {item.rating_rata_rata!.toFixed(1)}
+                          <span className="font-normal text-slate-500">({item.total_penilai || 0} ulasan)</span>
+                        </span>
+                      ) : (
+                        <span className="flex items-center gap-1 text-slate-500 text-xs">
+                          <Star size={13} />
+                          Belum ada ulasan
+                        </span>
+                      )}
                       <span className="flex items-center gap-1 font-medium text-slate-400">
                         <Download size={13} className="text-slate-500" />
                         {(item.jumlah_unduhan || 0).toLocaleString('id-ID')} unduhan

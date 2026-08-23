@@ -5,6 +5,7 @@ import IntroScreen from '@/components/IntroScreen';
 import LandingReveal from '@/components/LandingReveal';
 import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
+import BannerOnboarding from '@/components/layout/BannerOnboarding';
 import type { ProfilRingkas } from '@/types';
 
 interface ClientLayoutWrapperProps {
@@ -20,6 +21,7 @@ interface ClientLayoutWrapperProps {
  * 2. Menyembunyikan navbar selama intro berjalan
  * 3. Membungkus konten dengan LandingReveal
  * 4. Menampilkan IntroScreen saat dibutuhkan
+ * 5. Menampilkan BannerOnboarding untuk user baru
  */
 export default function ClientLayoutWrapper({
   children,
@@ -53,7 +55,13 @@ export default function ClientLayoutWrapper({
         </main>
         <Footer />
       </LandingReveal>
+
+      {/* Banner Onboarding — hanya untuk user yang sudah login */}
+      {profil && introComplete && (
+        <BannerOnboarding namaUser={profil.nama_lengkap} />
+      )}
     </>
   );
 }
+
 

@@ -6,6 +6,8 @@ import Tombol from '@/components/ui/Button';
 import { ambilDaftarBeasiswa } from '@/lib/actions/beasiswa';
 import { createServerSupabaseClient } from '@/lib/supabase/server';
 import PanelPencocokanAI from '@/components/beasiswa/PanelPencocokanAI';
+import TombolBookmark from '@/components/beasiswa/TombolBookmark';
+import HitungMundurDeadline from '@/components/beasiswa/HitungMundurDeadline';
 
 export const metadata: Metadata = {
   title: 'Jelajah Beasiswa',
@@ -483,12 +485,12 @@ export default async function HalamanBeasiswa({ searchParams }: HalamanBeasiswaP
                           </span>
                           <strong className="text-white font-bold">{item.kriteria_ipk_min ? item.kriteria_ipk_min.toFixed(2) : '3.00'}</strong>
                         </div>
-                        <div className="flex items-center justify-between text-xs text-slate-300">
+                        <div className="flex items-center justify-between text-xs">
                           <span className="flex items-center gap-1.5 text-slate-400">
                             <Clock size={13} className="text-purple-400" />
                             Tenggat
                           </span>
-                          <strong className="font-bold" style={{ color: '#fbbf24' }}>{deadlineFormatted}</strong>
+                          <HitungMundurDeadline deadline={item.deadline_pendaftaran || null} />
                         </div>
                         <div className="flex items-center justify-between text-xs pt-1 border-t border-purple-500/20">
                           <span className="flex items-center gap-1.5 text-purple-300 font-semibold truncate">
@@ -498,12 +500,18 @@ export default async function HalamanBeasiswa({ searchParams }: HalamanBeasiswaP
                         </div>
                       </div>
 
-                      <div
-                        className="flex items-center justify-end gap-1 text-xs font-bold opacity-0 group-hover:opacity-100 transition-all duration-200 transform translate-x-2 group-hover:translate-x-0 text-purple-400"
-                        aria-hidden="true"
-                      >
-                        Lihat detail persyaratannya
-                        <ArrowRight size={13} />
+                      <div className="flex items-center justify-between">
+                        <TombolBookmark
+                          beasiswaId={item.id}
+                          namaBeasiswa={item.nama_beasiswa}
+                        />
+                        <div
+                          className="flex items-center gap-1 text-xs font-bold opacity-0 group-hover:opacity-100 transition-all duration-200 transform translate-x-2 group-hover:translate-x-0 text-purple-400"
+                          aria-hidden="true"
+                        >
+                          Lihat detail
+                          <ArrowRight size={13} />
+                        </div>
                       </div>
                     </div>
                   </Link>
