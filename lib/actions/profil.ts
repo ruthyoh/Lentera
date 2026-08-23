@@ -12,6 +12,7 @@ export interface ProfileFormState {
     semester?: string;
     ipk?: string;
     asal_institusi?: string;
+    avatar?: string;
   };
   sukses?: boolean;
   pesan?: string;
@@ -35,6 +36,10 @@ export async function perbaruiProfil(
   const ipkStr = (formData.get('ipk') as string)?.trim() || '';
   const kategori_khusus = (formData.get('kategori_khusus') as string)?.trim() || null;
 
+  let avatar_url = (formData.get('avatar_url') as string)?.trim() || null;
+  const avatarFile = formData.get('avatar_file') as File | null;
+  const hapusAvatar = formData.get('hapus_avatar') === 'true';
+
   const fieldErrors: ProfileFormState['fieldErrors'] = {};
 
   if (!nama_lengkap || nama_lengkap.length < 2) {
@@ -56,6 +61,47 @@ export async function perbaruiProfil(
     }
   }
 
+  // Handle foto profil
+  if (hapusAvatar) {
+    avatar_url = null;
+  } else if (avatarFile && avatarFile.size > 0) {
+    const MAX_SIZE = 5 * 1024 * 1024; // 5 MB limit
+    if (avatarFile.size > MAX_SIZE) {
+      fieldErrors.avatar = 'Ukuran foto maksimal 5 MB.';
+    } else {
+      try {
+        const fileExt = avatarFile.name.split('.').pop() || 'png';
+        const fileName = `${user.id}/avatar_${Date.now()}.${fileExt}`;
+        const arrayBuffer = await avatarFile.arrayBuffer();
+        const buffer = Buffer.from(arrayBuffer);
+
+        const admin = createAdminClient();
+
+        // Step 1: Upload ke Supabase Storage
+        const { error: uploadError } = await admin.storage
+          .from('materi-files')
+          .upload(fileName, buffer, {
+            contentType: avatarFile.type || 'image/png',
+            upsert: true,
+          });
+
+        if (!uploadError) {
+          const {
+            data: { publicUrl },
+          } = admin.storage.from('materi-files').getPublicUrl(fileName);
+          avatar_url = publicUrl;
+        } else {
+          // Fallback to Data URL base64 jika storage bucket mengalami error
+          const base64Str = buffer.toString('base64');
+          avatar_url = `data:${avatarFile.type || 'image/png'};base64,${base64Str}`;
+        }
+      } catch (err) {
+        console.error('Upload avatar error:', err);
+        fieldErrors.avatar = 'Gagal memproses file foto profil.';
+      }
+    }
+  }
+
   if (Object.keys(fieldErrors).length > 0) {
     return { fieldErrors };
   }
@@ -63,22 +109,26 @@ export async function perbaruiProfil(
   try {
     const admin = createAdminClient();
 
+    const updatePayload: Record<string, unknown> = {
+      id: user.id,
+      nama_lengkap,
+      asal_institusi,
+      jurusan,
+      semester,
+      ipk,
+      kategori_khusus,
+      updated_at: new Date().toISOString(),
+    };
+
+    // Update avatar_url jika diubah / diunggah / dihapus
+    if (avatar_url !== undefined) {
+      updatePayload.avatar_url = avatar_url;
+    }
+
     // Upsert ke tabel profiles
     const { error: profileErr } = await admin
       .from('profiles')
-      .upsert(
-        {
-          id: user.id,
-          nama_lengkap,
-          asal_institusi,
-          jurusan,
-          semester,
-          ipk,
-          kategori_khusus,
-          updated_at: new Date().toISOString(),
-        },
-        { onConflict: 'id' }
-      );
+      .upsert(updatePayload, { onConflict: 'id' });
 
     if (profileErr) {
       console.error('Error updating profile table:', profileErr);
@@ -94,6 +144,7 @@ export async function perbaruiProfil(
         semester: semester ? String(semester) : '',
         ipk: ipkStr || '',
         kategori_khusus,
+        avatar_url: avatar_url || '',
       },
     });
 

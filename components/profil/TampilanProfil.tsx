@@ -5,14 +5,12 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import {
   User, Mail, GraduationCap, BookMarked, Calculator, Star,
-  BookOpen, Award, Upload, Download, Heart, Settings, LogOut,
+  BookOpen, Award, Upload, Download, Heart, LogOut,
   Edit3, Calendar, TrendingUp, Brain, MessageSquare, HelpCircle, FileText,
   X, CheckCircle2, ShieldCheck, Sparkles, AlertCircle, Eye, ArrowRight,
-  Plus, Check, ChevronRight, Layers, Trophy
+  Plus, ChevronRight, Trophy, Camera, Image as ImageIcon, Trash2
 } from 'lucide-react';
 
-import Badge from '@/components/ui/Badge';
-import Tombol from '@/components/ui/Button';
 import { perbaruiProfil, type ProfileFormState } from '@/lib/actions/profil';
 import { keluarAkun } from '@/lib/actions/auth';
 
@@ -26,6 +24,7 @@ export interface ProfilData {
   ipk?: number | null;
   kategori_khusus?: string | null;
   poin_kontribusi: number;
+  avatar_url?: string | null;
   created_at: string;
 }
 
@@ -100,6 +99,10 @@ export default function TampilanProfil({
   const [formState, setFormState] = useState<ProfileFormState>({});
   const [pesanSuksesModal, setPesanSuksesModal] = useState<string | null>(null);
 
+  // State untuk preview & upload foto profil
+  const [previewAvatar, setPreviewAvatar] = useState<string | null>(profil.avatar_url || null);
+  const [hapusAvatarFlag, setHapusAvatarFlag] = useState<boolean>(false);
+
   // Inisial Nama
   const inisial = profil.nama_lengkap
     .split(' ')
@@ -117,6 +120,7 @@ export default function TampilanProfil({
   const kelengkapanList = [
     { nama: 'Nama Lengkap', terisi: Boolean(profil.nama_lengkap) },
     { nama: 'Email Utama', terisi: Boolean(profil.email) },
+    { nama: 'Foto Profil', terisi: Boolean(profil.avatar_url || previewAvatar) },
     { nama: 'Jurusan / Program Studi', terisi: Boolean(profil.jurusan) },
     { nama: 'Semester', terisi: Boolean(profil.semester) },
     { nama: 'IPK Terkini', terisi: Boolean(profil.ipk) },
@@ -125,7 +129,7 @@ export default function TampilanProfil({
   const terisiCount = kelengkapanList.filter((k) => k.terisi).length;
   const persenKelengkapan = Math.round((terisiCount / kelengkapanList.length) * 100);
 
-  // Hitung Tingkat Level Kontributor
+  // Hitung Level Kontributor
   const poin = profil.poin_kontribusi || 0;
   let levelTitle = 'Pelajar Pemula';
   let targetPoin = 50;
@@ -178,6 +182,22 @@ export default function TampilanProfil({
     },
   ];
 
+  // Handler Ganti File Foto Profil
+  const handleFileFotoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      const objectUrl = URL.createObjectURL(file);
+      setPreviewAvatar(objectUrl);
+      setHapusAvatarFlag(false);
+    }
+  };
+
+  // Handler Hapus Foto Profil
+  const handleHapusFoto = () => {
+    setPreviewAvatar(null);
+    setHapusAvatarFlag(true);
+  };
+
   // Action simpan edit profil
   const handleSimpanProfil = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -190,7 +210,7 @@ export default function TampilanProfil({
       setFormState(res);
 
       if (res.sukses) {
-        setPesanSuksesModal('Profil berhasil diperbarui!');
+        setPesanSuksesModal('Profil & Foto Profil berhasil diperbarui!');
         setTimeout(() => {
           setModalEditBuka(false);
           setPesanSuksesModal(null);
@@ -200,7 +220,6 @@ export default function TampilanProfil({
     });
   };
 
-  // Filtered Riwayat AI
   const filteredRiwayatAI =
     filterJenisAI === 'semua'
       ? riwayatAI
@@ -212,7 +231,7 @@ export default function TampilanProfil({
           HERO PROFILE BANNER (Twilight Indigo Aesthetic)
           ===================================================== */}
       <div className="relative overflow-hidden bg-gradient-to-br from-[#0a0d24] via-[#12183b] to-[#1c224f] text-white border-b border-indigo-900/50">
-        {/* Glow ambient background */}
+        {/* Ambient Blur */}
         <div
           className="absolute -top-32 -left-20 w-96 h-96 rounded-full bg-cyan-500/10 blur-3xl pointer-events-none"
           aria-hidden="true"
@@ -233,28 +252,42 @@ export default function TampilanProfil({
 
         <div className="container-lentera relative z-10 py-10 md:py-14">
           <div className="flex flex-col lg:flex-row items-center lg:items-start justify-between gap-8">
-            {/* User Info Main */}
+            {/* User Avatar & Info */}
             <div className="flex flex-col sm:flex-row items-center sm:items-start gap-6 text-center sm:text-left">
-              {/* Avatar Box */}
-              <div className="relative group">
-                <div
-                  className="w-24 h-24 sm:w-28 sm:h-28 rounded-2xl flex items-center justify-center text-3xl font-extrabold shadow-2xl ring-4 ring-cyan-500/30 transition-transform duration-300 group-hover:scale-105"
-                  style={{
-                    background: 'linear-gradient(135deg, #06b6d4 0%, #1e1b4b 100%)',
-                    color: '#ecfeff',
-                  }}
-                >
-                  {inisial}
+              {/* Avatar Box with Edit Photo Trigger */}
+              <div className="relative group cursor-pointer" onClick={() => setModalEditBuka(true)}>
+                {profil.avatar_url ? (
+                  <img
+                    src={profil.avatar_url}
+                    alt={profil.nama_lengkap}
+                    className="w-24 h-24 sm:w-28 sm:h-28 rounded-2xl object-cover shadow-2xl ring-4 ring-cyan-500/40 group-hover:scale-105 transition-transform duration-300"
+                  />
+                ) : (
+                  <div
+                    className="w-24 h-24 sm:w-28 sm:h-28 rounded-2xl flex items-center justify-center text-3xl font-extrabold shadow-2xl ring-4 ring-cyan-500/30 transition-transform duration-300 group-hover:scale-105"
+                    style={{
+                      background: 'linear-gradient(135deg, #06b6d4 0%, #1e1b4b 100%)',
+                      color: '#ecfeff',
+                    }}
+                  >
+                    {inisial}
+                  </div>
+                )}
+
+                {/* Camera Overlay Icon on Hover */}
+                <div className="absolute inset-0 bg-slate-950/50 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity flex flex-col items-center justify-center text-white text-[11px] font-semibold gap-1 backdrop-blur-[2px]">
+                  <Camera size={20} className="text-cyan-300" />
+                  <span>Ubah Foto</span>
                 </div>
-                <div
-                  className="absolute -bottom-2 -right-2 px-2.5 py-0.5 rounded-full text-[10px] font-bold tracking-wide uppercase bg-gradient-to-r from-cyan-500 to-blue-600 text-white shadow-md border border-white/20 flex items-center gap-1"
-                >
+
+                {/* Level Badge */}
+                <div className="absolute -bottom-2 -right-2 px-2.5 py-0.5 rounded-full text-[10px] font-bold tracking-wide uppercase bg-gradient-to-r from-cyan-500 to-blue-600 text-white shadow-md border border-white/20 flex items-center gap-1">
                   <Sparkles size={10} />
                   Level {poin >= 200 ? '4' : poin >= 100 ? '3' : poin >= 30 ? '2' : '1'}
                 </div>
               </div>
 
-              {/* Identity Info */}
+              {/* Identity Details */}
               <div className="space-y-2">
                 <div className="flex flex-wrap items-center justify-center sm:justify-start gap-2.5">
                   <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-white font-[var(--font-display)]">
@@ -313,7 +346,7 @@ export default function TampilanProfil({
               </div>
             </div>
 
-            {/* Quick Action Buttons */}
+            {/* Quick Actions */}
             <div className="flex flex-wrap items-center justify-center gap-3 w-full lg:w-auto">
               <button
                 onClick={() => setModalEditBuka(true)}
@@ -321,7 +354,7 @@ export default function TampilanProfil({
                 className="px-4 py-2.5 rounded-xl text-xs sm:text-sm font-semibold bg-white/10 hover:bg-white/20 text-white border border-white/15 backdrop-blur-md transition-all flex items-center gap-2 shadow-sm active:scale-95"
               >
                 <Edit3 size={15} className="text-cyan-300" />
-                Edit Profil
+                Edit Profil & Foto
               </button>
 
               <Link
@@ -345,7 +378,7 @@ export default function TampilanProfil({
             </div>
           </div>
 
-          {/* Profile Completion Bar Banner */}
+          {/* Profile Completion Indicator */}
           {persenKelengkapan < 100 && (
             <div className="mt-8 p-4 rounded-xl bg-indigo-950/60 border border-cyan-500/20 backdrop-blur-md flex flex-col sm:flex-row items-center justify-between gap-4">
               <div className="flex items-center gap-3 text-center sm:text-left">
@@ -357,7 +390,7 @@ export default function TampilanProfil({
                     Kelengkapan Profil Akademis: {persenKelengkapan}%
                   </p>
                   <p className="text-[11px] text-indigo-300 mt-0.5">
-                    Lengkapi data jurusan, semester, dan IPK kamu agar rekomendasi Beasiswa AI makin presisi!
+                    Lengkapi foto profil, data jurusan, dan IPK kamu agar tampilan profil makin profesional!
                   </p>
                 </div>
               </div>
@@ -382,7 +415,7 @@ export default function TampilanProfil({
       </div>
 
       {/* =====================================================
-          MAIN CONTENT NAVIGATION TABS
+          MAIN NAVIGATION TABS & CONTENT
           ===================================================== */}
       <div className="container-lentera py-8">
         {/* Navigation Bar Tabs */}
@@ -413,12 +446,9 @@ export default function TampilanProfil({
           })}
         </div>
 
-        {/* =====================================================
-            TAB 1: IKHTISAR & STATISTIK
-            ===================================================== */}
+        {/* TAB 1: IKHTISAR */}
         {tabAktif === 'ikhtisar' && (
           <div className="space-y-8 animate-fade-in-up">
-            {/* 4 Stat Cards Grid */}
             <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
               <div className="card-glass p-5 flex flex-col justify-between border-indigo-100 hover:border-cyan-400 transition-all group">
                 <div className="flex items-center justify-between mb-3">
@@ -499,9 +529,7 @@ export default function TampilanProfil({
 
             {/* Layout Main Stats & Badges */}
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-              {/* Left 2 Cols: Level Progress & Badges */}
               <div className="lg:col-span-2 space-y-6">
-                {/* Level & Rank Progress Card */}
                 <div className="card-glass p-6 border-indigo-100">
                   <div className="flex items-center justify-between mb-4">
                     <div>
@@ -518,7 +546,6 @@ export default function TampilanProfil({
                     </span>
                   </div>
 
-                  {/* Bar Progress */}
                   <div className="w-full bg-indigo-100 rounded-full h-3 mb-3 p-0.5 border border-indigo-200">
                     <div
                       className={`h-2.5 rounded-full bg-gradient-to-r ${levelBadgeWarna} transition-all duration-700 shadow-sm`}
@@ -537,7 +564,6 @@ export default function TampilanProfil({
                   </div>
                 </div>
 
-                {/* Achievement Badges Grid */}
                 <div className="card-glass p-6 border-indigo-100">
                   <h2 className="text-base font-bold text-[var(--color-ink-900)] font-[var(--font-display)] mb-4 flex items-center gap-2">
                     <Sparkles size={18} className="text-cyan-600" />
@@ -580,9 +606,7 @@ export default function TampilanProfil({
                 </div>
               </div>
 
-              {/* Right Col: Quick Shortcuts & AI Summary */}
               <div className="space-y-6">
-                {/* AI Feature Breakdown */}
                 <div className="card-glass p-6 border-indigo-100">
                   <h3 className="text-sm font-bold text-[var(--color-ink-900)] font-[var(--font-display)] mb-4 flex items-center gap-2">
                     <Brain size={16} className="text-purple-600" />
@@ -607,7 +631,6 @@ export default function TampilanProfil({
                   </div>
                 </div>
 
-                {/* Navigation Shortcuts */}
                 <div className="card-glass p-6 border-indigo-100">
                   <h3 className="text-sm font-bold text-[var(--color-ink-900)] font-[var(--font-display)] mb-3">
                     Pintasan Fitur
@@ -637,9 +660,7 @@ export default function TampilanProfil({
           </div>
         )}
 
-        {/* =====================================================
-            TAB 2: MATERI SAYA
-            ===================================================== */}
+        {/* TAB 2: MATERI SAYA */}
         {tabAktif === 'materi' && (
           <div className="space-y-6 animate-fade-in-up">
             <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
@@ -734,9 +755,7 @@ export default function TampilanProfil({
           </div>
         )}
 
-        {/* =====================================================
-            TAB 3: RIWAYAT AI
-            ===================================================== */}
+        {/* TAB 3: RIWAYAT AI */}
         {tabAktif === 'riwayat' && (
           <div className="space-y-6 animate-fade-in-up">
             <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
@@ -750,7 +769,6 @@ export default function TampilanProfil({
                 </p>
               </div>
 
-              {/* Filter Tabs */}
               <div className="flex items-center gap-1.5 flex-wrap bg-white p-1 rounded-xl border border-indigo-100">
                 <button
                   onClick={() => setFilterJenisAI('semua')}
@@ -844,13 +862,10 @@ export default function TampilanProfil({
           </div>
         )}
 
-        {/* =====================================================
-            TAB 4: DETAIL AKUN & PENGATURAN
-            ===================================================== */}
+        {/* TAB 4: DETAIL AKUN & PENGATURAN */}
         {tabAktif === 'pengaturan' && (
           <div className="space-y-6 animate-fade-in-up">
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-              {/* Account Details Card */}
               <div className="lg:col-span-2 card-glass p-6 border-indigo-100 space-y-6">
                 <div className="flex items-center justify-between pb-4 border-b border-indigo-100">
                   <div>
@@ -945,7 +960,6 @@ export default function TampilanProfil({
                 )}
               </div>
 
-              {/* Account Security & Exit */}
               <div className="space-y-6">
                 <div className="card-glass p-6 border-indigo-100 space-y-4">
                   <h3 className="text-sm font-bold text-[var(--color-ink-900)] font-[var(--font-display)]">
@@ -972,17 +986,17 @@ export default function TampilanProfil({
       </div>
 
       {/* =====================================================
-          MODAL DIALOG EDIT PROFIL
+          MODAL DIALOG EDIT PROFIL & FOTO PROFIL
           ===================================================== */}
       {modalEditBuka && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/70 backdrop-blur-sm animate-fade-in-up">
-          <div className="w-full max-w-lg bg-white rounded-2xl shadow-2xl border border-indigo-100 overflow-hidden">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/75 backdrop-blur-sm animate-fade-in-up overflow-y-auto">
+          <div className="w-full max-w-lg bg-white rounded-2xl shadow-2xl border border-indigo-100 overflow-hidden my-8">
             {/* Modal Header */}
             <div className="px-6 py-4 bg-gradient-to-r from-[#0a0d24] to-[#1a1040] text-white flex items-center justify-between">
               <div className="flex items-center gap-2">
-                <Edit3 size={18} className="text-cyan-300" />
+                <Camera size={18} className="text-cyan-300" />
                 <h3 className="text-base font-bold font-[var(--font-display)]">
-                  Edit Profil Akademis
+                  Edit Profil & Foto Profil
                 </h3>
               </div>
               <button
@@ -994,7 +1008,9 @@ export default function TampilanProfil({
             </div>
 
             {/* Modal Form */}
-            <form onSubmit={handleSimpanProfil} className="p-6 space-y-4 max-h-[80vh] overflow-y-auto">
+            <form onSubmit={handleSimpanProfil} className="p-6 space-y-5 max-h-[82vh] overflow-y-auto">
+              <input type="hidden" name="hapus_avatar" value={hapusAvatarFlag ? 'true' : 'false'} />
+
               {pesanSuksesModal && (
                 <div className="p-3.5 rounded-xl bg-emerald-50 text-emerald-800 border border-emerald-200 text-xs font-bold flex items-center gap-2">
                   <CheckCircle2 size={16} className="text-emerald-600" />
@@ -1008,6 +1024,92 @@ export default function TampilanProfil({
                   {formState.error}
                 </div>
               )}
+
+              {/* =====================================================
+                  BAGIAN UNGGAH FOTO PROFIL
+                  ===================================================== */}
+              <div className="p-4 rounded-2xl bg-indigo-50/70 border border-indigo-100 space-y-3">
+                <label className="block text-xs font-bold text-indigo-950 flex items-center justify-between">
+                  <span className="flex items-center gap-1.5">
+                    <Camera size={15} className="text-cyan-600" />
+                    Foto Profil Akademis
+                  </span>
+                  <span className="text-[11px] font-normal text-indigo-600">
+                    PNG, JPG, WEBP (Maks 5 MB)
+                  </span>
+                </label>
+
+                <div className="flex flex-col sm:flex-row items-center gap-4">
+                  {/* Preview Box */}
+                  <div className="relative shrink-0">
+                    {previewAvatar && !hapusAvatarFlag ? (
+                      <img
+                        src={previewAvatar}
+                        alt="Preview Foto Profil"
+                        className="w-20 h-20 rounded-2xl object-cover ring-2 ring-cyan-500 shadow-md"
+                      />
+                    ) : (
+                      <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-cyan-600 to-indigo-900 text-cyan-100 flex items-center justify-center font-extrabold text-2xl ring-2 ring-indigo-300 shadow-inner">
+                        {inisial}
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Upload Controls */}
+                  <div className="flex-1 space-y-2 w-full text-center sm:text-left">
+                    <label className="cursor-pointer inline-flex items-center justify-center gap-2 px-3.5 py-2 rounded-xl text-xs font-bold bg-white text-indigo-900 border border-indigo-200 hover:border-cyan-500 shadow-sm transition-all hover:bg-cyan-50/50 w-full sm:w-auto">
+                      <Upload size={14} className="text-cyan-600" />
+                      Pilih / Unggah Berkas Foto
+                      <input
+                        type="file"
+                        name="avatar_file"
+                        accept="image/png, image/jpeg, image/jpg, image/webp"
+                        onChange={handleFileFotoChange}
+                        className="hidden"
+                      />
+                    </label>
+
+                    {(previewAvatar || profil.avatar_url) && !hapusAvatarFlag && (
+                      <button
+                        type="button"
+                        onClick={handleHapusFoto}
+                        className="inline-flex items-center gap-1 text-[11px] font-semibold text-rose-600 hover:text-rose-800 ml-0 sm:ml-3 hover:underline"
+                      >
+                        <Trash2 size={12} /> Hapus Foto & Gunakan Inisial
+                      </button>
+                    )}
+
+                    {formState.fieldErrors?.avatar && (
+                      <p className="text-[11px] text-rose-600 font-semibold">
+                        {formState.fieldErrors.avatar}
+                      </p>
+                    )}
+                  </div>
+                </div>
+
+                {/* Input URL opsional */}
+                <div className="pt-2 border-t border-indigo-100">
+                  <label className="block text-[11px] font-medium text-indigo-700 mb-1">
+                    Atau tempel Link URL Gambar Foto Profil (Opsional):
+                  </label>
+                  <div className="relative">
+                    <ImageIcon size={14} className="absolute left-3 top-2.5 text-indigo-400" />
+                    <input
+                      type="url"
+                      name="avatar_url"
+                      defaultValue={profil.avatar_url || ''}
+                      onChange={(e) => {
+                        if (e.target.value) {
+                          setPreviewAvatar(e.target.value);
+                          setHapusAvatarFlag(false);
+                        }
+                      }}
+                      placeholder="https://example.com/foto-kamu.jpg"
+                      className="w-full pl-9 pr-3 py-1.5 rounded-xl border border-indigo-200 focus:border-cyan-500 text-xs text-indigo-950 font-medium outline-none"
+                    />
+                  </div>
+                </div>
+              </div>
 
               {/* Field: Nama Lengkap */}
               <div>
@@ -1032,7 +1134,7 @@ export default function TampilanProfil({
               {/* Field: Asal Institusi */}
               <div>
                 <label className="block text-xs font-bold text-indigo-900 mb-1">
-                  Asal Institusi / Universiats
+                  Asal Institusi / Universitas
                 </label>
                 <input
                   type="text"
@@ -1126,7 +1228,7 @@ export default function TampilanProfil({
                   disabled={isPending}
                   className="px-5 py-2 rounded-xl text-xs font-bold bg-cyan-600 hover:bg-cyan-700 text-white shadow-md transition-all flex items-center gap-1.5 disabled:opacity-50"
                 >
-                  {isPending ? 'Menyimpan...' : 'Simpan Perubahan'}
+                  {isPending ? 'Menyimpan...' : 'Simpan Profil & Foto'}
                 </button>
               </div>
             </form>

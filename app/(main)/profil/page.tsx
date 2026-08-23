@@ -43,6 +43,7 @@ export default async function HalamanProfil() {
     ipk: profilDB?.ipk ?? (user.user_metadata?.ipk ? Number(user.user_metadata.ipk) : null),
     kategori_khusus: profilDB?.kategori_khusus || user.user_metadata?.kategori_khusus || null,
     poin_kontribusi: profilDB?.poin_kontribusi || 0,
+    avatar_url: profilDB?.avatar_url || user.user_metadata?.avatar_url || null,
     created_at: user.created_at,
   };
 
