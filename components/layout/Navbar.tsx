@@ -73,12 +73,7 @@ export default function Navbar({ profil }: NavbarProps) {
   return (
     <>
       <header
-        className={[
-          'fixed top-0 left-0 right-0 z-50 transition-all duration-300',
-          terscroll
-            ? 'bg-[var(--color-cream-100)]/95 backdrop-blur-md shadow-[var(--shadow-navbar)] border-b border-[var(--color-cream-300)]'
-            : 'bg-transparent',
-        ].join(' ')}
+        className="fixed top-0 left-0 right-0 z-50 transition-all duration-300 bg-[#0b1329]/95 backdrop-blur-md border-b border-white/10 shadow-lg"
         role="banner"
       >
         <div className="container-lentera">
