@@ -1,3 +1,4 @@
+import Image from 'next/image';
 import Link from 'next/link';
 import { Trophy, User, Mail, Github, Heart, BookOpen, Award } from 'lucide-react';
 import Logo from '@/components/ui/Logo';
@@ -49,16 +50,23 @@ export default function Footer() {
               >
                 Platform terintegrasi mendukung keberlanjutan akses pendidikan mahasiswa melalui berbagi pengetahuan dan informasi beasiswa.
               </p>
-              {/* Badge TCC — teks fallback (bukan gambar) agar tidak pernah kosong */}
+              {/* Badge TCC */}
               <div
-                className="inline-flex items-center gap-2 px-3 py-1.5 rounded-[var(--radius-sm)] text-xs font-semibold"
+                className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-semibold"
                 style={{
                   background: 'rgba(201,151,30,0.18)',
                   border: '1px solid rgba(201,151,30,0.3)',
                   color: 'var(--color-gold-300)',
                 }}
               >
-                ★ TCC Vibe Code 2026
+                <Image
+                  src="/logo-tcc.png"
+                  alt="Logo TCC 2026"
+                  width={14}
+                  height={22}
+                  className="object-contain"
+                />
+                <span>TCC Vibe Code 2026</span>
               </div>
             </div>
 

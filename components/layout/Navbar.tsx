@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect, useRef } from 'react';
+import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import {
@@ -101,7 +102,7 @@ export default function Navbar({ profil }: NavbarProps) {
                           color: '#FFFFFF',
                         }
                         : {
-                          color: 'var(--text-on-dark)',
+                          color: '#94a3b8',
                         }
                     }
                     aria-current={aktif ? 'page' : undefined}
@@ -115,16 +116,24 @@ export default function Navbar({ profil }: NavbarProps) {
 
             {/* Area Kanan: Badge TCC + Auth */}
             <div className="hidden md:flex items-center gap-3">
-              {/* Badge TCC */}
+              {/* Badge TCC dengan Logo */}
               <div
-                className="text-xs font-semibold px-3 py-1.5 rounded-full"
+                className="flex items-center gap-2 px-3 py-1.5 rounded-full backdrop-blur-md transition-transform duration-200 hover:scale-105"
                 style={{
-                  background: 'rgba(245,158,11,0.18)',
-                  border: '1px solid rgba(245,158,11,0.35)',
+                  background: 'rgba(245,158,11,0.15)',
+                  border: '1px solid rgba(245,158,11,0.4)',
                   color: '#FBBF24',
                 }}
               >
-                ★ TCC 2026
+                <Image
+                  src="/logo-tcc.png"
+                  alt="Logo TCC 2026"
+                  width={16}
+                  height={26}
+                  className="object-contain drop-shadow-[0_0_6px_rgba(245,158,11,0.6)]"
+                  priority
+                />
+                <span className="text-xs font-bold tracking-wide">TCC 2026</span>
               </div>
 
               <div
@@ -384,14 +393,21 @@ export default function Navbar({ profil }: NavbarProps) {
           >
             {/* Badge TCC */}
             <div
-              className="text-center text-xs font-semibold py-1.5 rounded-full"
+              className="flex items-center justify-center gap-2 text-xs font-semibold py-2 px-3 rounded-full"
               style={{
                 background: 'rgba(245,158,11,0.18)',
                 border: '1px solid rgba(245,158,11,0.3)',
                 color: '#FBBF24',
               }}
             >
-              ★ TCC Vibe Code 2026
+              <Image
+                src="/logo-tcc.png"
+                alt="Logo TCC 2026"
+                width={14}
+                height={22}
+                className="object-contain drop-shadow-[0_0_4px_rgba(245,158,11,0.6)]"
+              />
+              <span>TCC Vibe Code 2026</span>
             </div>
 
             {profil ? (
