@@ -109,17 +109,22 @@ export default async function HalamanDetailBeasiswa({ params }: HalamanDetailBea
       ];
 
   return (
-    <div className="min-h-screen pt-16" style={{ background: 'var(--color-cream-200)' }}>
+    <div
+      className="min-h-screen pt-16"
+      style={{
+        background: 'linear-gradient(180deg, #07132a 0%, #0b1d3a 30%, #0d2348 60%, #091830 100%)',
+      }}
+    >
       {/* Breadcrumb */}
-      <div className="border-b py-3" style={{ borderColor: 'var(--color-cream-300)', background: 'white' }}>
+      <div className="border-b py-3 backdrop-blur-md" style={{ borderColor: 'rgba(255, 255, 255, 0.1)', background: 'rgba(255, 255, 255, 0.03)' }}>
         <div className="container-lentera">
           <nav aria-label="Breadcrumb" className="flex items-center gap-2 text-sm">
-            <Link href="/beasiswa" className="flex items-center gap-1.5 hover:text-[var(--color-terracotta-600)] transition-colors text-[var(--text-muted-on-light)]">
+            <Link href="/beasiswa" className="flex items-center gap-1.5 hover:text-purple-300 transition-colors text-purple-400 font-medium">
               <ArrowLeft size={14} />
               Jelajah Beasiswa
             </Link>
-            <span style={{ color: 'var(--text-muted-on-light)' }}>/</span>
-            <span className="font-medium truncate text-[var(--text-on-light)]">
+            <span className="text-white/30">/</span>
+            <span className="font-medium truncate text-white">
               {beasiswa.nama_beasiswa}
             </span>
           </nav>

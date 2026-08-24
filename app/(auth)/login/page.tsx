@@ -118,11 +118,11 @@ export default function HalamanMasuk() {
           <div className="mb-8">
             <h1
               className="text-2xl font-bold mb-2"
-              style={{ fontFamily: 'var(--font-display)', color: 'var(--text-on-light)' }}
+              style={{ fontFamily: 'var(--font-display)', color: 'var(--text-on-dark)' }}
             >
               Selamat Datang Kembali 👋
             </h1>
-            <p className="text-sm" style={{ color: 'var(--text-muted-on-light)' }}>
+            <p className="text-sm" style={{ color: 'var(--text-muted-on-dark)' }}>
               Masuk untuk mengakses materi belajar dan beasiswamu.
             </p>
           </div>
@@ -131,7 +131,7 @@ export default function HalamanMasuk() {
           <FormMasuk />
 
           {/* Divider */}
-          <div className="my-6 divider-teks">atau masuk dengan</div>
+          <div className="my-6 divider-teks text-slate-300">atau masuk dengan</div>
 
           {/* OAuth Google (placeholder — belum aktif) */}
           <button
@@ -141,8 +141,8 @@ export default function HalamanMasuk() {
             title="Segera hadir"
             className="w-full flex items-center justify-center gap-3 py-3 px-4 rounded-[var(--radius-sm)] border-2 text-sm font-semibold transition-all duration-200 opacity-50 cursor-not-allowed"
             style={{
-              borderColor: 'var(--color-cream-400)',
-              color: 'var(--text-on-light)',
+              borderColor: 'rgba(255, 255, 255, 0.2)',
+              color: '#0f172a',
               background: 'white',
             }}
           >
@@ -156,7 +156,7 @@ export default function HalamanMasuk() {
           </button>
 
           {/* Link ke register */}
-          <p className="text-center text-sm mt-6" style={{ color: 'var(--text-muted-on-light)' }}>
+          <p className="text-center text-sm mt-6" style={{ color: 'var(--text-muted-on-dark)' }}>
             Belum punya akun?{' '}
             <Link
               href="/register"

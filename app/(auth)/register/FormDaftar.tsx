@@ -147,7 +147,7 @@ export default function FormDaftar() {
       {/* Divider data akademik */}
       <div
         className="divider-teks text-xs py-2"
-        style={{ color: 'var(--text-muted-on-light)' }}
+        style={{ color: 'var(--text-muted-on-dark)' }}
       >
         Data Akademik (opsional — untuk pencocokan beasiswa)
       </div>
@@ -157,7 +157,7 @@ export default function FormDaftar() {
         <label
           htmlFor="jurusan"
           className="text-sm font-semibold flex items-center gap-1.5"
-          style={{ color: 'var(--text-on-light)' }}
+          style={{ color: 'var(--text-on-dark)' }}
         >
           <GraduationCap size={14} />
           Jurusan / Program Studi
@@ -169,18 +169,18 @@ export default function FormDaftar() {
           style={{
             borderColor: state.fieldErrors?.jurusan
               ? '#f87171'
-              : 'var(--color-cream-400)',
-            color: 'var(--text-on-light)',
+              : 'rgba(255, 255, 255, 0.2)',
+            color: '#0f172a',
           }}
           defaultValue=""
         >
-          <option value="">Pilih jurusan Anda</option>
+          <option value="" style={{ color: '#0f172a' }}>Pilih jurusan Anda</option>
           {pilihanJurusan.map((j) => (
-            <option key={j} value={j}>{j}</option>
+            <option key={j} value={j} style={{ color: '#0f172a' }}>{j}</option>
           ))}
         </select>
         {state.fieldErrors?.jurusan && (
-          <p className="text-xs text-red-600">{state.fieldErrors.jurusan}</p>
+          <p className="text-xs text-red-400 font-medium">{state.fieldErrors.jurusan}</p>
         )}
       </div>
 
@@ -191,7 +191,7 @@ export default function FormDaftar() {
           <label
             htmlFor="semester"
             className="text-sm font-semibold flex items-center gap-1.5"
-            style={{ color: 'var(--text-on-light)' }}
+            style={{ color: 'var(--text-on-dark)' }}
           >
             <BookMarked size={14} />
             Semester
@@ -203,18 +203,18 @@ export default function FormDaftar() {
             style={{
               borderColor: state.fieldErrors?.semester
                 ? '#f87171'
-                : 'var(--color-cream-400)',
-              color: 'var(--text-on-light)',
+                : 'rgba(255, 255, 255, 0.2)',
+              color: '#0f172a',
             }}
             defaultValue=""
           >
-            <option value="">Pilih</option>
+            <option value="" style={{ color: '#0f172a' }}>Pilih</option>
             {pilihanSemester.map((s) => (
-              <option key={s.value} value={s.value}>{s.label}</option>
+              <option key={s.value} value={s.value} style={{ color: '#0f172a' }}>{s.label}</option>
             ))}
           </select>
           {state.fieldErrors?.semester && (
-            <p className="text-xs text-red-600">{state.fieldErrors.semester}</p>
+            <p className="text-xs text-red-400 font-medium">{state.fieldErrors.semester}</p>
           )}
         </div>
 
@@ -240,7 +240,7 @@ export default function FormDaftar() {
         <label
           htmlFor="kategori-khusus"
           className="text-sm font-semibold"
-          style={{ color: 'var(--text-on-light)' }}
+          style={{ color: 'var(--text-on-dark)' }}
         >
           Kategori Khusus (opsional)
         </label>
@@ -248,14 +248,14 @@ export default function FormDaftar() {
           id="kategori-khusus"
           name="kategori_khusus"
           className="w-full rounded-[var(--radius-sm)] border px-4 py-3 text-sm bg-white transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-[var(--color-gold-500)] focus:border-transparent"
-          style={{ borderColor: 'var(--color-cream-400)', color: 'var(--text-on-light)' }}
+          style={{ borderColor: 'rgba(255, 255, 255, 0.2)', color: '#0f172a' }}
           defaultValue=""
         >
           {pilihanKategoriKhusus.map((k) => (
-            <option key={k.value} value={k.value}>{k.label}</option>
+            <option key={k.value} value={k.value} style={{ color: '#0f172a' }}>{k.label}</option>
           ))}
         </select>
-        <p className="text-xs" style={{ color: 'var(--text-muted-on-light)' }}>
+        <p className="text-xs" style={{ color: 'var(--text-muted-on-dark)' }}>
           Digunakan untuk pencocokan beasiswa yang lebih akurat
         </p>
       </div>
@@ -267,17 +267,17 @@ export default function FormDaftar() {
           id="setuju-syarat"
           name="setuju_syarat"
           required
-          className="mt-0.5 w-4 h-4 rounded border-[var(--color-cream-400)] accent-[var(--color-gold-600)]"
+          className="mt-0.5 w-4 h-4 rounded border-slate-400 accent-[var(--color-gold-600)]"
         />
         <label
           htmlFor="setuju-syarat"
           className="text-sm leading-relaxed"
-          style={{ color: 'var(--text-muted-on-light)' }}
+          style={{ color: 'var(--text-muted-on-dark)' }}
         >
           Saya menyetujui{' '}
           <Link
             href="/syarat-ketentuan"
-            className="font-semibold underline text-[var(--color-gold-600)]"
+            className="font-semibold underline text-[var(--color-gold-400)] hover:text-amber-300"
             target="_blank"
           >
             Syarat &amp; Ketentuan
@@ -285,7 +285,7 @@ export default function FormDaftar() {
           dan{' '}
           <Link
             href="/kebijakan-privasi"
-            className="font-semibold underline text-[var(--color-gold-600)]"
+            className="font-semibold underline text-[var(--color-gold-400)] hover:text-amber-300"
             target="_blank"
           >
             Kebijakan Privasi
@@ -306,11 +306,11 @@ export default function FormDaftar() {
         {pending ? 'Membuat Akun...' : 'Buat Akun Gratis'}
       </Tombol>
 
-      <p className="text-center text-sm" style={{ color: 'var(--text-muted-on-light)' }}>
+      <p className="text-center text-sm" style={{ color: 'var(--text-muted-on-dark)' }}>
         Sudah punya akun?{' '}
         <Link
           href="/login"
-          className="font-semibold transition-colors hover:underline text-[var(--color-gold-600)]"
+          className="font-semibold transition-colors hover:underline text-[var(--color-gold-400)]"
         >
           Masuk sekarang
         </Link>

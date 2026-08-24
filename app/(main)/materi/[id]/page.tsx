@@ -186,9 +186,9 @@ export default async function HalamanDetailMateri({ params }: HalamanDetailMater
       </div>
 
       {/* ==============================================
-          KONTEN UTAMA — Background Cream (Terang)
+          KONTEN UTAMA — Background Gelap Celestial
           ============================================== */}
-      <div style={{ background: 'var(--color-cream-200)' }}>
+      <div className="bg-gradient-to-b from-[#0f2444] via-[#0b1d3a] to-[#07132a]">
         <div className="container-lentera py-10">
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
             {/* Kolom Utama */}

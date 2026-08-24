@@ -109,11 +109,11 @@ export default function FormUnggahMateri() {
               Berkas Materi <span className="text-red-500">*</span>
             </label>
             <div
-              className="border-2 border-dashed rounded-[var(--radius-md)] p-8 text-center transition-all duration-200 hover:border-[var(--color-gold-500)] bg-white relative"
+              className="border-2 border-dashed rounded-[var(--radius-md)] p-8 text-center transition-all duration-200 hover:border-cyan-400 bg-white/5 backdrop-blur-md relative"
               style={{
                 borderColor: state.fieldErrors?.file
                   ? '#f87171'
-                  : 'var(--color-cream-400)',
+                  : 'rgba(255, 255, 255, 0.15)',
               }}
             >
               <input
@@ -128,23 +128,23 @@ export default function FormUnggahMateri() {
               <div className="flex flex-col items-center gap-3">
                 <div
                   className="w-12 h-12 rounded-full flex items-center justify-center"
-                  style={{ background: 'var(--color-gold-100)', color: 'var(--color-gold-700)' }}
+                  style={{ background: 'rgba(34, 211, 238, 0.15)', color: '#22d3ee' }}
                 >
                   {namaFile ? <FileCheck size={24} /> : <Upload size={24} />}
                 </div>
                 {namaFile ? (
                   <div>
-                    <p className="font-semibold text-sm text-[var(--text-on-light)]">{namaFile}</p>
-                    <p className="text-xs text-[var(--color-gold-600)] mt-0.5 font-medium">
+                    <p className="font-semibold text-sm text-white">{namaFile}</p>
+                    <p className="text-xs text-cyan-300 mt-0.5 font-medium">
                       Ukuran: {ukuranFile} — Klik atau tarik file lain untuk mengganti
                     </p>
                   </div>
                 ) : (
                   <div>
-                    <p className="font-semibold text-sm text-[var(--text-on-light)]">
+                    <p className="font-semibold text-sm text-white">
                       Klik atau tarik file ke area ini
                     </p>
-                    <p className="text-xs text-[var(--text-muted-on-light)] mt-1">
+                    <p className="text-xs text-slate-400 mt-1">
                       Format diizinkan: <strong>PDF</strong> atau <strong>DOCX</strong> (Maksimal 10 MB)
                     </p>
                   </div>
@@ -152,7 +152,7 @@ export default function FormUnggahMateri() {
               </div>
             </div>
             {state.fieldErrors?.file && (
-              <p className="text-xs text-red-600 font-medium">{state.fieldErrors.file}</p>
+              <p className="text-xs text-red-400 font-medium">{state.fieldErrors.file}</p>
             )}
           </div>
 
@@ -185,32 +185,33 @@ export default function FormUnggahMateri() {
           <div className="flex flex-col gap-1.5">
             <label
               htmlFor="kategori"
-              className="text-sm font-semibold flex items-center gap-1.5 text-[var(--text-on-light)]"
+              className="text-sm font-semibold flex items-center gap-1.5 text-white"
             >
               <Layers size={15} />
-              Kategori Materi <span className="text-red-500">*</span>
+              Kategori Materi <span className="text-red-400">*</span>
             </label>
             <select
               id="kategori"
               name="kategori"
               required
-              className="w-full rounded-[var(--radius-sm)] border px-4 py-3 text-sm bg-white transition-all focus:outline-none focus:ring-2 focus:ring-[var(--color-gold-500)]"
+              className="w-full rounded-[var(--radius-sm)] border px-4 py-3 text-sm transition-all focus:outline-none focus:ring-2 focus:ring-cyan-500 cursor-pointer"
               style={{
+                background: 'rgba(255, 255, 255, 0.08)',
                 borderColor: state.fieldErrors?.kategori
                   ? '#f87171'
-                  : 'var(--color-cream-400)',
-                color: 'var(--text-on-light)',
+                  : 'rgba(255, 255, 255, 0.15)',
+                color: '#ffffff',
               }}
               defaultValue="catatan"
             >
               {pilihanKategori.map((k) => (
-                <option key={k.value} value={k.value}>
+                <option key={k.value} value={k.value} style={{ background: '#0d1f3c', color: '#fff' }}>
                   {k.label}
                 </option>
               ))}
             </select>
             {state.fieldErrors?.kategori && (
-              <p className="text-xs text-red-600 font-medium">{state.fieldErrors.kategori}</p>
+              <p className="text-xs text-red-400 font-medium">{state.fieldErrors.kategori}</p>
             )}
           </div>
 
@@ -218,7 +219,7 @@ export default function FormUnggahMateri() {
           <div className="flex flex-col gap-1.5">
             <label
               htmlFor="deskripsi"
-              className="text-sm font-semibold flex items-center gap-1.5 text-[var(--text-on-light)]"
+              className="text-sm font-semibold flex items-center gap-1.5 text-white"
             >
               <AlignLeft size={15} />
               Deskripsi Singkat (opsional)
@@ -228,8 +229,12 @@ export default function FormUnggahMateri() {
               name="deskripsi"
               rows={4}
               placeholder="Jelaskan secara singkat topik apa saja yang dibahas dalam materi ini..."
-              className="w-full rounded-[var(--radius-sm)] border p-4 text-sm bg-white transition-all focus:outline-none focus:ring-2 focus:ring-[var(--color-gold-500)]"
-              style={{ borderColor: 'var(--color-cream-400)', color: 'var(--text-on-light)' }}
+              className="w-full rounded-[var(--radius-sm)] border p-4 text-sm transition-all focus:outline-none focus:ring-2 focus:ring-cyan-500 placeholder:text-slate-400"
+              style={{
+                background: 'rgba(255, 255, 255, 0.08)',
+                borderColor: 'rgba(255, 255, 255, 0.15)',
+                color: '#ffffff',
+              }}
             />
           </div>
 

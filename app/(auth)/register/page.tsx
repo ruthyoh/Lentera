@@ -117,11 +117,11 @@ export default function HalamanDaftar() {
           <div className="mb-8">
             <h1
               className="text-2xl font-bold mb-2"
-              style={{ fontFamily: 'var(--font-display)', color: 'var(--text-on-light)' }}
+              style={{ fontFamily: 'var(--font-display)', color: 'var(--text-on-dark)' }}
             >
               Buat Akun Gratis ✨
             </h1>
-            <p className="text-sm" style={{ color: 'var(--text-muted-on-light)' }}>
+            <p className="text-sm" style={{ color: 'var(--text-muted-on-dark)' }}>
               Isi data diri berikut untuk memulai perjalanan belajarmu di Lentera.
             </p>
           </div>

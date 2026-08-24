@@ -64,13 +64,13 @@ export default function HalamanUtama() {
             <h2
               id="modul-judul"
               className="text-3xl md:text-4xl font-bold mb-4"
-              style={{ fontFamily: 'var(--font-display)', color: 'var(--text-on-light)' }}
+              style={{ fontFamily: 'var(--font-display)', color: 'var(--text-on-dark)' }}
             >
               Satu Platform, Dua Solusi
             </h2>
             <p
               className="text-base max-w-2xl mx-auto"
-              style={{ color: 'var(--text-muted-on-light)' }}
+              style={{ color: 'var(--text-muted-on-dark)' }}
             >
               Lentera hadir dengan dua modul yang saling melengkapi untuk mendukung perjalanan akademik dan finansialmu sebagai mahasiswa.
             </p>

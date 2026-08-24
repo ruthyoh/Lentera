@@ -12,7 +12,9 @@ export default function HalamanUnggahMateri() {
   return (
     <div
       className="min-h-screen pt-16"
-      style={{ background: 'var(--color-cream-200)' }}
+      style={{
+        background: 'linear-gradient(180deg, #07132a 0%, #0b1d3a 30%, #0d2348 60%, #091830 100%)',
+      }}
     >
       {/* Header */}
       <div

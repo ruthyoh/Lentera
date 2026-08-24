@@ -65,11 +65,11 @@ const labelJenisAI: Record<string, string> = {
 };
 
 const ikonJenisAI: Record<string, React.ReactNode> = {
-  ringkasan: <FileText size={16} className="text-cyan-400" />,
-  kuis: <HelpCircle size={16} className="text-rose-400" />,
-  tanya_jawab: <MessageSquare size={16} className="text-amber-400" />,
-  pencocokan_beasiswa: <Award size={16} className="text-emerald-400" />,
-  draf_esai: <Edit3 size={16} className="text-purple-400" />,
+  ringkasan: <FileText size={16} className="text-cyan-300" />,
+  kuis: <HelpCircle size={16} className="text-rose-300" />,
+  tanya_jawab: <MessageSquare size={16} className="text-amber-300" />,
+  pencocokan_beasiswa: <Award size={16} className="text-emerald-300" />,
+  draf_esai: <Edit3 size={16} className="text-purple-300" />,
 };
 
 const labelKategoriMateri: Record<string, string> = {
@@ -157,28 +157,28 @@ export default function TampilanProfil({
       judul: 'Profil Terverifikasi',
       deskripsi: 'Melengkapi data akademis profil',
       didapat: persenKelengkapan >= 80,
-      ikon: <ShieldCheck size={20} className="text-emerald-400" />,
+      ikon: <ShieldCheck size={20} className="text-emerald-300" />,
     },
     {
       id: 'penyedia_materi',
       judul: 'Penyedia Catatan',
       deskripsi: 'Mengunggah materi belajar pertama',
       didapat: jumlahMateri > 0,
-      ikon: <Upload size={20} className="text-cyan-400" />,
+      ikon: <Upload size={20} className="text-cyan-300" />,
     },
     {
       id: 'ai_explorer',
       judul: 'Pionir AI',
       deskripsi: 'Menggunakan fitur asisten AI',
       didapat: riwayatAI.length > 0,
-      ikon: <Brain size={20} className="text-purple-400" />,
+      ikon: <Brain size={20} className="text-purple-300" />,
     },
     {
       id: 'bintang_kontribusi',
       judul: 'Bintang Komunitas',
       deskripsi: 'Meraih 30+ Poin Kontribusi',
       didapat: poin >= 30,
-      ikon: <Star size={20} className="text-amber-400" />,
+      ikon: <Star size={20} className="text-amber-300" />,
     },
   ];
 
@@ -226,31 +226,43 @@ export default function TampilanProfil({
       : riwayatAI.filter((r) => r.jenis === filterJenisAI);
 
   return (
-    <div className="min-h-screen pt-16 pb-20 bg-[var(--color-mist-200)]">
+    <div
+      className="min-h-screen pt-16 pb-20 text-slate-100 relative overflow-hidden"
+      style={{
+        background: 'linear-gradient(180deg, #07132a 0%, #0b1d3a 30%, #0d2348 60%, #091830 100%)',
+      }}
+    >
+      {/* =====================================================
+          BACKGROUND AMBIENT GLOW EFFECTS
+          ===================================================== */}
+      <div
+        className="absolute top-10 left-1/4 w-[500px] h-[500px] rounded-full bg-cyan-500/10 blur-[130px] pointer-events-none"
+        aria-hidden="true"
+      />
+      <div
+        className="absolute top-1/3 right-10 w-[450px] h-[450px] rounded-full bg-indigo-500/15 blur-[120px] pointer-events-none"
+        aria-hidden="true"
+      />
+      <div
+        className="absolute bottom-20 left-10 w-[400px] h-[400px] rounded-full bg-blue-600/10 blur-[100px] pointer-events-none"
+        aria-hidden="true"
+      />
+
+      {/* Grid Pattern Overlay */}
+      <div
+        className="absolute inset-0 opacity-10 pointer-events-none"
+        style={{
+          backgroundImage: `linear-gradient(rgba(103, 232, 249, 0.2) 1px, transparent 1px), linear-gradient(90deg, rgba(103, 232, 249, 0.2) 1px, transparent 1px)`,
+          backgroundSize: '40px 40px',
+        }}
+        aria-hidden="true"
+      />
+
       {/* =====================================================
           HERO PROFILE BANNER (Twilight Indigo Aesthetic)
           ===================================================== */}
-      <div className="relative overflow-hidden bg-gradient-to-br from-[#0a0d24] via-[#12183b] to-[#1c224f] text-white border-b border-indigo-900/50">
-        {/* Ambient Blur */}
-        <div
-          className="absolute -top-32 -left-20 w-96 h-96 rounded-full bg-cyan-500/10 blur-3xl pointer-events-none"
-          aria-hidden="true"
-        />
-        <div
-          className="absolute top-1/2 right-0 w-96 h-96 rounded-full bg-indigo-500/15 blur-3xl pointer-events-none"
-          aria-hidden="true"
-        />
-
-        {/* Grid Overlay */}
-        <div
-          className="absolute inset-0 opacity-10 pointer-events-none"
-          style={{
-            backgroundImage: `linear-gradient(rgba(103, 232, 249, 0.3) 1px, transparent 1px), linear-gradient(90deg, rgba(103, 232, 249, 0.3) 1px, transparent 1px)`,
-            backgroundSize: '36px 36px',
-          }}
-        />
-
-        <div className="container-lentera relative z-10 py-10 md:py-14">
+      <div className="relative z-10 border-b border-white/10 bg-gradient-to-b from-white/[0.04] to-transparent backdrop-blur-md">
+        <div className="container-lentera py-10 md:py-14">
           <div className="flex flex-col lg:flex-row items-center lg:items-start justify-between gap-8">
             {/* User Avatar & Info */}
             <div className="flex flex-col sm:flex-row items-center sm:items-start gap-6 text-center sm:text-left">
@@ -260,11 +272,11 @@ export default function TampilanProfil({
                   <img
                     src={profil.avatar_url}
                     alt={profil.nama_lengkap}
-                    className="w-24 h-24 sm:w-28 sm:h-28 rounded-2xl object-cover shadow-2xl ring-4 ring-cyan-500/40 group-hover:scale-105 transition-transform duration-300"
+                    className="w-24 h-24 sm:w-28 sm:h-28 rounded-2xl object-cover shadow-[0_0_25px_rgba(6,182,212,0.3)] ring-4 ring-cyan-400/40 group-hover:ring-cyan-300 group-hover:scale-105 transition-all duration-300"
                   />
                 ) : (
                   <div
-                    className="w-24 h-24 sm:w-28 sm:h-28 rounded-2xl flex items-center justify-center text-3xl font-extrabold shadow-2xl ring-4 ring-cyan-500/30 transition-transform duration-300 group-hover:scale-105"
+                    className="w-24 h-24 sm:w-28 sm:h-28 rounded-2xl flex items-center justify-center text-3xl font-extrabold shadow-[0_0_25px_rgba(6,182,212,0.3)] ring-4 ring-cyan-400/40 group-hover:scale-105 transition-all duration-300"
                     style={{
                       background: 'linear-gradient(135deg, #06b6d4 0%, #1e1b4b 100%)',
                       color: '#ecfeff',
@@ -275,13 +287,13 @@ export default function TampilanProfil({
                 )}
 
                 {/* Camera Overlay Icon on Hover */}
-                <div className="absolute inset-0 bg-slate-950/50 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity flex flex-col items-center justify-center text-white text-[11px] font-semibold gap-1 backdrop-blur-[2px]">
+                <div className="absolute inset-0 bg-slate-950/70 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity flex flex-col items-center justify-center text-white text-[11px] font-semibold gap-1 backdrop-blur-[2px]">
                   <Camera size={20} className="text-cyan-300" />
                   <span>Ubah Foto</span>
                 </div>
 
                 {/* Level Badge */}
-                <div className="absolute -bottom-2 -right-2 px-2.5 py-0.5 rounded-full text-[10px] font-bold tracking-wide uppercase bg-gradient-to-r from-cyan-500 to-blue-600 text-white shadow-md border border-white/20 flex items-center gap-1">
+                <div className="absolute -bottom-2 -right-2 px-2.5 py-0.5 rounded-full text-[10px] font-bold tracking-wide uppercase bg-gradient-to-r from-cyan-500 to-blue-600 text-white shadow-lg border border-white/20 flex items-center gap-1">
                   <Sparkles size={10} />
                   Level {poin >= 200 ? '4' : poin >= 100 ? '3' : poin >= 30 ? '2' : '1'}
                 </div>
@@ -294,53 +306,53 @@ export default function TampilanProfil({
                     {profil.nama_lengkap}
                   </h1>
                   {peringkat !== null && (
-                    <span className="px-3 py-0.5 rounded-full text-xs font-semibold bg-amber-500/20 text-amber-300 border border-amber-500/30 flex items-center gap-1">
+                    <span className="px-3 py-0.5 rounded-full text-xs font-semibold bg-amber-500/20 text-amber-300 border border-amber-500/40 shadow-[0_0_15px_rgba(245,158,11,0.2)] flex items-center gap-1">
                       <Trophy size={12} className="text-amber-400" />
                       Peringkat #{(peringkat || 0) + 1}
                     </span>
                   )}
                 </div>
 
-                <p className="text-indigo-200 text-sm font-medium flex flex-wrap items-center justify-center sm:justify-start gap-2">
+                <p className="text-slate-300 text-sm font-medium flex flex-wrap items-center justify-center sm:justify-start gap-2">
                   <span className="flex items-center gap-1 text-cyan-300 font-semibold">
-                    <GraduationCap size={15} />
+                    <GraduationCap size={16} />
                     {profil.jurusan || 'Jurusan Belum Diisi'}
                   </span>
                   {profil.semester && (
                     <>
-                      <span className="text-indigo-400">•</span>
+                      <span className="text-slate-500">•</span>
                       <span>Semester {profil.semester}</span>
                     </>
                   )}
                   {profil.ipk && (
                     <>
-                      <span className="text-indigo-400">•</span>
-                      <span className="px-2 py-0.5 rounded bg-indigo-950/80 text-cyan-300 font-mono text-xs border border-indigo-700/50">
+                      <span className="text-slate-500">•</span>
+                      <span className="px-2.5 py-0.5 rounded-md bg-cyan-950/80 text-cyan-300 font-mono text-xs border border-cyan-500/30">
                         IPK {Number(profil.ipk).toFixed(2)}
                       </span>
                     </>
                   )}
                 </p>
 
-                <div className="flex flex-wrap items-center justify-center sm:justify-start gap-4 text-xs text-indigo-300 pt-1">
+                <div className="flex flex-wrap items-center justify-center sm:justify-start gap-4 text-xs text-slate-400 pt-1">
                   <span className="flex items-center gap-1.5">
-                    <BuildingIcon className="w-3.5 h-3.5 text-indigo-400" />
+                    <BuildingIcon className="w-3.5 h-3.5 text-cyan-400" />
                     {profil.asal_institusi || 'Institusi Belum Diisi'}
                   </span>
                   <span className="flex items-center gap-1.5">
-                    <Calendar size={13} className="text-indigo-400" />
+                    <Calendar size={13} className="text-indigo-300" />
                     Bergabung {bergabungSejak}
                   </span>
                 </div>
 
                 {/* Level Title Pill */}
                 <div className="pt-2 flex items-center justify-center sm:justify-start gap-2">
-                  <span className={`px-3 py-1 rounded-lg text-xs font-semibold bg-gradient-to-r ${levelBadgeWarna} text-white shadow-sm flex items-center gap-1.5`}>
+                  <span className={`px-3 py-1 rounded-lg text-xs font-semibold bg-gradient-to-r ${levelBadgeWarna} text-white shadow-md flex items-center gap-1.5`}>
                     <Award size={13} />
                     {levelTitle}
                   </span>
-                  <span className="text-xs text-indigo-300 font-medium">
-                    {poin} / {targetPoin} Poin Kontribusi
+                  <span className="text-xs text-slate-300 font-medium">
+                    <strong className="text-cyan-300">{poin}</strong> / {targetPoin} Poin Kontribusi
                   </span>
                 </div>
               </div>
@@ -351,7 +363,7 @@ export default function TampilanProfil({
               <button
                 onClick={() => setModalEditBuka(true)}
                 id="tombol-edit-profil-hero"
-                className="px-4 py-2.5 rounded-xl text-xs sm:text-sm font-semibold bg-white/10 hover:bg-white/20 text-white border border-white/15 backdrop-blur-md transition-all flex items-center gap-2 shadow-sm active:scale-95"
+                className="px-4 py-2.5 rounded-xl text-xs sm:text-sm font-semibold bg-white/10 hover:bg-white/20 text-white border border-white/15 backdrop-blur-md transition-all flex items-center gap-2 shadow-sm active:scale-95 hover:border-cyan-400/40"
               >
                 <Edit3 size={15} className="text-cyan-300" />
                 Edit Profil & Foto
@@ -359,7 +371,7 @@ export default function TampilanProfil({
 
               <Link
                 href="/jelajah/unggah"
-                className="px-4 py-2.5 rounded-xl text-xs sm:text-sm font-semibold bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-white transition-all flex items-center gap-2 shadow-lg shadow-cyan-500/20 active:scale-95"
+                className="px-4 py-2.5 rounded-xl text-xs sm:text-sm font-semibold bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-white transition-all flex items-center gap-2 shadow-lg shadow-cyan-500/25 active:scale-95"
               >
                 <Plus size={15} />
                 Unggah Materi
@@ -369,7 +381,7 @@ export default function TampilanProfil({
                 <button
                   type="submit"
                   id="tombol-keluar-hero"
-                  className="p-2.5 rounded-xl text-indigo-300 hover:text-rose-300 bg-white/5 hover:bg-rose-500/10 border border-white/10 transition-all active:scale-95"
+                  className="p-2.5 rounded-xl text-slate-300 hover:text-rose-300 bg-white/5 hover:bg-rose-500/20 border border-white/10 transition-all active:scale-95 hover:border-rose-400/40"
                   title="Keluar Akun"
                 >
                   <LogOut size={16} />
@@ -380,31 +392,31 @@ export default function TampilanProfil({
 
           {/* Profile Completion Indicator */}
           {persenKelengkapan < 100 && (
-            <div className="mt-8 p-4 rounded-xl bg-indigo-950/60 border border-cyan-500/20 backdrop-blur-md flex flex-col sm:flex-row items-center justify-between gap-4">
+            <div className="mt-8 p-4 rounded-2xl bg-white/[0.04] border border-cyan-500/30 backdrop-blur-md flex flex-col sm:flex-row items-center justify-between gap-4 shadow-lg">
               <div className="flex items-center gap-3 text-center sm:text-left">
-                <div className="w-10 h-10 rounded-lg bg-cyan-500/15 border border-cyan-500/30 flex items-center justify-center text-cyan-300 shrink-0">
+                <div className="w-10 h-10 rounded-xl bg-cyan-500/20 border border-cyan-400/40 flex items-center justify-center text-cyan-300 shrink-0 shadow-[0_0_15px_rgba(6,182,212,0.2)]">
                   <ShieldCheck size={20} />
                 </div>
                 <div>
-                  <p className="text-xs font-semibold text-cyan-200">
+                  <p className="text-xs font-bold text-cyan-200">
                     Kelengkapan Profil Akademis: {persenKelengkapan}%
                   </p>
-                  <p className="text-[11px] text-indigo-300 mt-0.5">
+                  <p className="text-[11px] text-slate-300 mt-0.5">
                     Lengkapi foto profil, data jurusan, dan IPK kamu agar tampilan profil makin profesional!
                   </p>
                 </div>
               </div>
 
               <div className="flex items-center gap-3 w-full sm:w-auto">
-                <div className="w-full sm:w-36 bg-indigo-900/80 rounded-full h-2.5 border border-indigo-700/50 overflow-hidden">
+                <div className="w-full sm:w-36 bg-slate-900/80 rounded-full h-2.5 border border-slate-700/60 overflow-hidden">
                   <div
-                    className="bg-gradient-to-r from-cyan-400 to-blue-500 h-2.5 rounded-full transition-all duration-500"
+                    className="bg-gradient-to-r from-cyan-400 to-blue-500 h-2.5 rounded-full transition-all duration-500 shadow-[0_0_10px_rgba(6,182,212,0.5)]"
                     style={{ width: `${persenKelengkapan}%` }}
                   />
                 </div>
                 <button
                   onClick={() => setModalEditBuka(true)}
-                  className="text-xs font-bold text-cyan-300 hover:text-white shrink-0 flex items-center gap-1 underline underline-offset-2"
+                  className="text-xs font-bold text-cyan-300 hover:text-cyan-200 shrink-0 flex items-center gap-1 underline underline-offset-2"
                 >
                   Lengkapi <ChevronRight size={13} />
                 </button>
@@ -417,9 +429,9 @@ export default function TampilanProfil({
       {/* =====================================================
           MAIN NAVIGATION TABS & CONTENT
           ===================================================== */}
-      <div className="container-lentera py-8">
+      <div className="container-lentera py-8 relative z-10">
         {/* Navigation Bar Tabs */}
-        <div className="flex items-center gap-2 overflow-x-auto pb-3 mb-8 border-b border-indigo-200/60 no-scrollbar">
+        <div className="flex items-center gap-2 overflow-x-auto pb-3 mb-8 border-b border-white/10 no-scrollbar">
           {[
             { id: 'ikhtisar', label: 'Ikhtisar & Statistik', ikon: <TrendingUp size={16} /> },
             { id: 'materi', label: `Materi Saya (${jumlahMateri})`, ikon: <BookOpen size={16} /> },
@@ -433,11 +445,12 @@ export default function TampilanProfil({
                 onClick={() => setTabAktif(tab.id as typeof tabAktif)}
                 className={`px-4 py-2.5 rounded-xl text-xs sm:text-sm font-bold transition-all flex items-center gap-2 whitespace-nowrap ${
                   aktif
-                    ? 'bg-gradient-to-r from-[#1e1b4b] to-[#2e2a72] text-white shadow-md shadow-indigo-900/20'
-                    : 'bg-white/80 hover:bg-white text-[var(--color-ink-700)] hover:text-indigo-900 border border-indigo-100'
+                    ? 'bg-gradient-to-r from-cyan-500/20 via-indigo-600/30 to-blue-600/20 text-white border border-cyan-400/60 shadow-[0_0_20px_rgba(6,182,212,0.25)]'
+                    : 'bg-white/[0.04] hover:bg-white/[0.08] text-cyan-400 hover:text-cyan-300 border border-white/10 hover:border-cyan-500/30'
                 }`}
+                id={`tab-profil-${tab.id}`}
               >
-                <span className={aktif ? 'text-cyan-300' : 'text-indigo-500'}>
+                <span className={aktif ? 'text-cyan-300' : 'text-cyan-400'}>
                   {tab.ikon}
                 </span>
                 {tab.label}
@@ -449,78 +462,79 @@ export default function TampilanProfil({
         {/* TAB 1: IKHTISAR */}
         {tabAktif === 'ikhtisar' && (
           <div className="space-y-8 animate-fade-in-up">
+            {/* 4 Stat Summary Cards */}
             <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-              <div className="card-glass p-5 flex flex-col justify-between border-indigo-100 hover:border-cyan-400 transition-all group">
+              <div className="rounded-2xl p-5 flex flex-col justify-between bg-white/[0.04] backdrop-blur-xl border border-white/10 hover:border-cyan-400/50 hover:bg-white/[0.07] hover:shadow-[0_8px_30px_rgba(6,182,212,0.15)] transition-all duration-300 group">
                 <div className="flex items-center justify-between mb-3">
-                  <span className="text-xs font-bold text-indigo-700 uppercase tracking-wider">
+                  <span className="text-xs font-bold text-slate-300 uppercase tracking-wider">
                     Materi Diunggah
                   </span>
-                  <div className="w-10 h-10 rounded-xl bg-cyan-100 text-cyan-700 flex items-center justify-center group-hover:scale-110 transition-transform">
+                  <div className="w-10 h-10 rounded-xl bg-cyan-500/20 text-cyan-300 border border-cyan-500/30 flex items-center justify-center group-hover:scale-110 transition-transform shadow-[0_0_12px_rgba(6,182,212,0.2)]">
                     <Upload size={18} />
                   </div>
                 </div>
                 <div>
-                  <p className="text-3xl font-extrabold text-[var(--color-ink-900)] font-[var(--font-display)]">
+                  <p className="text-3xl font-extrabold text-white font-[var(--font-display)]">
                     {jumlahMateri.toLocaleString('id-ID')}
                   </p>
-                  <p className="text-[11px] text-indigo-600 mt-1 flex items-center gap-1 font-medium">
-                    <span className="text-cyan-600 font-bold">+10 Poin</span> / unggah
+                  <p className="text-[11px] text-slate-400 mt-1 flex items-center gap-1 font-medium">
+                    <span className="text-cyan-300 font-bold">+10 Poin</span> / unggah
                   </p>
                 </div>
               </div>
 
-              <div className="card-glass p-5 flex flex-col justify-between border-indigo-100 hover:border-rose-400 transition-all group">
+              <div className="rounded-2xl p-5 flex flex-col justify-between bg-white/[0.04] backdrop-blur-xl border border-white/10 hover:border-rose-400/50 hover:bg-white/[0.07] hover:shadow-[0_8px_30px_rgba(244,114,182,0.15)] transition-all duration-300 group">
                 <div className="flex items-center justify-between mb-3">
-                  <span className="text-xs font-bold text-indigo-700 uppercase tracking-wider">
+                  <span className="text-xs font-bold text-slate-300 uppercase tracking-wider">
                     Total Suka
                   </span>
-                  <div className="w-10 h-10 rounded-xl bg-rose-100 text-rose-600 flex items-center justify-center group-hover:scale-110 transition-transform">
+                  <div className="w-10 h-10 rounded-xl bg-rose-500/20 text-rose-300 border border-rose-500/30 flex items-center justify-center group-hover:scale-110 transition-transform shadow-[0_0_12px_rgba(244,114,182,0.2)]">
                     <Heart size={18} />
                   </div>
                 </div>
                 <div>
-                  <p className="text-3xl font-extrabold text-[var(--color-ink-900)] font-[var(--font-display)]">
+                  <p className="text-3xl font-extrabold text-white font-[var(--font-display)]">
                     {totalSuka.toLocaleString('id-ID')}
                   </p>
-                  <p className="text-[11px] text-indigo-600 mt-1 font-medium">
+                  <p className="text-[11px] text-slate-400 mt-1 font-medium">
                     Apresiasi pengguna lain
                   </p>
                 </div>
               </div>
 
-              <div className="card-glass p-5 flex flex-col justify-between border-indigo-100 hover:border-blue-400 transition-all group">
+              <div className="rounded-2xl p-5 flex flex-col justify-between bg-white/[0.04] backdrop-blur-xl border border-white/10 hover:border-blue-400/50 hover:bg-white/[0.07] hover:shadow-[0_8px_30px_rgba(59,130,246,0.15)] transition-all duration-300 group">
                 <div className="flex items-center justify-between mb-3">
-                  <span className="text-xs font-bold text-indigo-700 uppercase tracking-wider">
+                  <span className="text-xs font-bold text-slate-300 uppercase tracking-wider">
                     Total Unduhan
                   </span>
-                  <div className="w-10 h-10 rounded-xl bg-blue-100 text-blue-700 flex items-center justify-center group-hover:scale-110 transition-transform">
+                  <div className="w-10 h-10 rounded-xl bg-blue-500/20 text-blue-300 border border-blue-500/30 flex items-center justify-center group-hover:scale-110 transition-transform shadow-[0_0_12px_rgba(59,130,246,0.2)]">
                     <Download size={18} />
                   </div>
                 </div>
                 <div>
-                  <p className="text-3xl font-extrabold text-[var(--color-ink-900)] font-[var(--font-display)]">
+                  <p className="text-3xl font-extrabold text-white font-[var(--font-display)]">
                     {totalUnduhan.toLocaleString('id-ID')}
                   </p>
-                  <p className="text-[11px] text-indigo-600 mt-1 font-medium">
+                  <p className="text-[11px] text-slate-400 mt-1 font-medium">
                     Materi kamu diakses
                   </p>
                 </div>
               </div>
 
-              <div className="card-glass p-5 flex flex-col justify-between border-indigo-100 hover:border-amber-400 transition-all group">
+              <div className="rounded-2xl p-5 flex flex-col justify-between bg-white/[0.04] backdrop-blur-xl border border-white/10 hover:border-amber-400/50 hover:bg-white/[0.07] hover:shadow-[0_8px_30px_rgba(245,158,11,0.15)] transition-all duration-300 group">
                 <div className="flex items-center justify-between mb-3">
-                  <span className="text-xs font-bold text-indigo-700 uppercase tracking-wider">
+                  <span className="text-xs font-bold text-slate-300 uppercase tracking-wider">
                     Poin Kontribusi
                   </span>
-                  <div className="w-10 h-10 rounded-xl bg-amber-100 text-amber-700 flex items-center justify-center group-hover:scale-110 transition-transform">
+                  <div className="w-10 h-10 rounded-xl bg-amber-500/20 text-amber-300 border border-amber-500/30 flex items-center justify-center group-hover:scale-110 transition-transform shadow-[0_0_12px_rgba(245,158,11,0.2)]">
                     <Star size={18} fill="currentColor" />
                   </div>
                 </div>
                 <div>
-                  <p className="text-3xl font-extrabold text-[var(--color-ink-900)] font-[var(--font-display)]">
+                  <p className="text-3xl font-extrabold text-white font-[var(--font-display)]">
                     {poin.toLocaleString('id-ID')}
                   </p>
-                  <p className="text-[11px] text-amber-700 font-semibold mt-1">
+                  <p className="text-[11px] text-amber-300 font-semibold mt-1">
                     Level: {levelTitle}
                   </p>
                 </div>
@@ -530,43 +544,45 @@ export default function TampilanProfil({
             {/* Layout Main Stats & Badges */}
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
               <div className="lg:col-span-2 space-y-6">
-                <div className="card-glass p-6 border-indigo-100">
+                {/* Academic Level Progress */}
+                <div className="rounded-2xl p-6 bg-white/[0.04] backdrop-blur-xl border border-white/10 hover:border-white/20 transition-all">
                   <div className="flex items-center justify-between mb-4">
                     <div>
-                      <h2 className="text-base font-bold text-[var(--color-ink-900)] font-[var(--font-display)] flex items-center gap-2">
-                        <Trophy size={18} className="text-amber-500" />
+                      <h2 className="text-base font-bold text-white font-[var(--font-display)] flex items-center gap-2">
+                        <Trophy size={18} className="text-amber-400" />
                         Tingkat Level Akademis
                       </h2>
-                      <p className="text-xs text-indigo-600 mt-0.5">
+                      <p className="text-xs text-slate-300 mt-0.5">
                         Tingkatkan kontribusi kamu untuk meraih gelar bintang kampus berikutnya.
                       </p>
                     </div>
-                    <span className="text-xs font-bold px-3 py-1 rounded-full bg-indigo-100 text-indigo-900 border border-indigo-200">
+                    <span className="text-xs font-bold px-3 py-1 rounded-full bg-cyan-500/20 text-cyan-300 border border-cyan-400/40">
                       {progressPoin}% Tercapai
                     </span>
                   </div>
 
-                  <div className="w-full bg-indigo-100 rounded-full h-3 mb-3 p-0.5 border border-indigo-200">
+                  <div className="w-full bg-slate-900/80 rounded-full h-3 mb-3 p-0.5 border border-slate-700/60 overflow-hidden">
                     <div
-                      className={`h-2.5 rounded-full bg-gradient-to-r ${levelBadgeWarna} transition-all duration-700 shadow-sm`}
+                      className={`h-2 rounded-full bg-gradient-to-r ${levelBadgeWarna} transition-all duration-700 shadow-[0_0_12px_rgba(6,182,212,0.5)]`}
                       style={{ width: `${progressPoin}%` }}
                     />
                   </div>
 
-                  <div className="flex items-center justify-between text-xs text-indigo-700 font-medium">
-                    <span>Target Berikutnya: {targetPoin} Poin</span>
+                  <div className="flex items-center justify-between text-xs text-slate-300 font-medium">
+                    <span>Target Berikutnya: <strong className="text-cyan-300">{targetPoin} Poin</strong></span>
                     <Link
                       href="/papan-peringkat"
-                      className="text-cyan-700 hover:text-cyan-900 font-bold flex items-center gap-1 hover:underline"
+                      className="text-cyan-300 hover:text-cyan-200 font-bold flex items-center gap-1 hover:underline"
                     >
                       Lihat Papan Peringkat <ArrowRight size={13} />
                     </Link>
                   </div>
                 </div>
 
-                <div className="card-glass p-6 border-indigo-100">
-                  <h2 className="text-base font-bold text-[var(--color-ink-900)] font-[var(--font-display)] mb-4 flex items-center gap-2">
-                    <Sparkles size={18} className="text-cyan-600" />
+                {/* Achievements & Badges */}
+                <div className="rounded-2xl p-6 bg-white/[0.04] backdrop-blur-xl border border-white/10">
+                  <h2 className="text-base font-bold text-white font-[var(--font-display)] mb-4 flex items-center gap-2">
+                    <Sparkles size={18} className="text-cyan-400" />
                     Lencana & Pencapaian
                   </h2>
 
@@ -576,27 +592,27 @@ export default function TampilanProfil({
                         key={lencana.id}
                         className={`p-4 rounded-xl border transition-all flex items-start gap-3.5 ${
                           lencana.didapat
-                            ? 'bg-gradient-to-br from-indigo-950 to-[#181d45] border-cyan-500/40 text-white shadow-md'
-                            : 'bg-indigo-50/50 border-indigo-100 text-indigo-400 opacity-60'
+                            ? 'bg-gradient-to-br from-cyan-950/60 to-[#12183b] border-cyan-400/40 text-white shadow-[0_0_20px_rgba(6,182,212,0.1)]'
+                            : 'bg-white/[0.02] border-white/5 text-slate-500 opacity-60'
                         }`}
                       >
                         <div
                           className={`w-10 h-10 rounded-xl flex items-center justify-center shrink-0 ${
-                            lencana.didapat ? 'bg-cyan-500/20 border border-cyan-400/30' : 'bg-indigo-100'
+                            lencana.didapat ? 'bg-cyan-500/20 border border-cyan-400/40 shadow-[0_0_10px_rgba(6,182,212,0.2)]' : 'bg-slate-800/50'
                           }`}
                         >
                           {lencana.ikon}
                         </div>
                         <div className="flex-1 min-w-0">
                           <div className="flex items-center justify-between">
-                            <h3 className={`text-xs font-bold ${lencana.didapat ? 'text-white' : 'text-indigo-700'}`}>
+                            <h3 className={`text-xs font-bold ${lencana.didapat ? 'text-white' : 'text-slate-400'}`}>
                               {lencana.judul}
                             </h3>
                             {lencana.didapat && (
-                              <CheckCircle2 size={14} className="text-cyan-400 shrink-0" />
+                              <CheckCircle2 size={14} className="text-cyan-300 shrink-0" />
                             )}
                           </div>
-                          <p className={`text-[11px] mt-0.5 ${lencana.didapat ? 'text-indigo-200' : 'text-indigo-500'}`}>
+                          <p className={`text-[11px] mt-0.5 ${lencana.didapat ? 'text-slate-300' : 'text-slate-500'}`}>
                             {lencana.deskripsi}
                           </p>
                         </div>
@@ -606,10 +622,11 @@ export default function TampilanProfil({
                 </div>
               </div>
 
+              {/* Sidebar AI Usage & Quick Links */}
               <div className="space-y-6">
-                <div className="card-glass p-6 border-indigo-100">
-                  <h3 className="text-sm font-bold text-[var(--color-ink-900)] font-[var(--font-display)] mb-4 flex items-center gap-2">
-                    <Brain size={16} className="text-purple-600" />
+                <div className="rounded-2xl p-6 bg-white/[0.04] backdrop-blur-xl border border-white/10">
+                  <h3 className="text-sm font-bold text-white font-[var(--font-display)] mb-4 flex items-center gap-2">
+                    <Brain size={16} className="text-purple-400" />
                     Penggunaan Asisten AI
                   </h3>
 
@@ -617,12 +634,12 @@ export default function TampilanProfil({
                     {Object.keys(labelJenisAI).map((jenis) => {
                       const count = hitungPerJenis[jenis] || 0;
                       return (
-                        <div key={jenis} className="flex items-center justify-between text-xs py-1.5 border-b border-indigo-100/70 last:border-0">
-                          <span className="text-indigo-800 font-medium flex items-center gap-2">
+                        <div key={jenis} className="flex items-center justify-between text-xs py-2 border-b border-white/10 last:border-0">
+                          <span className="text-slate-300 font-medium flex items-center gap-2">
                             {ikonJenisAI[jenis]}
                             {labelJenisAI[jenis]}
                           </span>
-                          <span className="px-2.5 py-0.5 rounded-full bg-indigo-100 text-indigo-900 font-bold">
+                          <span className="px-2.5 py-0.5 rounded-full bg-cyan-500/20 text-cyan-300 font-bold border border-cyan-500/30">
                             {count}×
                           </span>
                         </div>
@@ -631,8 +648,8 @@ export default function TampilanProfil({
                   </div>
                 </div>
 
-                <div className="card-glass p-6 border-indigo-100">
-                  <h3 className="text-sm font-bold text-[var(--color-ink-900)] font-[var(--font-display)] mb-3">
+                <div className="rounded-2xl p-6 bg-white/[0.04] backdrop-blur-xl border border-white/10">
+                  <h3 className="text-sm font-bold text-white font-[var(--font-display)] mb-3">
                     Pintasan Fitur
                   </h3>
                   <div className="space-y-2">
@@ -644,13 +661,13 @@ export default function TampilanProfil({
                       <Link
                         key={link.href}
                         href={link.href}
-                        className="flex items-center justify-between p-2.5 rounded-lg text-xs font-semibold text-indigo-900 hover:bg-indigo-100/80 transition-all border border-indigo-100"
+                        className="flex items-center justify-between p-2.5 rounded-xl text-xs font-semibold text-slate-200 hover:text-white bg-white/[0.03] hover:bg-white/[0.08] transition-all border border-white/10 hover:border-cyan-400/40"
                       >
                         <span className="flex items-center gap-2.5">
-                          <span className="text-cyan-600">{link.ikon}</span>
+                          <span className="text-cyan-300">{link.ikon}</span>
                           {link.label}
                         </span>
-                        <ChevronRight size={14} className="text-indigo-400" />
+                        <ChevronRight size={14} className="text-slate-400" />
                       </Link>
                     ))}
                   </div>
@@ -665,17 +682,17 @@ export default function TampilanProfil({
           <div className="space-y-6 animate-fade-in-up">
             <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
               <div>
-                <h2 className="text-lg font-bold text-[var(--color-ink-900)] font-[var(--font-display)]">
+                <h2 className="text-lg font-bold text-white font-[var(--font-display)]">
                   Materi Yang Kamu Unggah ({materiSaya.length})
                 </h2>
-                <p className="text-xs text-indigo-600 mt-0.5">
+                <p className="text-xs text-slate-300 mt-0.5">
                   Daftar seluruh materi, catatan, dan bank soal yang telah kamu bagikan.
                 </p>
               </div>
 
               <Link
                 href="/jelajah/unggah"
-                className="px-4 py-2.5 rounded-xl text-xs font-bold bg-cyan-600 hover:bg-cyan-700 text-white shadow-md flex items-center gap-2 transition-all"
+                className="px-4 py-2.5 rounded-xl text-xs font-bold bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-white shadow-md flex items-center gap-2 transition-all"
               >
                 <Plus size={15} /> Unggah Materi Baru
               </Link>
@@ -686,14 +703,14 @@ export default function TampilanProfil({
                 {materiSaya.map((item) => (
                   <div
                     key={item.id}
-                    className="card-glass p-5 border-indigo-100 hover:border-cyan-400 transition-all flex flex-col justify-between"
+                    className="rounded-2xl p-5 bg-white/[0.04] backdrop-blur-xl border border-white/10 hover:border-cyan-400/50 hover:bg-white/[0.07] transition-all duration-300 flex flex-col justify-between group"
                   >
                     <div>
                       <div className="flex items-center justify-between mb-3">
-                        <span className="px-2.5 py-1 rounded-md text-[10px] font-bold uppercase bg-indigo-100 text-indigo-800 tracking-wider">
+                        <span className="px-2.5 py-1 rounded-md text-[10px] font-bold uppercase bg-cyan-500/15 text-cyan-300 border border-cyan-500/30 tracking-wider">
                           {labelKategoriMateri[item.kategori] || item.kategori}
                         </span>
-                        <span className="text-[11px] text-indigo-500 font-medium">
+                        <span className="text-[11px] text-slate-400 font-medium">
                           {new Date(item.created_at).toLocaleDateString('id-ID', {
                             day: 'numeric',
                             month: 'short',
@@ -702,30 +719,30 @@ export default function TampilanProfil({
                         </span>
                       </div>
 
-                      <h3 className="text-sm font-bold text-[var(--color-ink-900)] line-clamp-2 mb-1.5 font-[var(--font-display)]">
+                      <h3 className="text-sm font-bold text-white group-hover:text-cyan-300 transition-colors line-clamp-2 mb-1.5 font-[var(--font-display)]">
                         {item.judul}
                       </h3>
 
-                      <p className="text-xs text-indigo-600 font-medium mb-4">
+                      <p className="text-xs text-slate-300 font-medium mb-4">
                         📚 {item.mata_kuliah}
                       </p>
                     </div>
 
-                    <div className="pt-3 border-t border-indigo-100/80 flex items-center justify-between text-xs text-indigo-600">
+                    <div className="pt-3 border-t border-white/10 flex items-center justify-between text-xs text-slate-300">
                       <div className="flex items-center gap-3">
                         <span className="flex items-center gap-1">
-                          <Download size={13} className="text-cyan-600" />
+                          <Download size={13} className="text-cyan-300" />
                           {item.jumlah_unduhan}
                         </span>
                         <span className="flex items-center gap-1">
-                          <Heart size={13} className="text-rose-500" />
+                          <Heart size={13} className="text-rose-400" />
                           {item.jumlah_suka}
                         </span>
                       </div>
 
                       <Link
                         href={`/materi/${item.id}`}
-                        className="text-xs font-bold text-cyan-700 hover:text-cyan-900 flex items-center gap-1 hover:underline"
+                        className="text-xs font-bold text-cyan-300 hover:text-cyan-200 flex items-center gap-1 hover:underline"
                       >
                         Lihat <Eye size={13} />
                       </Link>
@@ -734,19 +751,19 @@ export default function TampilanProfil({
                 ))}
               </div>
             ) : (
-              <div className="card-glass p-12 text-center border-indigo-100 max-w-lg mx-auto">
-                <div className="w-16 h-16 rounded-full bg-cyan-100 text-cyan-700 flex items-center justify-center mx-auto mb-4">
+              <div className="rounded-2xl p-12 text-center bg-white/[0.04] border border-white/10 max-w-lg mx-auto backdrop-blur-xl">
+                <div className="w-16 h-16 rounded-2xl bg-cyan-500/20 text-cyan-300 border border-cyan-500/30 flex items-center justify-center mx-auto mb-4 shadow-[0_0_20px_rgba(6,182,212,0.2)]">
                   <Upload size={28} />
                 </div>
-                <h3 className="text-base font-bold text-[var(--color-ink-900)] mb-1">
+                <h3 className="text-base font-bold text-white mb-1">
                   Belum ada materi diunggah
                 </h3>
-                <p className="text-xs text-indigo-600 mb-6">
+                <p className="text-xs text-slate-300 mb-6">
                   Bagikan catatan kuliah atau rangkumanmu untuk membantu sesama mahasiswa dan dapatkan +10 poin kontribusi!
                 </p>
                 <Link
                   href="/jelajah/unggah"
-                  className="px-5 py-2.5 rounded-xl text-xs font-bold bg-gradient-to-r from-cyan-600 to-blue-600 text-white shadow-md inline-flex items-center gap-2"
+                  className="px-5 py-2.5 rounded-xl text-xs font-bold bg-gradient-to-r from-cyan-500 to-blue-600 text-white shadow-lg inline-flex items-center gap-2"
                 >
                   <Plus size={15} /> Unggah Materi Pertama
                 </Link>
@@ -760,22 +777,22 @@ export default function TampilanProfil({
           <div className="space-y-6 animate-fade-in-up">
             <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
               <div>
-                <h2 className="text-lg font-bold text-[var(--color-ink-900)] font-[var(--font-display)] flex items-center gap-2">
-                  <Brain size={20} className="text-purple-600" />
+                <h2 className="text-lg font-bold text-white font-[var(--font-display)] flex items-center gap-2">
+                  <Brain size={20} className="text-purple-400" />
                   Riwayat Aktivitas Asisten AI
                 </h2>
-                <p className="text-xs text-indigo-600 mt-0.5">
+                <p className="text-xs text-slate-300 mt-0.5">
                   Daftar sesi konsultasi, kuis, ringkasan, dan pembuatan esai AI yang pernah kamu lakukan.
                 </p>
               </div>
 
-              <div className="flex items-center gap-1.5 flex-wrap bg-white p-1 rounded-xl border border-indigo-100">
+              <div className="flex items-center gap-1.5 flex-wrap bg-white/[0.04] p-1.5 rounded-xl border border-white/10">
                 <button
                   onClick={() => setFilterJenisAI('semua')}
                   className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all ${
                     filterJenisAI === 'semua'
-                      ? 'bg-indigo-900 text-white'
-                      : 'text-indigo-700 hover:bg-indigo-50'
+                      ? 'bg-cyan-500/30 text-cyan-200 border border-cyan-400/50 shadow-[0_0_10px_rgba(6,182,212,0.2)]'
+                      : 'text-slate-300 hover:bg-white/10 hover:text-white'
                   }`}
                 >
                   Semua ({riwayatAI.length})
@@ -786,8 +803,8 @@ export default function TampilanProfil({
                     onClick={() => setFilterJenisAI(jenis)}
                     className={`px-2.5 py-1.5 rounded-lg text-xs font-semibold transition-all ${
                       filterJenisAI === jenis
-                        ? 'bg-indigo-900 text-white'
-                        : 'text-indigo-700 hover:bg-indigo-50'
+                        ? 'bg-cyan-500/30 text-cyan-200 border border-cyan-400/50 shadow-[0_0_10px_rgba(6,182,212,0.2)]'
+                        : 'text-slate-300 hover:bg-white/10 hover:text-white'
                     }`}
                   >
                     {labelJenisAI[jenis]} ({hitungPerJenis[jenis] || 0})
@@ -797,8 +814,8 @@ export default function TampilanProfil({
             </div>
 
             {filteredRiwayatAI.length > 0 ? (
-              <div className="card-glass p-6 border-indigo-100">
-                <div className="divide-y divide-indigo-100/80">
+              <div className="rounded-2xl p-6 bg-white/[0.04] backdrop-blur-xl border border-white/10">
+                <div className="divide-y divide-white/10">
                   {filteredRiwayatAI.map((item) => {
                     const tgl = new Date(item.created_at).toLocaleDateString('id-ID', {
                       day: 'numeric',
@@ -810,28 +827,28 @@ export default function TampilanProfil({
 
                     return (
                       <div key={item.id} className="py-4 first:pt-0 last:pb-0 flex items-start gap-4">
-                        <div className="w-9 h-9 rounded-xl bg-indigo-100 flex items-center justify-center shrink-0 mt-0.5">
-                          {ikonJenisAI[item.jenis] || <Brain size={16} className="text-indigo-600" />}
+                        <div className="w-9 h-9 rounded-xl bg-cyan-500/20 border border-cyan-500/30 flex items-center justify-center shrink-0 mt-0.5">
+                          {ikonJenisAI[item.jenis] || <Brain size={16} className="text-cyan-300" />}
                         </div>
 
                         <div className="flex-1 min-w-0">
                           <div className="flex flex-wrap items-center justify-between gap-2">
-                            <h3 className="text-xs sm:text-sm font-bold text-[var(--color-ink-900)]">
+                            <h3 className="text-xs sm:text-sm font-bold text-white">
                               {labelJenisAI[item.jenis] || item.jenis}
                             </h3>
-                            <span className="text-[11px] text-indigo-500 font-medium">
+                            <span className="text-[11px] text-slate-400 font-medium">
                               {tgl}
                             </span>
                           </div>
 
-                          <p className="text-xs text-indigo-600 mt-0.5">
+                          <p className="text-xs text-slate-300 mt-0.5">
                             Sesi interaksi AI berhasil disimpan di database akun kamu.
                           </p>
 
                           {item.materi_id && (
                             <Link
                               href={`/materi/${item.materi_id}`}
-                              className="inline-flex items-center gap-1 text-xs font-bold text-cyan-700 hover:text-cyan-900 mt-2 hover:underline"
+                              className="inline-flex items-center gap-1 text-xs font-bold text-cyan-300 hover:text-cyan-200 mt-2 hover:underline"
                             >
                               Lihat Terkait Materi <ChevronRight size={13} />
                             </Link>
@@ -843,17 +860,17 @@ export default function TampilanProfil({
                 </div>
               </div>
             ) : (
-              <div className="card-glass p-12 text-center border-indigo-100 max-w-lg mx-auto">
-                <Brain size={36} className="mx-auto mb-3 text-indigo-400" />
-                <h3 className="text-base font-bold text-[var(--color-ink-900)] mb-1">
+              <div className="rounded-2xl p-12 text-center bg-white/[0.04] border border-white/10 max-w-lg mx-auto backdrop-blur-xl">
+                <Brain size={36} className="mx-auto mb-3 text-cyan-400" />
+                <h3 className="text-base font-bold text-white mb-1">
                   Tidak ada riwayat AI
                 </h3>
-                <p className="text-xs text-indigo-600 mb-5">
+                <p className="text-xs text-slate-300 mb-5">
                   Kamu belum pernah mencoba fitur asisten AI pada kategori ini.
                 </p>
                 <Link
                   href="/beasiswa"
-                  className="px-4 py-2 rounded-xl text-xs font-bold bg-cyan-600 text-white shadow-md inline-block"
+                  className="px-4 py-2 rounded-xl text-xs font-bold bg-cyan-600 hover:bg-cyan-500 text-white shadow-md inline-block"
                 >
                   Coba AI Beasiswa Now
                 </Link>
@@ -866,94 +883,94 @@ export default function TampilanProfil({
         {tabAktif === 'pengaturan' && (
           <div className="space-y-6 animate-fade-in-up">
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-              <div className="lg:col-span-2 card-glass p-6 border-indigo-100 space-y-6">
-                <div className="flex items-center justify-between pb-4 border-b border-indigo-100">
+              <div className="lg:col-span-2 rounded-2xl p-6 bg-white/[0.04] backdrop-blur-xl border border-white/10 space-y-6">
+                <div className="flex items-center justify-between pb-4 border-b border-white/10">
                   <div>
-                    <h2 className="text-base font-bold text-[var(--color-ink-900)] font-[var(--font-display)]">
+                    <h2 className="text-base font-bold text-white font-[var(--font-display)]">
                       Informasi Akun Akademis
                     </h2>
-                    <p className="text-xs text-indigo-600 mt-0.5">
+                    <p className="text-xs text-slate-300 mt-0.5">
                       Data ini digunakan untuk verifikasi dan optimasi rekomendasi AI.
                     </p>
                   </div>
 
                   <button
                     onClick={() => setModalEditBuka(true)}
-                    className="px-3.5 py-1.5 rounded-lg text-xs font-bold bg-indigo-100 hover:bg-indigo-200 text-indigo-900 transition-all flex items-center gap-1.5"
+                    className="px-3.5 py-1.5 rounded-xl text-xs font-bold bg-white/10 hover:bg-white/20 text-white border border-white/15 transition-all flex items-center gap-1.5"
                   >
                     <Edit3 size={14} /> Edit
                   </button>
                 </div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-                  <div className="p-3.5 rounded-xl bg-indigo-50/60 border border-indigo-100/80">
-                    <span className="text-[11px] text-indigo-500 font-semibold uppercase tracking-wider block mb-1">
+                  <div className="p-4 rounded-xl bg-white/[0.03] border border-white/10">
+                    <span className="text-[11px] text-slate-400 font-semibold uppercase tracking-wider block mb-1">
                       Nama Lengkap
                     </span>
-                    <span className="text-sm font-bold text-[var(--color-ink-900)] flex items-center gap-2">
-                      <User size={15} className="text-cyan-600" />
+                    <span className="text-sm font-bold text-white flex items-center gap-2">
+                      <User size={15} className="text-cyan-300" />
                       {profil.nama_lengkap}
                     </span>
                   </div>
 
-                  <div className="p-3.5 rounded-xl bg-indigo-50/60 border border-indigo-100/80">
-                    <span className="text-[11px] text-indigo-500 font-semibold uppercase tracking-wider block mb-1">
+                  <div className="p-4 rounded-xl bg-white/[0.03] border border-white/10">
+                    <span className="text-[11px] text-slate-400 font-semibold uppercase tracking-wider block mb-1">
                       Alamat Email
                     </span>
-                    <span className="text-sm font-bold text-[var(--color-ink-900)] flex items-center gap-2 truncate">
-                      <Mail size={15} className="text-cyan-600 shrink-0" />
+                    <span className="text-sm font-bold text-white flex items-center gap-2 truncate">
+                      <Mail size={15} className="text-cyan-300 shrink-0" />
                       <span className="truncate">{profil.email}</span>
                     </span>
                   </div>
 
-                  <div className="p-3.5 rounded-xl bg-indigo-50/60 border border-indigo-100/80">
-                    <span className="text-[11px] text-indigo-500 font-semibold uppercase tracking-wider block mb-1">
+                  <div className="p-4 rounded-xl bg-white/[0.03] border border-white/10">
+                    <span className="text-[11px] text-slate-400 font-semibold uppercase tracking-wider block mb-1">
                       Program Studi / Jurusan
                     </span>
-                    <span className="text-sm font-bold text-[var(--color-ink-900)] flex items-center gap-2">
-                      <GraduationCap size={15} className="text-cyan-600" />
+                    <span className="text-sm font-bold text-white flex items-center gap-2">
+                      <GraduationCap size={15} className="text-cyan-300" />
                       {profil.jurusan || 'Belum Diisi'}
                     </span>
                   </div>
 
-                  <div className="p-3.5 rounded-xl bg-indigo-50/60 border border-indigo-100/80">
-                    <span className="text-[11px] text-indigo-500 font-semibold uppercase tracking-wider block mb-1">
+                  <div className="p-4 rounded-xl bg-white/[0.03] border border-white/10">
+                    <span className="text-[11px] text-slate-400 font-semibold uppercase tracking-wider block mb-1">
                       Asal Institusi / Kampus
                     </span>
-                    <span className="text-sm font-bold text-[var(--color-ink-900)] flex items-center gap-2">
-                      <BuildingIcon className="w-4 h-4 text-cyan-600" />
+                    <span className="text-sm font-bold text-white flex items-center gap-2">
+                      <BuildingIcon className="w-4 h-4 text-cyan-300" />
                       {profil.asal_institusi || 'Belum Diisi'}
                     </span>
                   </div>
 
-                  <div className="p-3.5 rounded-xl bg-indigo-50/60 border border-indigo-100/80">
-                    <span className="text-[11px] text-indigo-500 font-semibold uppercase tracking-wider block mb-1">
+                  <div className="p-4 rounded-xl bg-white/[0.03] border border-white/10">
+                    <span className="text-[11px] text-slate-400 font-semibold uppercase tracking-wider block mb-1">
                       Semester Saat Ini
                     </span>
-                    <span className="text-sm font-bold text-[var(--color-ink-900)] flex items-center gap-2">
-                      <BookMarked size={15} className="text-cyan-600" />
+                    <span className="text-sm font-bold text-white flex items-center gap-2">
+                      <BookMarked size={15} className="text-cyan-300" />
                       {profil.semester ? `Semester ${profil.semester}` : 'Belum Diisi'}
                     </span>
                   </div>
 
-                  <div className="p-3.5 rounded-xl bg-indigo-50/60 border border-indigo-100/80">
-                    <span className="text-[11px] text-indigo-500 font-semibold uppercase tracking-wider block mb-1">
+                  <div className="p-4 rounded-xl bg-white/[0.03] border border-white/10">
+                    <span className="text-[11px] text-slate-400 font-semibold uppercase tracking-wider block mb-1">
                       Indeks Prestasi Kumulatif (IPK)
                     </span>
-                    <span className="text-sm font-bold text-[var(--color-ink-900)] flex items-center gap-2">
-                      <Calculator size={15} className="text-cyan-600" />
+                    <span className="text-sm font-bold text-white flex items-center gap-2">
+                      <Calculator size={15} className="text-cyan-300" />
                       {profil.ipk ? Number(profil.ipk).toFixed(2) : 'Belum Diisi'}
                     </span>
                   </div>
                 </div>
 
                 {profil.kategori_khusus && (
-                  <div className="p-4 rounded-xl bg-cyan-50/80 border border-cyan-200">
-                    <span className="text-[11px] text-cyan-800 font-bold uppercase tracking-wider block mb-1">
+                  <div className="p-4 rounded-xl bg-cyan-500/10 border border-cyan-500/30">
+                    <span className="text-[11px] text-cyan-300 font-bold uppercase tracking-wider block mb-1">
                       Kategori Prioritas Akademis
                     </span>
-                    <span className="text-sm font-bold text-cyan-900 flex items-center gap-2">
-                      <Sparkles size={16} className="text-cyan-600" />
+                    <span className="text-sm font-bold text-white flex items-center gap-2">
+                      <Sparkles size={16} className="text-cyan-300" />
                       {profil.kategori_khusus}
                     </span>
                   </div>
@@ -961,11 +978,11 @@ export default function TampilanProfil({
               </div>
 
               <div className="space-y-6">
-                <div className="card-glass p-6 border-indigo-100 space-y-4">
-                  <h3 className="text-sm font-bold text-[var(--color-ink-900)] font-[var(--font-display)]">
+                <div className="rounded-2xl p-6 bg-white/[0.04] backdrop-blur-xl border border-white/10 space-y-4">
+                  <h3 className="text-sm font-bold text-white font-[var(--font-display)]">
                     Keamanan & Akses Akun
                   </h3>
-                  <p className="text-xs text-indigo-600">
+                  <p className="text-xs text-slate-300">
                     Status autentikasi aktif menggunakan Supabase Auth yang terenkripsi.
                   </p>
 
@@ -973,7 +990,7 @@ export default function TampilanProfil({
                     <button
                       type="submit"
                       id="tombol-keluar-pengaturan"
-                      className="w-full py-2.5 px-4 rounded-xl text-xs font-bold bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-200 transition-all flex items-center justify-center gap-2"
+                      className="w-full py-2.5 px-4 rounded-xl text-xs font-bold bg-rose-500/15 hover:bg-rose-500/25 text-rose-300 border border-rose-500/30 transition-all flex items-center justify-center gap-2 active:scale-95"
                     >
                       <LogOut size={15} /> Keluar Dari Akun
                     </button>
@@ -986,13 +1003,13 @@ export default function TampilanProfil({
       </div>
 
       {/* =====================================================
-          MODAL DIALOG EDIT PROFIL & FOTO PROFIL
+          MODAL DIALOG EDIT PROFIL & FOTO PROFIL (Dark Mode)
           ===================================================== */}
       {modalEditBuka && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/75 backdrop-blur-sm animate-fade-in-up overflow-y-auto">
-          <div className="w-full max-w-lg bg-white rounded-2xl shadow-2xl border border-indigo-100 overflow-hidden my-8">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-md animate-fade-in-up overflow-y-auto">
+          <div className="w-full max-w-lg bg-[#0c102a] rounded-2xl shadow-2xl border border-white/15 overflow-hidden my-8 text-white">
             {/* Modal Header */}
-            <div className="px-6 py-4 bg-gradient-to-r from-[#0a0d24] to-[#1a1040] text-white flex items-center justify-between">
+            <div className="px-6 py-4 bg-gradient-to-r from-[#070b1e] via-[#10173b] to-[#18204d] text-white flex items-center justify-between border-b border-white/10">
               <div className="flex items-center gap-2">
                 <Camera size={18} className="text-cyan-300" />
                 <h3 className="text-base font-bold font-[var(--font-display)]">
@@ -1001,7 +1018,7 @@ export default function TampilanProfil({
               </div>
               <button
                 onClick={() => setModalEditBuka(false)}
-                className="text-indigo-300 hover:text-white p-1 rounded-lg hover:bg-white/10 transition-colors"
+                className="text-slate-400 hover:text-white p-1 rounded-lg hover:bg-white/10 transition-colors"
               >
                 <X size={18} />
               </button>
@@ -1012,15 +1029,15 @@ export default function TampilanProfil({
               <input type="hidden" name="hapus_avatar" value={hapusAvatarFlag ? 'true' : 'false'} />
 
               {pesanSuksesModal && (
-                <div className="p-3.5 rounded-xl bg-emerald-50 text-emerald-800 border border-emerald-200 text-xs font-bold flex items-center gap-2">
-                  <CheckCircle2 size={16} className="text-emerald-600" />
+                <div className="p-3.5 rounded-xl bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 text-xs font-bold flex items-center gap-2">
+                  <CheckCircle2 size={16} className="text-emerald-400" />
                   {pesanSuksesModal}
                 </div>
               )}
 
               {formState.error && (
-                <div className="p-3.5 rounded-xl bg-rose-50 text-rose-800 border border-rose-200 text-xs font-bold flex items-center gap-2">
-                  <AlertCircle size={16} className="text-rose-600" />
+                <div className="p-3.5 rounded-xl bg-rose-500/20 text-rose-300 border border-rose-500/40 text-xs font-bold flex items-center gap-2">
+                  <AlertCircle size={16} className="text-rose-400" />
                   {formState.error}
                 </div>
               )}
@@ -1028,13 +1045,13 @@ export default function TampilanProfil({
               {/* =====================================================
                   BAGIAN UNGGAH FOTO PROFIL
                   ===================================================== */}
-              <div className="p-4 rounded-2xl bg-indigo-50/70 border border-indigo-100 space-y-3">
-                <label className="block text-xs font-bold text-indigo-950 flex items-center justify-between">
+              <div className="p-4 rounded-xl bg-white/[0.03] border border-white/10 space-y-3">
+                <label className="block text-xs font-bold text-slate-200 flex items-center justify-between">
                   <span className="flex items-center gap-1.5">
-                    <Camera size={15} className="text-cyan-600" />
+                    <Camera size={15} className="text-cyan-300" />
                     Foto Profil Akademis
                   </span>
-                  <span className="text-[11px] font-normal text-indigo-600">
+                  <span className="text-[11px] font-normal text-slate-400">
                     PNG, JPG, WEBP (Maks 5 MB)
                   </span>
                 </label>
@@ -1046,10 +1063,10 @@ export default function TampilanProfil({
                       <img
                         src={previewAvatar}
                         alt="Preview Foto Profil"
-                        className="w-20 h-20 rounded-2xl object-cover ring-2 ring-cyan-500 shadow-md"
+                        className="w-20 h-20 rounded-2xl object-cover ring-2 ring-cyan-400 shadow-md"
                       />
                     ) : (
-                      <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-cyan-600 to-indigo-900 text-cyan-100 flex items-center justify-center font-extrabold text-2xl ring-2 ring-indigo-300 shadow-inner">
+                      <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-cyan-600 to-indigo-900 text-cyan-100 flex items-center justify-center font-extrabold text-2xl ring-2 ring-white/20 shadow-inner">
                         {inisial}
                       </div>
                     )}
@@ -1057,8 +1074,8 @@ export default function TampilanProfil({
 
                   {/* Upload Controls */}
                   <div className="flex-1 space-y-2 w-full text-center sm:text-left">
-                    <label className="cursor-pointer inline-flex items-center justify-center gap-2 px-3.5 py-2 rounded-xl text-xs font-bold bg-white text-indigo-900 border border-indigo-200 hover:border-cyan-500 shadow-sm transition-all hover:bg-cyan-50/50 w-full sm:w-auto">
-                      <Upload size={14} className="text-cyan-600" />
+                    <label className="cursor-pointer inline-flex items-center justify-center gap-2 px-3.5 py-2 rounded-xl text-xs font-bold bg-white/10 text-white border border-white/20 hover:border-cyan-400 hover:bg-cyan-500/20 shadow-sm transition-all w-full sm:w-auto">
+                      <Upload size={14} className="text-cyan-300" />
                       Pilih / Unggah Berkas Foto
                       <input
                         type="file"
@@ -1073,14 +1090,14 @@ export default function TampilanProfil({
                       <button
                         type="button"
                         onClick={handleHapusFoto}
-                        className="inline-flex items-center gap-1 text-[11px] font-semibold text-rose-600 hover:text-rose-800 ml-0 sm:ml-3 hover:underline"
+                        className="inline-flex items-center gap-1 text-[11px] font-semibold text-rose-400 hover:text-rose-300 ml-0 sm:ml-3 hover:underline"
                       >
                         <Trash2 size={12} /> Hapus Foto & Gunakan Inisial
                       </button>
                     )}
 
                     {formState.fieldErrors?.avatar && (
-                      <p className="text-[11px] text-rose-600 font-semibold">
+                      <p className="text-[11px] text-rose-400 font-semibold">
                         {formState.fieldErrors.avatar}
                       </p>
                     )}
@@ -1088,12 +1105,12 @@ export default function TampilanProfil({
                 </div>
 
                 {/* Input URL opsional */}
-                <div className="pt-2 border-t border-indigo-100">
-                  <label className="block text-[11px] font-medium text-indigo-700 mb-1">
+                <div className="pt-2 border-t border-white/10">
+                  <label className="block text-[11px] font-medium text-slate-400 mb-1">
                     Atau tempel Link URL Gambar Foto Profil (Opsional):
                   </label>
                   <div className="relative">
-                    <ImageIcon size={14} className="absolute left-3 top-2.5 text-indigo-400" />
+                    <ImageIcon size={14} className="absolute left-3 top-2.5 text-slate-400" />
                     <input
                       type="url"
                       name="avatar_url"
@@ -1105,7 +1122,7 @@ export default function TampilanProfil({
                         }
                       }}
                       placeholder="https://example.com/foto-kamu.jpg"
-                      className="w-full pl-9 pr-3 py-1.5 rounded-xl border border-indigo-200 focus:border-cyan-500 text-xs text-indigo-950 font-medium outline-none"
+                      className="w-full pl-9 pr-3 py-1.5 rounded-xl bg-white/[0.06] border border-white/15 focus:border-cyan-400 text-xs text-white placeholder:text-slate-500 font-medium outline-none"
                     />
                   </div>
                 </div>
@@ -1113,19 +1130,19 @@ export default function TampilanProfil({
 
               {/* Field: Nama Lengkap */}
               <div>
-                <label className="block text-xs font-bold text-indigo-900 mb-1">
-                  Nama Lengkap <span className="text-rose-500">*</span>
+                <label className="block text-xs font-bold text-slate-200 mb-1">
+                  Nama Lengkap <span className="text-rose-400">*</span>
                 </label>
                 <input
                   type="text"
                   name="nama_lengkap"
                   defaultValue={profil.nama_lengkap}
                   required
-                  className="w-full px-3.5 py-2 rounded-xl border border-indigo-200 focus:border-cyan-500 text-xs text-indigo-950 font-medium focus:ring-2 focus:ring-cyan-500/20 outline-none"
+                  className="w-full px-3.5 py-2 rounded-xl bg-white/[0.06] border border-white/15 focus:border-cyan-400 text-xs text-white placeholder:text-slate-500 font-medium focus:ring-2 focus:ring-cyan-500/20 outline-none"
                   placeholder="Masukkan nama lengkap kamu"
                 />
                 {formState.fieldErrors?.nama_lengkap && (
-                  <p className="text-[11px] text-rose-600 mt-1 font-semibold">
+                  <p className="text-[11px] text-rose-400 mt-1 font-semibold">
                     {formState.fieldErrors.nama_lengkap}
                   </p>
                 )}
@@ -1133,28 +1150,28 @@ export default function TampilanProfil({
 
               {/* Field: Asal Institusi */}
               <div>
-                <label className="block text-xs font-bold text-indigo-900 mb-1">
+                <label className="block text-xs font-bold text-slate-200 mb-1">
                   Asal Institusi / Universitas
                 </label>
                 <input
                   type="text"
                   name="asal_institusi"
                   defaultValue={profil.asal_institusi || ''}
-                  className="w-full px-3.5 py-2 rounded-xl border border-indigo-200 focus:border-cyan-500 text-xs text-indigo-950 font-medium focus:ring-2 focus:ring-cyan-500/20 outline-none"
+                  className="w-full px-3.5 py-2 rounded-xl bg-white/[0.06] border border-white/15 focus:border-cyan-400 text-xs text-white placeholder:text-slate-500 font-medium focus:ring-2 focus:ring-cyan-500/20 outline-none"
                   placeholder="Contoh: Universitas Indonesia"
                 />
               </div>
 
               {/* Field: Jurusan */}
               <div>
-                <label className="block text-xs font-bold text-indigo-900 mb-1">
+                <label className="block text-xs font-bold text-slate-200 mb-1">
                   Jurusan / Program Studi
                 </label>
                 <input
                   type="text"
                   name="jurusan"
                   defaultValue={profil.jurusan || ''}
-                  className="w-full px-3.5 py-2 rounded-xl border border-indigo-200 focus:border-cyan-500 text-xs text-indigo-950 font-medium focus:ring-2 focus:ring-cyan-500/20 outline-none"
+                  className="w-full px-3.5 py-2 rounded-xl bg-white/[0.06] border border-white/15 focus:border-cyan-400 text-xs text-white placeholder:text-slate-500 font-medium focus:ring-2 focus:ring-cyan-500/20 outline-none"
                   placeholder="Contoh: Teknik Informatika"
                 />
               </div>
@@ -1162,17 +1179,17 @@ export default function TampilanProfil({
               {/* Field Grid: Semester & IPK */}
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-xs font-bold text-indigo-900 mb-1">
+                  <label className="block text-xs font-bold text-slate-200 mb-1">
                     Semester
                   </label>
                   <select
                     name="semester"
                     defaultValue={profil.semester ? String(profil.semester) : ''}
-                    className="w-full px-3.5 py-2 rounded-xl border border-indigo-200 focus:border-cyan-500 text-xs text-indigo-950 font-medium focus:ring-2 focus:ring-cyan-500/20 outline-none bg-white"
+                    className="w-full px-3.5 py-2 rounded-xl bg-[#0c102a] border border-white/15 focus:border-cyan-400 text-xs text-white font-medium focus:ring-2 focus:ring-cyan-500/20 outline-none"
                   >
-                    <option value="">Pilih Semester</option>
+                    <option value="" className="bg-[#0c102a] text-slate-300">Pilih Semester</option>
                     {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12].map((s) => (
-                      <option key={s} value={s}>
+                      <option key={s} value={s} className="bg-[#0c102a] text-white">
                         Semester {s}
                       </option>
                     ))}
@@ -1180,7 +1197,7 @@ export default function TampilanProfil({
                 </div>
 
                 <div>
-                  <label className="block text-xs font-bold text-indigo-900 mb-1">
+                  <label className="block text-xs font-bold text-slate-200 mb-1">
                     IPK Terkini (0.00 - 4.00)
                   </label>
                   <input
@@ -1190,7 +1207,7 @@ export default function TampilanProfil({
                     max="4"
                     name="ipk"
                     defaultValue={profil.ipk ? String(profil.ipk) : ''}
-                    className="w-full px-3.5 py-2 rounded-xl border border-indigo-200 focus:border-cyan-500 text-xs text-indigo-950 font-medium focus:ring-2 focus:ring-cyan-500/20 outline-none"
+                    className="w-full px-3.5 py-2 rounded-xl bg-white/[0.06] border border-white/15 focus:border-cyan-400 text-xs text-white placeholder:text-slate-500 font-medium focus:ring-2 focus:ring-cyan-500/20 outline-none"
                     placeholder="Contoh: 3.85"
                   />
                 </div>
@@ -1198,35 +1215,35 @@ export default function TampilanProfil({
 
               {/* Field: Kategori Khusus */}
               <div>
-                <label className="block text-xs font-bold text-indigo-900 mb-1">
+                <label className="block text-xs font-bold text-slate-200 mb-1">
                   Kategori Prioritas / Kriteria Beasiswa
                 </label>
                 <select
                   name="kategori_khusus"
                   defaultValue={profil.kategori_khusus || ''}
-                  className="w-full px-3.5 py-2 rounded-xl border border-indigo-200 focus:border-cyan-500 text-xs text-indigo-950 font-medium focus:ring-2 focus:ring-cyan-500/20 outline-none bg-white"
+                  className="w-full px-3.5 py-2 rounded-xl bg-[#0c102a] border border-white/15 focus:border-cyan-400 text-xs text-white font-medium focus:ring-2 focus:ring-cyan-500/20 outline-none"
                 >
-                  <option value="">Umum (Tanpa Kategori Khusus)</option>
-                  <option value="Daerah 3T (Terdepan, Terluar, Tertinggal)">Daerah 3T</option>
-                  <option value="Mahasiswa Disabilitas">Disabilitas</option>
-                  <option value="Keluarga Kurang Mampu (KIP-K)">Kurang Mampu / KIP-K</option>
-                  <option value="Prestasi Akademik / Non-Akademik">Prestasi Unggulan</option>
+                  <option value="" className="bg-[#0c102a] text-slate-300">Umum (Tanpa Kategori Khusus)</option>
+                  <option value="Daerah 3T (Terdepan, Terluar, Tertinggal)" className="bg-[#0c102a] text-white">Daerah 3T</option>
+                  <option value="Mahasiswa Disabilitas" className="bg-[#0c102a] text-white">Disabilitas</option>
+                  <option value="Keluarga Kurang Mampu (KIP-K)" className="bg-[#0c102a] text-white">Kurang Mampu / KIP-K</option>
+                  <option value="Prestasi Akademik / Non-Akademik" className="bg-[#0c102a] text-white">Prestasi Unggulan</option>
                 </select>
               </div>
 
               {/* Modal Footer Buttons */}
-              <div className="pt-4 border-t border-indigo-100 flex items-center justify-end gap-3">
+              <div className="pt-4 border-t border-white/10 flex items-center justify-end gap-3">
                 <button
                   type="button"
                   onClick={() => setModalEditBuka(false)}
-                  className="px-4 py-2 rounded-xl text-xs font-bold text-indigo-700 hover:bg-indigo-50 border border-indigo-200 transition-all"
+                  className="px-4 py-2 rounded-xl text-xs font-bold text-slate-300 hover:text-white hover:bg-white/10 border border-white/15 transition-all"
                 >
                   Batal
                 </button>
                 <button
                   type="submit"
                   disabled={isPending}
-                  className="px-5 py-2 rounded-xl text-xs font-bold bg-cyan-600 hover:bg-cyan-700 text-white shadow-md transition-all flex items-center gap-1.5 disabled:opacity-50"
+                  className="px-5 py-2 rounded-xl text-xs font-bold bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-white shadow-[0_0_15px_rgba(6,182,212,0.3)] transition-all flex items-center gap-1.5 disabled:opacity-50"
                 >
                   {isPending ? 'Menyimpan...' : 'Simpan Profil & Foto'}
                 </button>
